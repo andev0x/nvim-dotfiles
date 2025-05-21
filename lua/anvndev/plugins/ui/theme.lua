@@ -9,7 +9,7 @@ return {
     config = function()
       require("tokyonight").setup({
         style = "night",
-        transparent = false,
+        transparent = true,
         terminal_colors = true,
         styles = {
           comments = { italic = true },
@@ -32,7 +32,7 @@ return {
           colors.bg_popup = "#0a0f0a"
           colors.bg_search = "#0f1a0f"
           colors.bg_sidebar = "#0a0f0a"
-          colors.bg_statusline = "#0a0f0a"
+          colors.bg_statusline = "NONE"
           colors.bg_visual = "#0f1a0f"
           colors.fg = "#a0c0a0"
           colors.fg_dark = "#80a080"

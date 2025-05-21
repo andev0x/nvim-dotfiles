@@ -58,11 +58,11 @@ return {
     config = function()
       require("neotest").setup({
         adapters = {
-          require("neotest-python")({
-            dap = { justMyCode = false },
-            runner = "pytest",
-            python = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python",
-          }),
+        require("neotest-python")({
+          dap = { justMyCode = false },
+          runner = "pytest",
+          python = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python",
+        }),
         },
       })
     end,

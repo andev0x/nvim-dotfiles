@@ -137,10 +137,10 @@ end
 
 -- Configure each LSP server
 for server_name, server_config in pairs(servers) do
-  lspconfig[server_name].setup({
-    capabilities = capabilities,
-    on_attach = on_attach,
+    lspconfig[server_name].setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
     settings = server_config.settings or {},
     filetypes = server_config.filetypes,
-  })
+    })
 end

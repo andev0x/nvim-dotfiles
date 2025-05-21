@@ -58,13 +58,19 @@ return {
         return table.concat(result, " ")
       end
       
+      -- Custom component to show author name (placeholder)
+      local function author_name()
+        -- Replace this with a real API call if desired
+        return "  @anvndev"
+      end
+      
       -- Lualine configuration
       lualine.setup({
         options = {
           icons_enabled = true,
           theme = "tokyonight",
-          component_separators = { left = "", right = "" },
-          section_separators = { left = "", right = "" },
+          component_separators = { left = "", right = "" },
+          section_separators = { left = "", right = "" },
           disabled_filetypes = {
             statusline = { "dashboard", "alpha", "starter" },
             winbar = { "dashboard", "alpha", "starter" },
@@ -79,18 +85,18 @@ return {
           },
         },
         sections = {
-          lualine_a = { "mode" },
+          lualine_a = { { "mode", icon = "" } },
           lualine_b = {
-            "branch",
+            { "branch", icon = "" },
             {
               "diff",
               symbols = {
-                added = " ",
-                modified = " ",
-                removed = " ",
+                added = " ",
+                modified = " ",
+                removed = " ",
               },
             },
-            diagnostics,
+            { diagnostics, symbols = { error = " ", warn = " ", info = " ", hint = " " } },
           },
           lualine_c = {
             {
@@ -102,10 +108,17 @@ return {
                 unnamed = "[No Name]",
                 newfile = "[New]",
               },
+              icon = '',
             },
             current_function,
           },
-          lualine_x = { lsp_status, "encoding", "fileformat", "filetype" },
+          lualine_x = {
+            lsp_status,
+            "encoding",
+            "fileformat",
+            "filetype",
+            author_name,
+          },
           lualine_y = { "progress" },
           lualine_z = { "location" },
         },
