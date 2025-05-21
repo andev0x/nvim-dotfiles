@@ -1,0 +1,62 @@
+# Neovim specific
+*.swp
+*.swo
+*~
+.session
+.session.lock
+Session.vim
+Sessionx.vim
+netrwhist
+*.log
+
+# Plugin specific
+packer_compiled.lua
+lazy-lock.json
+
+# System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.bak
+*.backup
+*.old
+
+# Local configuration
+local.lua
+local.vim
+local/
+
+# Cache directories
+.cache/
+.tmp/
+.temp/
+
+# LSP and DAP
+.lsp/
+.dap/
+
+# Personal notes and todos
+TODO.md
+NOTES.md
+*.todo
+
+# Environment variables and secrets
+.env
+.env.*
+*.secret
+secrets.lua
+credentials.lua
+
+# Backup files
+*~
+*.swp
+*.swo
+*.swn
+*.bak
+*.backup
+*.old
+*.orig
+*.rej
