@@ -58,4 +58,4 @@ nvim
 
 ## License
 
-MIT License 
+MIT [License](https://github.com/andevgo/nvim-dotfiles?tab=License-1-ov-file#readme) 
