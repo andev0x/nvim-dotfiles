@@ -2,6 +2,13 @@
 
 This is my personal Neovim configuration, built with a focus on modern development features and a clean, efficient workflow.
 
+----
+
+<p float="left">
+  <img src="https://raw.githubusercontent.com/andevgo/image-archive/refs/heads/main/p1.jpg" width="500" />
+  <img src="https://raw.githubusercontent.com/andevgo/image-archive/refs/heads/main/p2.jpg" width="500" />
+</p>
+
 ## Features
 
 - 🎨 Modern UI with custom theme
