@@ -7,85 +7,48 @@ return {
     event = "VeryLazy",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
-      local lualine = require("lualine")
-      
-      -- Custom component to show LSP status
-      local function lsp_status()
-        local clients = vim.lsp.get_clients()
-        if next(clients) == nil then
-          return "No LSP"
-        end
-        
-        local client_names = {}
-        for _, client in ipairs(clients) do
-          table.insert(client_names, client.name)
-        end
-        return "LSP: " .. table.concat(client_names, ", ")
+      local navic = require("nvim-navic")
+      local devicons = require("nvim-web-devicons")
+      -- Custom component: user name
+      local function user_name()
+        return "  anvndev"
       end
-      
-      -- Custom component to show current function/method
-      local function current_function()
-        local has_navic, navic = pcall(require, "nvim-navic")
-        if has_navic and navic.is_available() then
-          return navic.get_location()
+      -- Custom component: filetype with icon
+      local function filetype_with_icon()
+        local ft = vim.bo.filetype or ""
+        local fname = vim.api.nvim_buf_get_name(0)
+        local ext = vim.fn.fnamemodify(fname, ":e")
+        local icon, icon_hl = devicons.get_icon(fname, ext, { default = true })
+        if icon == nil or icon == "" then
+          icon = ""
         end
-        return ""
+        return string.format("%s %s", icon, ft ~= "" and ft or "plain")
       end
-      
-      -- Custom component to show diagnostics
-      local function diagnostics()
-        local diagnostics_count = {
-          error = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR }),
-          warn = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.WARN }),
-          info = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.INFO }),
-          hint = #vim.diagnostic.get(0, { severity = vim.diagnostic.severity.HINT }),
-        }
-        
-        local result = {}
-        if diagnostics_count.error > 0 then
-          table.insert(result, " " .. diagnostics_count.error)
+      -- Custom component: error count and message
+      local function error_count()
+        local count = 0
+        local diagnostics = vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR })
+        count = #diagnostics
+        if count > 0 then
+          return string.format(" %d error(s)!", count)
+        else
+          return "No errors"
         end
-        if diagnostics_count.warn > 0 then
-          table.insert(result, " " .. diagnostics_count.warn)
-        end
-        if diagnostics_count.info > 0 then
-          table.insert(result, " " .. diagnostics_count.info)
-        end
-        if diagnostics_count.hint > 0 then
-          table.insert(result, " " .. diagnostics_count.hint)
-        end
-        
-        return table.concat(result, " ")
       end
-      
-      -- Custom component to show author name (placeholder)
-      local function author_name()
-        -- Replace this with a real API call if desired
-        return "  @anvndev"
-      end
-      
-      -- Lualine configuration
-      lualine.setup({
+      require("lualine").setup({
         options = {
           icons_enabled = true,
-          theme = "tokyonight",
-          component_separators = { left = "", right = "" },
-          section_separators = { left = "", right = "" },
-          disabled_filetypes = {
-            statusline = { "dashboard", "alpha", "starter" },
-            winbar = { "dashboard", "alpha", "starter" },
-          },
-          ignore_focus = {},
-          always_divide_middle = true,
+          theme = "catppuccin-mocha", -- dark theme, change if you prefer
+          section_separators = { left = "", right = "" },
+          component_separators = { left = "", right = "" },
           globalstatus = true,
-          refresh = {
-            statusline = 100,
-            tabline = 100,
-            winbar = 100,
-          },
+          always_divide_middle = true,
         },
         sections = {
-          lualine_a = { { "mode", icon = "" } },
+          lualine_a = {
+            user_name,
+            { "mode", icon = "" },
+          },
           lualine_b = {
             { "branch", icon = "" },
             {
@@ -96,28 +59,39 @@ return {
                 removed = " ",
               },
             },
-            { diagnostics, symbols = { error = " ", warn = " ", info = " ", hint = " " } },
+            {
+              "diagnostics",
+              symbols = { error = " ", warn = " ", info = " ", hint = " " },
+            },
           },
           lualine_c = {
+            filetype_with_icon,
             {
               "filename",
-              path = 1, -- Relative path
+              path = 1,
               symbols = {
-                modified = "[+]",
-                readonly = "[RO]",
+                modified = " [+]",
+                readonly = " ",
                 unnamed = "[No Name]",
                 newfile = "[New]",
               },
-              icon = '',
+              icon = "",
             },
-            current_function,
+            {
+              function()
+                return navic.is_available() and navic.get_location() or ""
+              end,
+              cond = function()
+                return navic.is_available()
+              end,
+              color = { fg = "#A3BE8C" },
+            },
           },
           lualine_x = {
-            lsp_status,
+            error_count,
             "encoding",
             "fileformat",
-            "filetype",
-            author_name,
+            { "filetype", icon_only = true },
           },
           lualine_y = { "progress" },
           lualine_z = { "location" },
@@ -130,9 +104,6 @@ return {
           lualine_y = {},
           lualine_z = {},
         },
-        tabline = {},
-        winbar = {},
-        inactive_winbar = {},
         extensions = {
           "nvim-tree",
           "toggleterm",
@@ -151,34 +122,6 @@ return {
     dependencies = { "neovim/nvim-lspconfig" },
     config = function()
       require("nvim-navic").setup({
-        icons = {
-          File = " ",
-          Module = " ",
-          Namespace = " ",
-          Package = " ",
-          Class = " ",
-          Method = " ",
-          Property = " ",
-          Field = " ",
-          Constructor = " ",
-          Enum = " ",
-          Interface = " ",
-          Function = " ",
-          Variable = " ",
-          Constant = " ",
-          String = " ",
-          Number = " ",
-          Boolean = " ",
-          Array = " ",
-          Object = " ",
-          Key = " ",
-          Null = " ",
-          EnumMember = " ",
-          Struct = " ",
-          Event = " ",
-          Operator = " ",
-          TypeParameter = " ",
-        },
         highlight = true,
         separator = " > ",
         depth_limit = 0,

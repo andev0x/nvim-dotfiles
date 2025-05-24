@@ -27,7 +27,7 @@ local servers = {
   pyright = {}, -- Python
   
   -- Web development
-  typescript_language_server = {}, -- TypeScript/JavaScript
+  tsserver = {}, -- TypeScript/JavaScript
   html = {},
   cssls = {},
   jsonls = {},
@@ -95,7 +95,7 @@ mason_lspconfig.setup({
     "rust_analyzer",
     "clangd",
     "pyright",
-    "typescript-language-server",
+    "tsserver",
     "html",
     "cssls",
     "jsonls",
