@@ -24,15 +24,17 @@ return {
         end
         return string.format("%s %s", icon, ft ~= "" and ft or "plain")
       end
-      -- Custom component: error count and message
-      local function error_count()
-        local count = 0
-        local diagnostics = vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR })
-        count = #diagnostics
-        if count > 0 then
-          return string.format(" %d error(s)!", count)
+      -- Custom component: time-based icon
+      local function time_icon()
+        local hour = tonumber(os.date("%H"))
+        if hour >= 5 and hour < 12 then
+          return "☀️"
+        elseif hour >= 12 and hour < 17 then
+          return "⛅"
+        elseif hour >= 17 and hour < 20 then
+          return "🍹"
         else
-          return "No errors"
+          return "🌙"
         end
       end
       require("lualine").setup({
@@ -88,10 +90,9 @@ return {
             },
           },
           lualine_x = {
-            error_count,
+            time_icon,
             "encoding",
             "fileformat",
-            { "filetype", icon_only = true },
           },
           lualine_y = { "progress" },
           lualine_z = { "location" },

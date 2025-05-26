@@ -237,15 +237,15 @@ return {
       
       -- Register key groups using the new format
       which_key.register({
-        { "", group = "Buffers" },
-        { "", group = "LSP" },
-        { "", group = "Refactor" },
-        { "", group = "Terminal" },
-        { "", group = "Git" },
-        { "", group = "Debug" },
-        { "", group = "Find/Files" },
-        { "", group = "Code" },
         { "", group = "Workspace" },
+        { "", group = "Debug" },
+        { "", group = "Refactor" },
+        { "", group = "Buffers" },
+        { "", group = "Git" },
+        { "", group = "Code" },
+        { "", group = "Terminal" },
+        { "", group = "Find/Files" },
+        { "", group = "LSP" },
       })
     end,
   },
@@ -256,6 +256,21 @@ return {
     event = "VeryLazy",
     config = function()
       local notify = require("notify")
+      
+      -- Function to get time-based icon
+      local function get_time_icon()
+        local hour = tonumber(os.date("%H"))
+        if hour >= 5 and hour < 12 then
+          return "☀️"  -- Morning sun
+        elseif hour >= 12 and hour < 17 then
+          return "⛅"  -- Afternoon sun with clouds
+        elseif hour >= 17 and hour < 20 then
+          return "🍹"  -- Sunset
+        else
+          return "🌙"  -- Moon
+        end
+      end
+      
       notify.setup({
         stages = "fade",
         timeout = 3000,
@@ -263,15 +278,21 @@ return {
         background_colour = "#000000",
         max_width = 80,
         icons = {
-          ERROR = "",
-          WARN = "",
-          INFO = "",
-          DEBUG = "",
+          ERROR = get_time_icon(),
+          WARN = "⚠️",
+          INFO = "ℹ️",
+          DEBUG = "🔍",
           TRACE = "✎",
         },
       })
       
-      vim.notify = notify
+      -- Override the default notify function to always use current time icon
+      local original_notify = vim.notify
+      vim.notify = function(msg, level, opts)
+        opts = opts or {}
+        opts.icon = get_time_icon()
+        return original_notify(msg, level, opts)
+      end
     end,
   },
   
@@ -376,6 +397,29 @@ return {
           format_item_override = {},
           get_config = nil,
         },
+      })
+    end,
+  },
+  
+  -- Web devicons
+  {
+    "nvim-tree/nvim-web-devicons",
+    event = "VeryLazy",
+    config = function()
+      require("nvim-web-devicons").setup({
+        override = {
+          go = {
+            icon = "",
+            color = "#519aba",
+            name = "Go",
+          },
+          py = {
+            icon = "󰌠",
+            color = "#ffd43b",
+            name = "Python",
+          },
+        },
+        default = true,
       })
     end,
   },
@@ -541,6 +585,15 @@ return {
       vim.g.mkdp_page_title = "${name}"
       vim.g.mkdp_filetypes = { "markdown" }
       vim.g.mkdp_theme = "dark"
+    end,
+  },
+  
+  -- Mini icons
+  {
+    "echasnovski/mini.icons",
+    event = "VeryLazy",
+    config = function()
+      require("mini.icons").setup()
     end,
   },
 }
