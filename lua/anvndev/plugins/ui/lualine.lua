@@ -11,7 +11,7 @@ return {
 			local devicons = require("nvim-web-devicons")
 			-- Custom component: user name
 			local function user_name()
-				return "  anvndev"
+				return " anvndev"
 			end
 			-- Custom component: filetype with icon
 			local function filetype_with_icon()
@@ -27,14 +27,22 @@ return {
 			-- Custom component: time-based icon
 			local function time_icon()
 				local hour = tonumber(os.date("%H"))
-				if hour >= 5 and hour < 12 then
+				if hour >= 5 and hour < 11 then
 					return "🌞"
-				elseif hour >= 12 and hour < 17 then
+				elseif hour >= 11 and hour < 13 then
+					return "🥪"
+				elseif hour >= 13 and hour < 14 then
+					return "☕"
+				elseif hour >= 14 and hour < 17 then
 					return "⛅"
-				elseif hour >= 17 and hour < 20 then
+				elseif hour >= 17 and hour < 19 then
 					return "🌵"
-				else
+				elseif hour >= 19 and hour < 22 then
 					return "🌙"
+				elseif hour >= 22 and hour < 23 then
+					return "🪐"
+				else
+					return "🌚"
 				end
 			end
 			require("lualine").setup({
@@ -131,4 +139,3 @@ return {
 		end,
 	},
 }
-
