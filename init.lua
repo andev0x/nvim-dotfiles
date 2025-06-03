@@ -65,4 +65,3 @@ vim.api.nvim_create_autocmd("User", {
 		print("⚡ Neovim loaded " .. stats.count .. " plugins in " .. ms .. "ms")
 	end,
 })
-

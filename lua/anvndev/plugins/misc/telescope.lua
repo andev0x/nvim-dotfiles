@@ -19,7 +19,7 @@ return {
       "nvim-telescope/telescope-dap.nvim",
     },
     keys = {
-      { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find files" },
+      { "<leader>fl", "<cmd>Telescope find_files<cr>", desc = "Find files" },
       { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live grep" },
       { "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Find buffers" },
       { "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Help tags" },
