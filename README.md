@@ -33,7 +33,7 @@ This is my personal Neovim configuration, built with a focus on modern developme
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/andevgo/nvim-dotfiles.git ~/.config/nvim
+git clone https://github.com/andev0x/nvim-dotfiles.git ~/.config/nvim
 ```
 
 2. Start Neovim and let the plugins install:
@@ -65,4 +65,4 @@ nvim
 
 ## License
 
-MIT [License](https://github.com/andevgo/nvim-dotfiles?tab=License-1-ov-file#readme) 
+MIT [License](https://github.com/andev0x/nvim-dotfiles?tab=License-1-ov-file#readme)
