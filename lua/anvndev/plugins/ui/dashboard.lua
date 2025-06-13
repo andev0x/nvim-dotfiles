@@ -8,20 +8,23 @@ return {
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		config = function()
 			local alpha = require("alpha")
+			vim.api.nvim_set_hl(0, "DashboardHeaderGreen", {
+				fg = "#80FF80",
+			})
 			local dashboard = require("alpha.themes.dashboard")
 
 			-- Custom header
 			dashboard.section.header.val = {
 				[[                                                                       ]],
 				[[                                                                       ]],
-				[[    █████╗ ███╗   ██╗██╗   ██╗███╗   ██╗██████╗ ███████╗██╗   ██╗     ]],
-				[[   ██╔══██╗████╗  ██║██║   ██║████╗  ██║██╔══██╗██╔════╝██║   ██║     ]],
-				[[   ███████║██╔██╗ ██║██║   ██║██╔██╗ ██║██║  ██║█████╗  ██║   ██║     ]],
-				[[   ██╔══██║██║╚██╗██║╚██╗ ██╔╝██║╚██╗██║██║  ██║██╔══╝  ╚██╗ ██╔╝     ]],
-				[[   ██║  ██║██║ ╚████║ ╚████╔╝ ██║ ╚████║██████╔╝███████╗ ╚████╔╝      ]],
-				[[   ╚═╝  ╚═╝╚═╝  ╚═══╝  ╚═══╝  ╚═╝  ╚═══╝╚═════╝ ╚══════╝  ╚═══╝       ]],
+				[[    █████╗ ███╗   ██╗██╗   ██╗███╗   ██╗██████╗ ███████╗██╗   ██╗      ]],
+				[[   ██╔══██╗████╗  ██║██║   ██║████╗  ██║██╔══██╗██╔════╝██║   ██║      ]],
+				[[   ███████║██╔██╗ ██║██║   ██║██╔██╗ ██║██║  ██║█████╗  ██║   ██║      ]],
+				[[   ██╔══██║██║╚██╗██║╚██╗ ██╔╝██║╚██╗██║██║  ██║██╔══╝  ╚██╗ ██╔╝      ]],
+				[[   ██║  ██║██║ ╚████║ ╚████╔╝ ██║ ╚████║██████╔╝███████╗ ╚████╔╝       ]],
+				[[   ╚═╝  ╚═╝╚═╝  ╚═══╝  ╚═══╝  ╚═╝  ╚═══╝╚═════╝ ╚══════╝  ╚═══╝        ]],
 				[[                                                                       ]],
-				[[                     ⟦ Backend Development ⟧                           ]],
+				[[                     ⟦ designed by andev0x ⟧                           ]],
 				[[                                                                       ]],
 			}
 
@@ -46,7 +49,7 @@ return {
 
 			dashboard.section.footer.val = footer()
 			dashboard.section.footer.opts.hl = "Type"
-			dashboard.section.header.opts.hl = "Include"
+			dashboard.section.header.opts.hl = "DashboardHeaderGreen"
 			dashboard.section.buttons.opts.hl = "Keyword"
 
 			dashboard.opts.opts.noautocmd = true
@@ -65,4 +68,3 @@ return {
 		end,
 	},
 }
-

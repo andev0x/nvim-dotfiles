@@ -80,8 +80,12 @@ keymap("n", "<leader>du", ":lua require'dapui'.toggle()<CR>", { desc = "Toggle D
 keymap("n", "<leader>dt", ":lua require'dap'.terminate()<CR>", { desc = "Terminate" })
 
 -- Terminal
-keymap("n", "<leader>t", ":ToggleTerm<CR>", { desc = "Toggle terminal" })
+keymap("n", "<leader>tt", ":ToggleTerm<CR>", { desc = "Toggle terminal" })
 keymap("t", "<Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
--- Lazygit
-keymap("n", "<leader>gg", ":LazyGit<CR>", { desc = "LazyGit" })
+-- Toggle features
+keymap("n", "<leader>ts", ":set spell!<CR>", { desc = "Toggle spell check" })
+keymap("n", "<leader>tr", ":set relativenumber!<CR>", { desc = "Toggle relative line numbers" })
+keymap("n", "<leader>tw", ":set wrap!<CR>", { desc = "Toggle word wrap" })
+keymap("n", "<leader>tl", ":set list!<CR>", { desc = "Toggle invisible characters" })
+keymap("n", "<leader>th", ":set hlsearch!<CR>", { desc = "Toggle search highlight" })

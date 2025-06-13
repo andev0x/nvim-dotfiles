@@ -60,9 +60,14 @@ opt.undofile = true
 opt.undodir = vim.fn.stdpath("data") .. "/undodir"
 
 -- Update time
-opt.updatetime = 100
+opt.updatetime = 50  -- Faster update time for better responsiveness
 opt.timeout = true
 opt.timeoutlen = 300
+
+-- Performance optimizations
+opt.lazyredraw = true  -- Don't redraw while executing macros
+opt.ttyfast = true     -- Faster terminal rendering
+opt.ttimeoutlen = 10   -- Reduce key code delay
 
 -- Completion
 opt.completeopt = "menu,menuone,noselect"
@@ -78,9 +83,7 @@ opt.foldenable = true
 opt.fillchars = [[eob: ,fold: ,foldopen: ,foldsep: ,foldclose: ]]
 
 -- iTerm2 specific settings
-opt.mouse = "a"                 -- Enable mouse support
-opt.ttimeoutlen = 10           -- Reduce key code delay
-opt.ttyfast = true             -- Faster terminal rendering
+opt.mouse = "a"  -- Enable mouse support
 
 -- Disable providers we don't use
 g.loaded_python3_provider = 0
@@ -91,3 +94,16 @@ g.loaded_node_provider = 0
 -- Disable builtin plugins
 g.loaded_netrw = 1
 g.loaded_netrwPlugin = 1
+
+-- Additional useful options
+opt.list = false  -- Don't show invisible characters by default
+opt.listchars = {
+  tab = "→ ",
+  extends = "⟩",
+  precedes = "⟨",
+  trail = "·",
+  nbsp = "␣",
+}
+opt.breakindent = true  -- Preserve indentation in wrapped lines
+opt.showbreak = "↪ "   -- Show wrapped line prefix
+opt.inccommand = "split"  -- Show effects of command incrementally
