@@ -52,7 +52,8 @@ cmp.setup({
     end, { "i", "s" }),
   }),
   sources = cmp.config.sources({
-    { name = "nvim_lsp", priority = 1000 },
+    { name = "codeium", priority = 1000 },
+    { name = "nvim_lsp", priority = 900 },
     { name = "luasnip", priority = 750 },
     { name = "buffer", priority = 500 },
     { name = "path", priority = 250 },
@@ -69,6 +70,7 @@ cmp.setup({
         luasnip = "[Snippet]",
         nvim_lua = "[Lua]",
         path = "[Path]",
+        codeium = "[Codeium]",
       },
     }),
   },
