@@ -4,10 +4,18 @@ This is my personal Neovim configuration, built with a focus on modern developme
 
 ----
 
-<p float="left">
-  <img src="https://raw.githubusercontent.com/andev0x/description-image-archive/refs/heads/main/nvim-dotfies/p3.png" width="450" />
-  <img src="https://raw.githubusercontent.com/andev0x/description-image-archive/refs/heads/main/nvim-dotfies/p4.png" width="450" />
+<p align="center">
+  <img src="https://raw.githubusercontent.com/andev0x/description-image-archive/refs/heads/main/nvim-dotfies/p3.png" width="350" />
+  <img src="https://raw.githubusercontent.com/andev0x/description-image-archive/refs/heads/main/nvim-dotfies/p4.png" width="350" />
 </p>
+
+<div align="center">
+
+# nvim-dotfiles by andev0x
+
+ [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE) [![Neovim](https://img.shields.io/badge/Neovim-%3E=0.9.0-blueviolet?logo=neovim)](https://neovim.io/) [![Neovim](https://img.shields.io/badge/my%20blog-andev0x-blue)](https://andev0x.github.io/)
+
+</div>
 
 ## Features
 
@@ -66,4 +74,5 @@ nvim
 
 ## License
 
-MIT [License](https://github.com/andev0x/nvim-dotfiles?tab=License-1-ov-file#readme)
+MIT [License](LICENSE)
+
