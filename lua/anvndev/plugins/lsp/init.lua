@@ -57,25 +57,13 @@ return {
         },
         signs = {
           text = {
-            [vim.diagnostic.severity.ERROR] = "",
-            [vim.diagnostic.severity.WARN] = "",
-            [vim.diagnostic.severity.INFO] = "",
-            [vim.diagnostic.severity.HINT] = "",
+            [vim.diagnostic.severity.ERROR] = " ",
+            [vim.diagnostic.severity.WARN] = " ",
+            [vim.diagnostic.severity.INFO] = " ",
+            [vim.diagnostic.severity.HINT] = " ",
           },
         },
       })
-      
-      -- Configure LSP signs with better visibility
-      local signs = {
-        Error = " ",
-        Warn = " ",
-        Hint = " ",
-        Info = " ",
-      }
-      for type, icon in pairs(signs) do
-        local hl = "DiagnosticSign" .. type
-        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl, linehl = hl })
-      end
 
       -- Add error handling for LSP setup
       local on_attach = function(client, bufnr)

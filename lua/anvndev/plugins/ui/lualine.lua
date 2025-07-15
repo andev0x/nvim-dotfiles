@@ -11,7 +11,7 @@ return {
 			local devicons = require("nvim-web-devicons")
 			-- Custom component: user name
 			local function user_name()
-				return " anvndev"
+				return " anvndev"
 			end
 			-- Custom component: filetype with icon
 			local function filetype_with_icon()
