@@ -58,15 +58,15 @@ which_key.setup({
 
 -- Register key groups
 which_key.register({
-  { "", group = "Workspace" },
-  { "", group = "Refactor" },
-  { "", group = "Buffers" },
   { "", group = "Debug" },
-  { "", group = "Git" },
   { "", group = "Terminal" },
   { "", group = "Find/Files" },
-  { "", group = "Code" },
   { "", group = "LSP" },
+  { "", group = "Code" },
+  { "", group = "Buffers" },
+  { "", group = "Git" },
+  { "", group = "Refactor" },
+  { "", group = "Workspace" },
   { "", group = "Toggle" },
   { "", group = "Text" },
 }) 
