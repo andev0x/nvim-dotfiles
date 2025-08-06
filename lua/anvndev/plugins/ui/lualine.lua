@@ -2,6 +2,11 @@
 -- Statusline configuration
 
 return {
+  -- Diffview for git diffs
+  {
+	"sindrets/diffview.nvim",
+	event = "VeryLazy",
+  },
 	{
 		"nvim-lualine/lualine.nvim",
 		event = "VeryLazy",
