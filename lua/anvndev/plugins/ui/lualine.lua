@@ -2,11 +2,18 @@
 -- Statusline configuration
 
 return {
-  -- Diffview for git diffs
-  {
-	"sindrets/diffview.nvim",
-	event = "VeryLazy",
-  },
+	-- Glow for markdown preview
+	{
+		"ellisonleao/glow.nvim",
+		config = true,
+		cmd = "Glow",
+		ft = "markdown",
+	},
+	-- Diffview for git diffs
+	{
+		"sindrets/diffview.nvim",
+		event = "VeryLazy",
+	},
 	{
 		"nvim-lualine/lualine.nvim",
 		event = "VeryLazy",
