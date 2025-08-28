@@ -2,6 +2,14 @@
 -- Statusline configuration
 
 return {
+	-- Preview markdown
+	{
+		"andev0x/mdview.nvim",
+		build = "npm install",
+		config = function()
+			require("mdview").setup()
+		end,
+	},
 	-- Glow for markdown preview
 	{
 		"ellisonleao/glow.nvim",

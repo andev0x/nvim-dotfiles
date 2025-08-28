@@ -14,10 +14,10 @@ keymap("n", "<C-k>", "<C-w>k", { desc = "Navigate to top window" })
 keymap("n", "<C-l>", "<C-w>l", { desc = "Navigate to right window" })
 
 -- Resize windows
-keymap("n", "<C-Up>", ":resize -2<CR>", { desc = "Decrease window height" })
-keymap("n", "<C-Down>", ":resize +2<CR>", { desc = "Increase window height" })
-keymap("n", "<C-Left>", ":vertical resize -2<CR>", { desc = "Decrease window width" })
-keymap("n", "<C-Right>", ":vertical resize +2<CR>", { desc = "Increase window width" })
+keymap("n", "<leader>K", ":resize -2<CR>", { desc = "Decrease window height" })
+keymap("n", "<leader>J", ":resize +2<CR>", { desc = "Increase window height" })
+keymap("n", "<leader>H", ":vertical resize -2<CR>", { desc = "Decrease window width" })
+keymap("n", "<leader>L", ":vertical resize +2<CR>", { desc = "Increase window width" })
 
 -- Buffer navigation
 keymap("n", "<S-l>", ":bnext<CR>", { desc = "Next buffer" })
