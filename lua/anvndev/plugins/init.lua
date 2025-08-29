@@ -34,6 +34,7 @@ return {
 	{ import = "anvndev.plugins.misc.telescope" },
 	{ import = "anvndev.plugins.misc.treesitter" },
 	{ import = "anvndev.plugins.misc.codeium" },
+	{ import = "anvndev.plugins.misc.neorg" },
 	{ import = "anvndev.plugins.misc.others" },
 	{
 		"tpope/vim-eunuch",
