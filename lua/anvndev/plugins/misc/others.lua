@@ -558,7 +558,7 @@ return {
 	},
 
 	-- Markdown preview
-	{
+	--[[ 	{
 		"iamcco/markdown-preview.nvim",
 		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
 		ft = { "markdown" },
@@ -596,7 +596,7 @@ return {
 			vim.g.mkdp_filetypes = { "markdown" }
 			vim.g.mkdp_theme = "dark"
 		end,
-	},
+	}, ]]
 
 	-- Mini icons
 	{
