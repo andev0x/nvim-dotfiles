@@ -60,14 +60,14 @@ opt.undofile = true
 opt.undodir = vim.fn.stdpath("data") .. "/undodir"
 
 -- Update time
-opt.updatetime = 50  -- Faster update time for better responsiveness
+opt.updatetime = 50 -- Faster update time for better responsiveness
 opt.timeout = true
 opt.timeoutlen = 300
 
 -- Performance optimizations
-opt.lazyredraw = true  -- Don't redraw while executing macros
-opt.ttyfast = true     -- Faster terminal rendering
-opt.ttimeoutlen = 10   -- Reduce key code delay
+opt.lazyredraw = true -- Don't redraw while executing macros
+opt.ttyfast = true -- Faster terminal rendering
+opt.ttimeoutlen = 10 -- Reduce key code delay
 
 -- Completion
 opt.completeopt = "menu,menuone,noselect"
@@ -82,8 +82,15 @@ opt.foldlevelstart = 99
 opt.foldenable = true
 opt.fillchars = [[eob: ,fold: ,foldopen: ,foldsep: ,foldclose: ]]
 
+-- Keymaps
+vim.keymap.set("n", "zc", "zc", { desc = "Close fold" })
+vim.keymap.set("n", "zo", "zo", { desc = "Open fold" })
+vim.keymap.set("n", "za", "za", { desc = "Toggle fold" })
+vim.keymap.set("n", "<leader>zR", "zR", { desc = "Open all folds" })
+vim.keymap.set("n", "<leader>zM", "zM", { desc = "Close all folds" })
+
 -- iTerm2 specific settings
-opt.mouse = "a"  -- Enable mouse support
+opt.mouse = "a" -- Enable mouse support
 
 -- Disable providers we don't use
 g.loaded_python3_provider = 0
@@ -96,14 +103,15 @@ g.loaded_netrw = 1
 g.loaded_netrwPlugin = 1
 
 -- Additional useful options
-opt.list = false  -- Don't show invisible characters by default
+opt.list = false -- Don't show invisible characters by default
 opt.listchars = {
-  tab = "→ ",
-  extends = "⟩",
-  precedes = "⟨",
-  trail = "·",
-  nbsp = "␣",
+	tab = "→ ",
+	extends = "⟩",
+	precedes = "⟨",
+	trail = "·",
+	nbsp = "␣",
 }
-opt.breakindent = true  -- Preserve indentation in wrapped lines
-opt.showbreak = "↪ "   -- Show wrapped line prefix
-opt.inccommand = "split"  -- Show effects of command incrementally
+opt.breakindent = true -- Preserve indentation in wrapped lines
+opt.showbreak = "↪ " -- Show wrapped line prefix
+opt.inccommand = "split" -- Show effects of command incrementally
+
