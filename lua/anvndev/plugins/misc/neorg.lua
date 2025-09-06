@@ -1,9 +1,7 @@
 return {
 	{
 		"nvim-neorg/neorg",
-		build = function()
-			require("neorg.modules.base").load_module("core.integrations.treesitter").sync_parsers()
-		end,
+		build = ":Neorg sync-parsers",
 		ft = "norg",
 		cmd = "Neorg",
 		dependencies = { "nvim-lua/plenary.nvim", "nvim-treesitter/nvim-treesitter" },
@@ -24,6 +22,8 @@ return {
 							default_workspace = "notes",
 						},
 					},
+					["core.esupports.metagen"] = {},
+					["core.integrations.telescope"] = {},
 				},
 			})
 			local map = vim.keymap.set
