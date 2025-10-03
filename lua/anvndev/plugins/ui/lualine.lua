@@ -105,7 +105,7 @@ return {
 								unnamed = "[No Name]",
 								newfile = "[New]",
 							},
-							icon = "",
+							icon = "",
 						},
 						{
 							function()
