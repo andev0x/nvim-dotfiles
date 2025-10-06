@@ -56,17 +56,19 @@ which_key.setup({
 	},
 })
 
--- Register key groups
 which_key.register({
-	{ "<leader>", group = "Debug" },
-	{ "<leader>t", group = "Terminal" },
-	{ "<leader>f", group = "Find/Files" },
-	{ "<leader>l", group = "LSP" },
-	{ "<leader>c", group = "Code" },
-	{ "<leader>b", group = "Buffers" },
-	{ "<leader>g", group = "Git" },
-	{ "<leader>r", group = "Refactor" },
-	{ "<leader>w", group = "Workspace" },
-	{ "<leader>to", group = "Toggle" },
-	{ "<leader>x", group = "Text" },
+	["<leader>"] = {
+		name = "leader",
+		t = { name = "Terminal" },
+		f = { name = "Find/Files" },
+		l = { name = "LSP" },
+		c = { name = "Code" },
+		b = { name = "Buffers" },
+		g = { name = "Git" },
+		r = { name = "Refactor" },
+		w = { name = "Workspace" },
+		to = { name = "Toggle" },
+		x = { name = "Text" },
+		d = { name = "Debug" },
+	},
 })
