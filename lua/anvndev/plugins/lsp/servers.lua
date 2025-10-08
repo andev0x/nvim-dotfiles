@@ -1,9 +1,7 @@
 -- ~/.config/nvim/lua/anvndev/plugins/lsp/servers.lua
 -- LSP servers configuration
-
-local lspconfig = require("lspconfig")
 local mason = require("mason")
-local mason_lspconfig = require("mason-lspconfig")
+
 local mason_tool_installer = require("mason-tool-installer")
 
 -- Setup Mason
@@ -64,6 +62,7 @@ local tools = {
   "json-lsp",
   "yaml-language-server",
   "dockerfile-language-server",
+  "nvim-lspconfig",
   
   -- Formatters
   "gofumpt",
@@ -89,22 +88,7 @@ local tools = {
 }
 
 -- Setup Mason LSP Config
-mason_lspconfig.setup({
-  ensure_installed = {
-    "gopls",
-    "rust_analyzer",
-    "clangd",
-    "pyright",
-    "ts_ls",
-    "html",
-    "cssls",
-    "jsonls",
-    "yamlls",
-    "dockerls",
-    "lua_ls",
-  },
-  automatic_installation = true,
-})
+
 
 -- Setup Mason Tool Installer
 mason_tool_installer.setup({
@@ -137,10 +121,11 @@ end
 
 -- Configure each LSP server
 for server_name, server_config in pairs(servers) do
-    lspconfig[server_name].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
+  vim.lsp.config(server_name, {
+    capabilities = capabilities,
+    on_attach = on_attach,
     settings = server_config.settings or {},
     filetypes = server_config.filetypes,
-    })
+  })
+  vim.lsp.enable(server_name)
 end

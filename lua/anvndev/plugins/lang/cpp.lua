@@ -5,12 +5,12 @@ return {
   {
     "p00f/clangd_extensions.nvim",
     ft = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
-    dependencies = { "neovim/nvim-lspconfig" },
+    
     config = function()
       require("clangd_extensions").setup({
         server = {
-          -- options to pass to nvim-lspconfig
-          -- i.e. the arguments to require("lspconfig").clangd.setup({})
+          
+          -- i.e. the arguments to vim.lsp.config("clangd", {})
           cmd = {
             "clangd",
             "--background-index",
