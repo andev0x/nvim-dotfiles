@@ -7,14 +7,18 @@ return {
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      -- Automatically install LSPs and related tools to stdpath
-      { "williamboman/mason.nvim" },
-      { "williamboman/mason-lspconfig.nvim" },
-      { "WhoIsSethDaniel/mason-tool-installer.nvim" },
-      
+      -- Mason and related tooling
+      {
+        "williamboman/mason.nvim",
+        dependencies = {
+          "williamboman/mason-lspconfig.nvim",
+          "WhoIsSethDaniel/mason-tool-installer.nvim",
+        },
+      },
+
       -- Useful status updates for LSP
       { "j-hui/fidget.nvim", opts = {} },
-      
+
       -- Additional lua configuration, makes nvim stuff amazing!
       { "folke/neodev.nvim" },
     },

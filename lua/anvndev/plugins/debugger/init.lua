@@ -11,8 +11,8 @@ return {
 			-- Virtual text for DAP
 			{ "theHamsta/nvim-dap-virtual-text" },
 
-			-- Mason integration for DAP
-			{ "jay-babu/mason-nvim-dap.nvim" },
+		-- Mason integration for DAP
+			{ "jay-babu/mason-nvim-dap.nvim", dependencies = { "williamboman/mason.nvim" } },
 		},
 		config = function()
 			local dap = require("dap")
@@ -102,6 +102,12 @@ return {
 			})
 
 			-- Setup Mason DAP
+			-- Ensure mason is available and configured before mason-nvim-dap uses mason-core
+			local mason_ok, mason = pcall(require, "mason")
+			if mason_ok then
+				mason.setup()
+			end
+
 			require("mason-nvim-dap").setup({
 				ensure_installed = { "delve", "codelldb", "debugpy" },
 				automatic_installation = true,

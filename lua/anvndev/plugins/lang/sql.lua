@@ -3,14 +3,11 @@ return {
 		"nanotee/sqls.nvim",
 		ft = "sql",
 		dependencies = {
-			"neovim/nvim-lspconfig",
+			
 		},
 		config = function()
-			local lspconfig = require("lspconfig")
-			local configs = require("lspconfig.configs")
-
 			-- SQL language server configuration
-			lspconfig.sqls.setup({
+			vim.lsp.config.sqls.setup({
 				on_attach = function(client, bufnr)
 					-- Enable completion triggered by <c-x><c-o>
 					vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
