@@ -1,9 +1,9 @@
-local status_ok, which_key = pcall(require, "which-key")
+local status_ok, wk = pcall(require, "which-key")
 if not status_ok then
 	return
 end
 
-which_key.setup({
+wk.setup({
 	plugins = {
 		marks = true,
 		registers = true,
@@ -56,19 +56,27 @@ which_key.setup({
 	},
 })
 
-which_key.register({
-	["<leader>"] = {
-		name = "leader",
-		t = { name = "Terminal" },
-		f = { name = "Find/Files" },
-		l = { name = "LSP" },
-		c = { name = "Code" },
-		b = { name = "Buffers" },
-		g = { name = "Git" },
-		r = { name = "Refactor" },
-		w = { name = "Workspace" },
-		to = { name = "Toggle" },
-		x = { name = "Text" },
-		d = { name = "Debug" },
-	},
+-- 🔹 Modern which-key v3 spec (flat list)
+wk.add({
+	{ "<leader>l", group = "LSP" },
+	{ "<leader>g", group = "Git" },
+	{ "<leader>c", group = "Code" },
+	{ "<leader>t", group = "Terminal" },
+	{ "<leader>b", group = "Buffers" },
+	{ "<leader>d", group = "Debug" },
+	{ "<leader>r", group = "Refactor" },
+	{ "<leader>w", group = "Workspace" },
+	{ "<leader>f", group = "Find/Files" },
+	{ "<leader>x", group = "Text" },
+
+	-- 🔹 Optional: group toggle
+	{ "<leader>to", group = "Toggle" },
+	{ "<leader>tl", desc = "Toggle invisible characters" },
+	{ "<leader>th", desc = "Horizontal terminal" },
+	{ "<leader>ts", desc = "Toggle spell check" },
+	{ "<leader>tt", desc = "Toggle terminal" },
+	{ "<leader>tr", desc = "Toggle relative line numbers" },
+	{ "<leader>tw", desc = "Toggle word wrap" },
+	{ "<leader>tv", desc = "Vertical terminal" },
+	{ "<leader>tf", desc = "Float terminal" },
 })

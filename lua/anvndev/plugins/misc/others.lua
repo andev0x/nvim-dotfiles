@@ -20,7 +20,7 @@ return {
 					map = "<M-e>",
 					chars = { "{", "[", "(", '"', "'" },
 					pattern = string.gsub([[ [%'%"%)%>%]%)%}%,] ]], "%s+", ""),
-					offset = 0, -- Offset from pattern match
+					offset = 0,
 					end_key = "$",
 					keys = "qwertyuiopzxcvbnmasdfghjkl",
 					check_comma = true,
@@ -39,22 +39,7 @@ return {
 	{
 		"kylechui/nvim-surround",
 		event = "VeryLazy",
-		config = function()
-			require("nvim-surround").setup({
-				keymaps = {
-					insert = "<C-g>s",
-					insert_line = "<C-g>S",
-					normal = "ys",
-					normal_cur = "yss",
-					normal_line = "yS",
-					normal_cur_line = "ySS",
-					visual = "S",
-					visual_line = "gS",
-					delete = "ds",
-					change = "cs",
-				},
-			})
-		end,
+		config = true,
 	},
 
 	-- Indent guides
@@ -62,30 +47,24 @@ return {
 		"lukas-reineke/indent-blankline.nvim",
 		event = { "BufReadPost", "BufNewFile" },
 		main = "ibl",
-		config = function()
-			require("ibl").setup({
-				indent = {
-					char = "│",
-					tab_char = "│",
+		opts = {
+			indent = { char = "│", tab_char = "│" },
+			scope = { enabled = true },
+			exclude = {
+				filetypes = {
+					"help",
+					"alpha",
+					"dashboard",
+					"neo-tree",
+					"Trouble",
+					"lazy",
+					"mason",
+					"notify",
+					"toggleterm",
+					"lazyterm",
 				},
-				scope = { enabled = true },
-				exclude = {
-					filetypes = {
-						"help",
-						"alpha",
-						"dashboard",
-						"neo-tree",
-						"Trouble",
-						"trouble",
-						"lazy",
-						"mason",
-						"notify",
-						"toggleterm",
-						"lazyterm",
-					},
-				},
-			})
-		end,
+			},
+		},
 	},
 
 	-- Terminal
@@ -110,11 +89,8 @@ return {
 				end,
 				open_mapping = [[<c-\>]],
 				hide_numbers = true,
-				shade_filetypes = {},
-				shade_terminals = true,
 				shading_factor = 2,
 				start_in_insert = true,
-				insert_mappings = true,
 				persist_size = true,
 				direction = "float",
 				close_on_exit = true,
@@ -122,78 +98,35 @@ return {
 				float_opts = {
 					border = "curved",
 					winblend = 0,
-					highlights = {
-						border = "Normal",
-						background = "Normal",
-					},
+					highlights = { border = "Normal", background = "Normal" },
 				},
 			})
 
-			-- Custom terminal functions
 			local Terminal = require("toggleterm.terminal").Terminal
+			local terms = {
+				lazygit = Terminal:new({ cmd = "lazygit", hidden = true, direction = "float" }),
+				node = Terminal:new({ cmd = "node", hidden = true, direction = "float" }),
+				python = Terminal:new({ cmd = "python3", hidden = true, direction = "float" }),
+				go = Terminal:new({ cmd = "gore", hidden = true, direction = "float" }),
+			}
 
-			-- Lazygit terminal
-			local lazygit = Terminal:new({
-				cmd = "lazygit",
-				hidden = true,
-				direction = "float",
-				float_opts = {
-					border = "curved",
-				},
-			})
-
-			function _G._LAZYGIT_TOGGLE()
-				lazygit:toggle()
+			_G._LAZYGIT_TOGGLE = function()
+				terms.lazygit:toggle()
+			end
+			_G._NODE_TOGGLE = function()
+				terms.node:toggle()
+			end
+			_G._PYTHON_TOGGLE = function()
+				terms.python:toggle()
+			end
+			_G._GO_TOGGLE = function()
+				terms.go:toggle()
 			end
 
-			-- Node terminal
-			local node = Terminal:new({
-				cmd = "node",
-				hidden = true,
-				direction = "float",
-			})
-
-			function _G._NODE_TOGGLE()
-				node:toggle()
-			end
-
-			-- Python terminal
-			local python = Terminal:new({
-				cmd = "python3",
-				hidden = true,
-				direction = "float",
-			})
-
-			function _G._PYTHON_TOGGLE()
-				python:toggle()
-			end
-
-			-- Go terminal
-			local go_repl = Terminal:new({
-				cmd = "gore",
-				hidden = true,
-				direction = "float",
-			})
-
-			function _G._GO_TOGGLE()
-				go_repl:toggle()
-			end
-
-			-- Key mappings for custom terminals
-			vim.api.nvim_set_keymap(
-				"n",
-				"<leader>gg",
-				"<cmd>lua _LAZYGIT_TOGGLE()<CR>",
-				{ noremap = true, silent = true }
-			)
-			vim.api.nvim_set_keymap("n", "<leader>tn", "<cmd>lua _NODE_TOGGLE()<CR>", { noremap = true, silent = true })
-			vim.api.nvim_set_keymap(
-				"n",
-				"<leader>tp",
-				"<cmd>lua _PYTHON_TOGGLE()<CR>",
-				{ noremap = true, silent = true }
-			)
-			vim.api.nvim_set_keymap("n", "<leader>tg", "<cmd>lua _GO_TOGGLE()<CR>", { noremap = true, silent = true })
+			vim.keymap.set("n", "<leader>gg", _LAZYGIT_TOGGLE, { desc = "LazyGit" })
+			vim.keymap.set("n", "<leader>tn", _NODE_TOGGLE, { desc = "Node REPL" })
+			vim.keymap.set("n", "<leader>tp", _PYTHON_TOGGLE, { desc = "Python REPL" })
+			vim.keymap.set("n", "<leader>tg", _GO_TOGGLE, { desc = "Go REPL" })
 		end,
 	},
 
@@ -202,16 +135,11 @@ return {
 		"folke/which-key.nvim",
 		event = "VeryLazy",
 		config = function()
-			local which_key = require("which-key")
-
-			which_key.setup({
+			require("which-key").setup({
 				plugins = {
 					marks = true,
 					registers = true,
-					spelling = {
-						enabled = true,
-						suggestions = 20,
-					},
+					spelling = { enabled = true, suggestions = 20 },
 					presets = {
 						operators = true,
 						motions = true,
@@ -222,63 +150,35 @@ return {
 						g = true,
 					},
 				},
-				icons = {
-					breadcrumb = "»",
-					separator = "➜",
-					group = "+",
-				},
-				win = {
-					border = "rounded",
-					position = "bottom",
-					margin = { 1, 0, 1, 0 },
-					padding = { 2, 2, 2, 2 },
-					winblend = 0,
-				},
-				layout = {
-					height = { min = 4, max = 25 },
-					width = { min = 20, max = 50 },
-					spacing = 3,
-					align = "left",
-				},
+				icons = { breadcrumb = "»", separator = "➜", group = "+" },
+				win = { border = "rounded", position = "bottom", padding = { 2, 2, 2, 2 } },
+				layout = { height = { min = 4, max = 25 }, width = { min = 20, max = 50 }, spacing = 3 },
 				triggers = { "<leader>" },
-				show_help = true,
-				show_keys = true,
-			})
-
-			-- Register key groups using the new format
-			which_key.register({
-				{ "", group = "Workspace" },
-				{ "", group = "Debug" },
-				{ "", group = "Refactor" },
-				{ "", group = "Buffers" },
-				{ "", group = "Git" },
-				{ "", group = "Code" },
-				{ "", group = "Terminal" },
-				{ "", group = "Find/Files" },
-				{ "", group = "LSP" },
 			})
 		end,
 	},
 
-	-- Notifications
+	-- Notify
 	{
 		"rcarriga/nvim-notify",
 		event = "VeryLazy",
 		config = function()
 			local notify = require("notify")
-
-			-- Function to get time-based icon
-			local function get_time_icon()
+			local function time_icon()
 				local hour = tonumber(os.date("%H"))
-				if hour >= 5 and hour < 12 then
-					return "☀️" -- Morning sun
-				elseif hour >= 12 and hour < 17 then
-					return "⛅" -- Afternoon sun with clouds
-				elseif hour >= 17 and hour < 20 then
-					return "🍹" -- Sunset
-				else
-					return "🌙" -- Moon
+				if hour < 5 then
+					return "🌙"
 				end
+				if hour < 12 then
+					return "☀️"
+				end
+				if hour < 17 then
+					return "⛅"
+				end
+				if hour < 20 then
+					return "🍹"
+				end
+				return "🌙"
 			end
 
 			notify.setup({
@@ -286,9 +186,8 @@ return {
 				timeout = 3000,
 				render = "default",
 				background_colour = "#000000",
-				max_width = 80,
 				icons = {
-					ERROR = get_time_icon(),
+					ERROR = time_icon(),
 					WARN = "⚠️",
 					INFO = "ℹ️",
 					DEBUG = "🔍",
@@ -296,142 +195,38 @@ return {
 				},
 			})
 
-			-- Override the default notify function to always use current time icon
-			local original_notify = vim.notify
 			vim.notify = function(msg, level, opts)
 				opts = opts or {}
-				opts.icon = get_time_icon()
-				return original_notify(msg, level, opts)
+				opts.icon = time_icon()
+				return notify(msg, level, opts)
 			end
 		end,
 	},
 
-	-- Better UI components
+	-- Dressing UI
 	{
 		"stevearc/dressing.nvim",
 		event = "VeryLazy",
-		config = function()
-			require("dressing").setup({
-				input = {
-					enabled = true,
-					default_prompt = "Input:",
-					prompt_align = "left",
-					insert_only = true,
-					anchor = "SW",
-					border = "rounded",
-					relative = "cursor",
-					prefer_width = 40,
-					width = nil,
-					max_width = { 140, 0.9 },
-					min_width = { 20, 0.2 },
-					win_options = {
-						winblend = 0,
-						winhighlight = "",
-					},
-					mappings = {
-						n = {
-							["<Esc>"] = "Close",
-							["<CR>"] = "Confirm",
-						},
-						i = {
-							["<C-c>"] = "Close",
-							["<CR>"] = "Confirm",
-							["<Up>"] = "HistoryPrev",
-							["<Down>"] = "HistoryNext",
-						},
-					},
-					override = function(conf)
-						return conf
-					end,
-					get_config = nil,
-				},
-				select = {
-					enabled = true,
-					backend = { "telescope", "fzf_lua", "fzf", "builtin", "nui" },
-					trim_prompt = true,
-					telescope = nil,
-					fzf = {
-						window = {
-							width = 0.5,
-							height = 0.4,
-						},
-					},
-					fzf_lua = {
-						winopts = {
-							width = 0.5,
-							height = 0.4,
-						},
-					},
-					nui = {
-						position = "50%",
-						size = nil,
-						relative = "editor",
-						border = {
-							style = "rounded",
-						},
-						buf_options = {
-							swapfile = false,
-							filetype = "DressingSelect",
-						},
-						win_options = {
-							winblend = 0,
-						},
-						max_width = 80,
-						max_height = 40,
-						min_width = 40,
-						min_height = 10,
-					},
-					builtin = {
-						anchor = "NW",
-						border = "rounded",
-						relative = "editor",
-						win_options = {
-							winblend = 0,
-							winhighlight = "",
-						},
-						width = nil,
-						max_width = { 140, 0.8 },
-						min_width = { 40, 0.2 },
-						height = nil,
-						max_height = 0.9,
-						min_height = { 10, 0.2 },
-						mappings = {
-							["<Esc>"] = "Close",
-							["<C-c>"] = "Close",
-							["<CR>"] = "Confirm",
-						},
-						override = function(conf)
-							return conf
-						end,
-					},
-					format_item_override = {},
-					get_config = nil,
-				},
-			})
-		end,
+		opts = {
+			input = { border = "rounded", prefer_width = 40 },
+			select = {
+				backend = { "telescope", "fzf_lua", "fzf", "builtin", "nui" },
+				builtin = { border = "rounded" },
+			},
+		},
 	},
 
 	-- Web devicons
 	{
 		"nvim-tree/nvim-web-devicons",
 		event = "VeryLazy",
-		config = function()
-			require("nvim-web-devicons").setup({
-				override = {
-					go = {
-						icon = "",
-						color = "#519aba",
-						name = "Go",
-					},
-					py = {
-						icon = "󰌠",
-						color = "#ffd43b",
-						name = "Python",
-					},
-				},
-				default = true,
-			})
-		end,
+		opts = {
+			override = {
+				go = { icon = "", color = "#519aba", name = "Go" },
+				py = { icon = "󰌠", color = "#ffd43b", name = "Python" },
+			},
+			default = true,
+		},
 	},
 
 	-- Todo comments
@@ -439,130 +234,45 @@ return {
 		"folke/todo-comments.nvim",
 		event = { "BufReadPost", "BufNewFile" },
 		dependencies = { "nvim-lua/plenary.nvim" },
-		config = function()
-			require("todo-comments").setup({
-				signs = true,
-				sign_priority = 8,
-				keywords = {
-					FIX = {
-						icon = "",
-						color = "error",
-						alt = { "FIXME", "BUG", "FIXIT", "ISSUE" },
-					},
-					TODO = { icon = "", color = "info" },
-					HACK = { icon = "", color = "warning" },
-					WARN = { icon = "", color = "warning", alt = { "WARNING", "XXX" } },
-					PERF = { icon = "", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
-					NOTE = { icon = "󰍨", color = "hint", alt = { "INFO" } },
-					TEST = { icon = "⏲ ", color = "test", alt = { "TESTING", "PASSED", "FAILED" } },
-				},
-				gui_style = {
-					fg = "NONE",
-					bg = "BOLD",
-				},
-				merge_keywords = true,
-				highlight = {
-					multiline = true,
-					multiline_pattern = "^.",
-					multiline_context = 10,
-					before = "",
-					keyword = "wide",
-					after = "fg",
-					pattern = [[.*<(KEYWORDS)\s*:]],
-					comments_only = true,
-					max_line_len = 400,
-					exclude = {},
-				},
-				colors = {
-					error = { "DiagnosticError", "ErrorMsg", "#DC2626" },
-					warning = { "DiagnosticWarn", "WarningMsg", "#FBBF24" },
-					info = { "DiagnosticInfo", "#2563EB" },
-					hint = { "DiagnosticHint", "#10B981" },
-					default = { "Identifier", "#7C3AED" },
-					test = { "Identifier", "#FF00FF" },
-				},
-				search = {
-					command = "rg",
-					args = {
-						"--color=never",
-						"--no-heading",
-						"--with-filename",
-						"--line-number",
-						"--column",
-					},
-					pattern = [[\b(KEYWORDS):]],
-				},
-			})
-		end,
+		opts = {
+			signs = true,
+			keywords = {
+				FIX = { icon = "", color = "error", alt = { "FIXME", "BUG" } },
+				TODO = { icon = "", color = "info" },
+				HACK = { icon = "", color = "warning" },
+				WARN = { icon = "", color = "warning" },
+				PERF = { icon = "" },
+				NOTE = { icon = "󰍨", color = "hint" },
+			},
+		},
 	},
 
-	-- Trouble (diagnostics, references, etc.)
+	-- Trouble
 	{
 		"folke/trouble.nvim",
-		cmd = { "TroubleToggle", "Trouble" },
+		cmd = { "Trouble", "TroubleToggle" },
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		keys = {
 			{ "<leader>xx", "<cmd>TroubleToggle<cr>", desc = "Toggle Trouble" },
 			{ "<leader>xw", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "Workspace Diagnostics" },
 			{ "<leader>xd", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document Diagnostics" },
-			{ "<leader>xl", "<cmd>TroubleToggle loclist<cr>", desc = "Location List" },
-			{ "<leader>xq", "<cmd>TroubleToggle quickfix<cr>", desc = "Quickfix List" },
 			{ "gR", "<cmd>TroubleToggle lsp_references<cr>", desc = "LSP References" },
 		},
-		config = function()
-			require("trouble").setup({
-				position = "bottom",
-				height = 10,
-				width = 50,
-				icons = true,
-				mode = "workspace_diagnostics",
-				fold_open = "",
-				fold_closed = "",
-				group = true,
-				padding = true,
-				action_keys = {
-					close = "q",
-					cancel = "<esc>",
-					refresh = "r",
-					jump = { "<cr>", "<tab>" },
-					open_split = { "<c-x>" },
-					open_vsplit = { "<c-v>" },
-					open_tab = { "<c-t>" },
-					jump_close = { "o" },
-					toggle_mode = "m",
-					toggle_preview = "P",
-					hover = "K",
-					preview = "p",
-					close_folds = { "zM", "zm" },
-					open_folds = { "zR", "zr" },
-					toggle_fold = { "zA", "za" },
-					previous = "k",
-					next = "j",
-				},
-				indent_lines = true,
-				auto_open = false,
-				auto_close = false,
-				auto_preview = true,
-				auto_fold = false,
-				auto_jump = { "lsp_definitions" },
-				signs = {
-					error = "",
-					warning = "",
-					hint = "󰌵",
-					information = "",
-					other = "﫠",
-				},
-				use_diagnostic_signs = false,
-			})
-		end,
+		opts = {
+			position = "bottom",
+			height = 10,
+			icons = true,
+			mode = "workspace_diagnostics",
+			auto_open = false,
+			auto_close = false,
+			use_diagnostic_signs = false,
+		},
 	},
 
 	-- Mini icons
 	{
 		"echasnovski/mini.icons",
 		event = "VeryLazy",
-		config = function()
-			require("mini.icons").setup()
-		end,
+		config = true,
 	},
 }
