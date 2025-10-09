@@ -3,6 +3,7 @@
 -- ⚙️ Autocommands for anvndev Neovim setup
 -- ==================================================
 
+-- Shortcuts
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 
@@ -11,50 +12,59 @@ local autocmd = vim.api.nvim_create_autocmd
 -- --------------------------------------------------
 local general = augroup("General", { clear = true })
 
--- Highlight on yank
+-- Highlight text on yank
 autocmd("TextYankPost", {
 	group = general,
 	callback = function()
-		vim.hl.on_yank({ higroup = "IncSearch", timeout = 300 })
+		vim.highlight.on_yank({ higroup = "IncSearch", timeout = 200 })
 	end,
 	desc = "Highlight selected text on yank",
 })
 
--- Resize splits automatically when window is resized
+-- Auto-resize splits when the window size changes
 autocmd("VimResized", {
 	group = general,
 	callback = function()
 		vim.cmd("tabdo wincmd =")
 	end,
-	desc = "Auto-resize splits on Vim resize",
+	desc = "Automatically resize splits on window resize",
 })
 
--- Create missing directories when saving a file
+-- Auto-create missing directories when saving a file
 autocmd("BufWritePre", {
 	group = general,
 	callback = function(event)
-		if event.match:match("^%w%w+://") then return end
+		if event.match:match("^%w%w+://") then
+			return
+		end
 		local file = vim.loop.fs_realpath(event.match) or event.match
 		vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
 	end,
-	desc = "Auto-create parent directories before saving",
+	desc = "Auto-create parent directories before saving a file",
 })
 
--- Close specific filetypes with <q>
+-- Close certain filetypes with 'q'
 autocmd("FileType", {
 	group = general,
 	pattern = {
-		"qf", "help", "man", "notify", "lspinfo",
-		"spectre_panel", "startuptime", "tsplayground", "PlenaryTestPopup",
+		"qf",
+		"help",
+		"man",
+		"notify",
+		"lspinfo",
+		"spectre_panel",
+		"startuptime",
+		"tsplayground",
+		"PlenaryTestPopup",
 	},
 	callback = function(event)
 		vim.bo[event.buf].buflisted = false
 		vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
 	end,
-	desc = "Close utility buffers with <q>",
+	desc = "Close utility buffers with 'q'",
 })
 
--- Jump to last edit position when reopening a file
+-- Restore last cursor position when reopening a file
 autocmd("BufReadPost", {
 	group = general,
 	callback = function()
@@ -64,53 +74,56 @@ autocmd("BufReadPost", {
 			pcall(vim.api.nvim_win_set_cursor, 0, mark)
 		end
 	end,
-	desc = "Restore cursor position on file reopen",
+	desc = "Restore cursor position when reopening a file",
 })
 
--- Auto format before saving if LSP formatter is available
+-- Auto format before saving (skip Lua to avoid corruption)
 autocmd("BufWritePre", {
 	group = general,
 	callback = function()
-		pcall(vim.lsp.buf.format, { async = false })
+		if vim.bo.filetype ~= "lua" then
+			pcall(vim.lsp.buf.format, { async = false })
+		end
 	end,
-	desc = "Auto-format before saving (if LSP supports it)",
+	desc = "Auto-format before saving (except Lua)",
 })
 
 -- --------------------------------------------------
 -- 🧠 Language Specific Settings
 -- --------------------------------------------------
-local language_settings = augroup("LanguageSettings", { clear = true })
+local language = augroup("LanguageSettings", { clear = true })
 
--- Go
+-- Go indentation
 autocmd("FileType", {
-	group = language_settings,
+	group = language,
 	pattern = "go",
 	callback = function()
 		vim.opt_local.expandtab = false
 		vim.opt_local.tabstop = 4
 		vim.opt_local.shiftwidth = 4
 	end,
-	desc = "Set Go indentation rules",
+	desc = "Set Go indentation to tabs (4 spaces width)",
 })
 
--- Rust
+-- Rust indentation
 autocmd("FileType", {
-	group = language_settings,
+	group = language,
 	pattern = "rust",
 	callback = function()
+		vim.opt_local.expandtab = false
 		vim.opt_local.tabstop = 4
 		vim.opt_local.shiftwidth = 4
 	end,
-	desc = "Set Rust indentation rules",
+	desc = "Set Rust indentation to tabs (4 spaces width)",
 })
 
 -- --------------------------------------------------
 -- 🖥️ Terminal Settings
 -- --------------------------------------------------
-local terminal_settings = augroup("TerminalSettings", { clear = true })
+local terminal = augroup("TerminalSettings", { clear = true })
 
 autocmd("TermOpen", {
-	group = terminal_settings,
+	group = terminal,
 	callback = function()
 		vim.opt_local.number = false
 		vim.opt_local.relativenumber = false
@@ -122,28 +135,30 @@ autocmd("TermOpen", {
 -- --------------------------------------------------
 -- 🧰 LSP Settings
 -- --------------------------------------------------
-local lsp_settings = augroup("LspSettings", { clear = true })
+local lsp = augroup("LspSettings", { clear = true })
 
--- Setup LSP keymaps dynamically when attached
+-- Set up LSP keymaps when LSP attaches
 autocmd("LspAttach", {
-	group = lsp_settings,
+	group = lsp,
 	callback = function(event)
 		local opts = { buffer = event.buf, silent = true }
-		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-		vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-		vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-		vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-		vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
-		vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts)
-		vim.keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
-		vim.keymap.set("n", "<leader>wl", function()
+		local map = vim.keymap.set
+
+		map("n", "gD", vim.lsp.buf.declaration, opts)
+		map("n", "gd", vim.lsp.buf.definition, opts)
+		map("n", "K", vim.lsp.buf.hover, opts)
+		map("n", "gi", vim.lsp.buf.implementation, opts)
+		map("n", "<C-k>", vim.lsp.buf.signature_help, opts)
+		map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts)
+		map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
+		map("n", "<leader>wl", function()
 			print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 		end, opts)
-		vim.keymap.set("n", "<leader>D", vim.lsp.buf.type_definition, opts)
-		vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-		vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
-		vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-		vim.keymap.set("n", "<leader>lf", function()
+		map("n", "<leader>D", vim.lsp.buf.type_definition, opts)
+		map("n", "<leader>rn", vim.lsp.buf.rename, opts)
+		map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
+		map("n", "gr", vim.lsp.buf.references, opts)
+		map("n", "<leader>lf", function()
 			vim.lsp.buf.format({ async = true })
 		end, opts)
 	end,
@@ -162,8 +177,9 @@ vim.diagnostic.config({
 			[vim.diagnostic.severity.HINT] = "",
 		},
 	},
-	virtual_text = false, -- Disable inline text diagnostics
+	virtual_text = false, -- Disable inline diagnostics
 	underline = true,
+	update_in_insert = false,
 	severity_sort = true,
 	float = {
 		border = "rounded",
@@ -171,12 +187,33 @@ vim.diagnostic.config({
 	},
 })
 
--- Show diagnostic popup automatically when cursor stops
+-- Show diagnostics popup when cursor holds
 autocmd("CursorHold", {
 	callback = function()
 		vim.diagnostic.open_float(nil, { focus = false })
 	end,
 	desc = "Show diagnostics popup on cursor hold",
+})
+
+-- --------------------------------------------------
+-- 🌳 Treesitter Safety Check
+-- --------------------------------------------------
+autocmd("BufWinEnter", {
+	callback = function(args)
+		local buf = args.buf
+		local ft = vim.bo[buf].filetype
+		local ok, parsers = pcall(require, "nvim-treesitter.parsers")
+		if not ok then
+			return
+		end
+		local parser = parsers.get_parser(buf, ft)
+		if not parser then
+			vim.defer_fn(function()
+				pcall(vim.cmd, "TSBufEnable highlight")
+			end, 80)
+		end
+	end,
+	desc = "Force enable Treesitter highlight if missing",
 })
 
 -- ==================================================
