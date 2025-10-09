@@ -11,7 +11,7 @@ return {
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      -- Mason for managing LSP servers and tools
+      -- Mason: manage LSP servers, linters, formatters, DAPs
       {
         "williamboman/mason.nvim",
         dependencies = {
@@ -19,26 +19,38 @@ return {
           "WhoIsSethDaniel/mason-tool-installer.nvim",
         },
         config = function()
-          require("mason").setup()
+          require("mason").setup({
+            ui = {
+              border = "rounded",
+              icons = {
+                package_installed = "✓",
+                package_pending = "➜",
+                package_uninstalled = "✗",
+              },
+            },
+          })
+
           require("mason-lspconfig").setup({
             automatic_installation = true,
           })
+
           require("mason-tool-installer").setup({
             ensure_installed = {
               "gopls",
-              "lua_ls",
-              "rust_analyzer",
+              "lua-language-server",
+              "rust-analyzer",
               "golangci-lint",
               "stylua",
               "gofumpt",
               "goimports",
             },
             auto_update = true,
+            run_on_start = true,
           })
         end,
       },
 
-      -- LSP progress/status indicator
+      -- LSP progress/status UI
       { "j-hui/fidget.nvim", opts = {} },
 
       -- Enhance Lua LSP for Neovim
@@ -46,14 +58,13 @@ return {
     },
 
     config = function()
-      -- Setup Lua-specific LSP features
       require("neodev").setup()
 
-      -- Load custom modules (these should exist)
+      -- Import custom completion and server setup modules
       require("anvndev.plugins.lsp.completion")
       require("anvndev.plugins.lsp.servers")
 
-      -- Configure diagnostic visuals
+      -- Diagnostic configuration for better readability
       vim.diagnostic.config({
         underline = true,
         update_in_insert = false,
@@ -87,7 +98,7 @@ return {
         },
       })
 
-      -- Improve LSP floating windows
+      -- Rounded borders for hover & signature popups
       vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
         border = "rounded",
         max_width = 80,
@@ -98,12 +109,12 @@ return {
         max_width = 80,
       })
 
-      -- Optional: enable inlay hints globally (Neovim 0.10+)
+      -- ✅ Fix: Enable inlay hints correctly for Neovim 0.10+
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
           local client = vim.lsp.get_client_by_id(args.data.client_id)
           if client and client.supports_method("textDocument/inlayHint") then
-            vim.lsp.inlay_hint.enable(args.buf, true)
+            vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
           end
         end,
         desc = "Enable inlay hints when supported",
@@ -118,7 +129,6 @@ return {
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
     dependencies = {
-      -- Snippet engine
       {
         "L3MON4D3/LuaSnip",
         dependencies = { "rafamadriz/friendly-snippets" },
@@ -126,21 +136,17 @@ return {
           require("luasnip.loaders.from_vscode").lazy_load()
         end,
       },
-
-      -- Completion sources
       { "hrsh7th/cmp-nvim-lsp" },
       { "hrsh7th/cmp-buffer" },
       { "hrsh7th/cmp-path" },
       { "saadparwaiz1/cmp_luasnip" },
       { "hrsh7th/cmp-nvim-lua" },
-
-      -- Icons for completion menu
       { "onsails/lspkind.nvim" },
     },
   },
 
   -- --------------------------------------------------
-  -- 🧹 Formatting (using Conform)
+  -- 🧹 Formatting (Conform)
   -- --------------------------------------------------
   {
     "stevearc/conform.nvim",
@@ -174,7 +180,7 @@ return {
   },
 
   -- --------------------------------------------------
-  -- 🧾 Linting (using nvim-lint)
+  -- 🧾 Linting (nvim-lint)
   -- --------------------------------------------------
   {
     "mfussenegger/nvim-lint",
@@ -188,7 +194,6 @@ return {
         lua = { "luacheck" },
       }
 
-      -- Auto-lint when entering buffer or saving file
       local lint_augroup = vim.api.nvim_create_augroup("LintAutoGroup", { clear = true })
       vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
         group = lint_augroup,
@@ -198,7 +203,6 @@ return {
         desc = "Auto-lint buffer on save/leave",
       })
 
-      -- Manual command
       vim.api.nvim_create_user_command("Lint", function()
         lint.try_lint()
       end, { desc = "Manually trigger linting" })
