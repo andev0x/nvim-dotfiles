@@ -1,68 +1,60 @@
 -- ~/.config/nvim/lua/anvndev/core/autocmds.lua
--- Autocommands
+-- ==================================================
+-- ⚙️ Autocommands for anvndev Neovim setup
+-- ==================================================
 
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 
--- General settings
+-- --------------------------------------------------
+-- 🧩 General Settings
+-- --------------------------------------------------
 local general = augroup("General", { clear = true })
 
 -- Highlight on yank
 autocmd("TextYankPost", {
 	group = general,
 	callback = function()
-		vim.hl.on_yank({
-			higroup = "IncSearch",
-			timeout = 300,
-		})
+		vim.hl.on_yank({ higroup = "IncSearch", timeout = 300 })
 	end,
-	desc = "Highlight on yank",
+	desc = "Highlight selected text on yank",
 })
 
--- Resize splits on window resize
+-- Resize splits automatically when window is resized
 autocmd("VimResized", {
 	group = general,
 	callback = function()
 		vim.cmd("tabdo wincmd =")
 	end,
-	desc = "Resize splits on window resize",
+	desc = "Auto-resize splits on Vim resize",
 })
 
--- Auto create dir when saving a file
+-- Create missing directories when saving a file
 autocmd("BufWritePre", {
 	group = general,
 	callback = function(event)
-		if event.match:match("^%w%w+://") then
-			return
-		end
+		if event.match:match("^%w%w+://") then return end
 		local file = vim.loop.fs_realpath(event.match) or event.match
 		vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
 	end,
-	desc = "Create directory if it doesn't exist",
+	desc = "Auto-create parent directories before saving",
 })
 
--- Close some filetypes with <q>
+-- Close specific filetypes with <q>
 autocmd("FileType", {
 	group = general,
 	pattern = {
-		"qf",
-		"help",
-		"man",
-		"notify",
-		"lspinfo",
-		"spectre_panel",
-		"startuptime",
-		"tsplayground",
-		"PlenaryTestPopup",
+		"qf", "help", "man", "notify", "lspinfo",
+		"spectre_panel", "startuptime", "tsplayground", "PlenaryTestPopup",
 	},
 	callback = function(event)
 		vim.bo[event.buf].buflisted = false
 		vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
 	end,
-	desc = "Close some filetypes with <q>",
+	desc = "Close utility buffers with <q>",
 })
 
--- Go to last location when opening a buffer
+-- Jump to last edit position when reopening a file
 autocmd("BufReadPost", {
 	group = general,
 	callback = function()
@@ -72,22 +64,24 @@ autocmd("BufReadPost", {
 			pcall(vim.api.nvim_win_set_cursor, 0, mark)
 		end
 	end,
-	desc = "Go to last location when opening a buffer",
+	desc = "Restore cursor position on file reopen",
 })
 
--- Auto format on save (if formatter available)
+-- Auto format before saving if LSP formatter is available
 autocmd("BufWritePre", {
 	group = general,
 	callback = function()
-		vim.lsp.buf.format({ async = false })
+		pcall(vim.lsp.buf.format, { async = false })
 	end,
-	desc = "Format on save",
+	desc = "Auto-format before saving (if LSP supports it)",
 })
 
--- Language specific settings
+-- --------------------------------------------------
+-- 🧠 Language Specific Settings
+-- --------------------------------------------------
 local language_settings = augroup("LanguageSettings", { clear = true })
 
--- Go settings
+-- Go
 autocmd("FileType", {
 	group = language_settings,
 	pattern = "go",
@@ -96,10 +90,10 @@ autocmd("FileType", {
 		vim.opt_local.tabstop = 4
 		vim.opt_local.shiftwidth = 4
 	end,
-	desc = "Go indentation settings",
+	desc = "Set Go indentation rules",
 })
 
--- Rust settings
+-- Rust
 autocmd("FileType", {
 	group = language_settings,
 	pattern = "rust",
@@ -107,13 +101,14 @@ autocmd("FileType", {
 		vim.opt_local.tabstop = 4
 		vim.opt_local.shiftwidth = 4
 	end,
-	desc = "Rust indentation settings",
+	desc = "Set Rust indentation rules",
 })
 
--- Terminal settings
+-- --------------------------------------------------
+-- 🖥️ Terminal Settings
+-- --------------------------------------------------
 local terminal_settings = augroup("TerminalSettings", { clear = true })
 
--- Enter insert mode when opening terminal
 autocmd("TermOpen", {
 	group = terminal_settings,
 	callback = function()
@@ -121,13 +116,15 @@ autocmd("TermOpen", {
 		vim.opt_local.relativenumber = false
 		vim.cmd("startinsert")
 	end,
-	desc = "Enter insert mode when opening terminal",
+	desc = "Auto enter insert mode in terminal",
 })
 
--- LSP settings
+-- --------------------------------------------------
+-- 🧰 LSP Settings
+-- --------------------------------------------------
 local lsp_settings = augroup("LspSettings", { clear = true })
 
--- LSP keymaps when attaching to buffer
+-- Setup LSP keymaps dynamically when attached
 autocmd("LspAttach", {
 	group = lsp_settings,
 	callback = function(event)
@@ -150,10 +147,12 @@ autocmd("LspAttach", {
 			vim.lsp.buf.format({ async = true })
 		end, opts)
 	end,
-	desc = "LSP keymaps when attaching to buffer",
+	desc = "Set LSP keymaps on attach",
 })
 
--- Configure diagnostics
+-- --------------------------------------------------
+-- 🪶 Diagnostics Configuration
+-- --------------------------------------------------
 vim.diagnostic.config({
 	signs = {
 		text = {
@@ -163,7 +162,7 @@ vim.diagnostic.config({
 			[vim.diagnostic.severity.HINT] = "",
 		},
 	},
-	virtual_text = true,
+	virtual_text = false, -- Disable inline text diagnostics
 	underline = true,
 	severity_sort = true,
 	float = {
@@ -172,3 +171,14 @@ vim.diagnostic.config({
 	},
 })
 
+-- Show diagnostic popup automatically when cursor stops
+autocmd("CursorHold", {
+	callback = function()
+		vim.diagnostic.open_float(nil, { focus = false })
+	end,
+	desc = "Show diagnostics popup on cursor hold",
+})
+
+-- ==================================================
+-- 🧠 End of autocmds.lua
+-- ==================================================

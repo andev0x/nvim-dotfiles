@@ -1,38 +1,59 @@
 -- ~/.config/nvim/lua/anvndev/plugins/lsp/init.lua
--- LSP configuration
+-- ==================================================
+-- ⚙️ LSP, Formatting, and Linting configuration
+-- ==================================================
 
 return {
-  -- LSP Configuration & Plugins
+  -- --------------------------------------------------
+  -- 🧠 LSP Core Configuration
+  -- --------------------------------------------------
   {
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      -- Mason and related tooling
+      -- Mason for managing LSP servers and tools
       {
         "williamboman/mason.nvim",
         dependencies = {
           "williamboman/mason-lspconfig.nvim",
           "WhoIsSethDaniel/mason-tool-installer.nvim",
         },
+        config = function()
+          require("mason").setup()
+          require("mason-lspconfig").setup({
+            automatic_installation = true,
+          })
+          require("mason-tool-installer").setup({
+            ensure_installed = {
+              "gopls",
+              "lua_ls",
+              "rust_analyzer",
+              "golangci-lint",
+              "stylua",
+              "gofumpt",
+              "goimports",
+            },
+            auto_update = true,
+          })
+        end,
       },
 
-      -- Useful status updates for LSP
+      -- LSP progress/status indicator
       { "j-hui/fidget.nvim", opts = {} },
 
-      -- Additional lua configuration, makes nvim stuff amazing!
-      { "folke/neodev.nvim" },
+      -- Enhance Lua LSP for Neovim
+      { "folke/neodev.nvim", opts = {} },
     },
+
     config = function()
-      -- Setup neovim lua configuration
+      -- Setup Lua-specific LSP features
       require("neodev").setup()
-      
-      -- Import completion configuration
+
+      -- Load custom modules (these should exist)
       require("anvndev.plugins.lsp.completion")
-      
-      -- Import LSP servers configuration
       require("anvndev.plugins.lsp.servers")
-      
-      -- Configure diagnostic display with improved visibility
+
+      -- Configure diagnostic visuals
       vim.diagnostic.config({
         underline = true,
         update_in_insert = false,
@@ -40,9 +61,6 @@ return {
           spacing = 4,
           source = "if_many",
           prefix = "●",
-          severity = {
-            min = vim.diagnostic.severity.HINT,
-          },
         },
         severity_sort = true,
         float = {
@@ -69,15 +87,7 @@ return {
         },
       })
 
-      -- Add error handling for LSP setup
-      local on_attach = function(client, bufnr)
-        -- Enable inlay hints if supported
-        if client.supports_method("textDocument/inlayHint") then
-          vim.lsp.inlay_hint.enable(bufnr, true)
-        end
-      end
-
-      -- Configure LSP handlers
+      -- Improve LSP floating windows
       vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
         border = "rounded",
         max_width = 80,
@@ -87,15 +97,28 @@ return {
         border = "rounded",
         max_width = 80,
       })
+
+      -- Optional: enable inlay hints globally (Neovim 0.10+)
+      vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(args)
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          if client and client.supports_method("textDocument/inlayHint") then
+            vim.lsp.inlay_hint.enable(args.buf, true)
+          end
+        end,
+        desc = "Enable inlay hints when supported",
+      })
     end,
   },
-  
-  -- Autocompletion
+
+  -- --------------------------------------------------
+  -- ⚡ Autocompletion
+  -- --------------------------------------------------
   {
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
     dependencies = {
-      -- Snippet Engine & its associated nvim-cmp source
+      -- Snippet engine
       {
         "L3MON4D3/LuaSnip",
         dependencies = { "rafamadriz/friendly-snippets" },
@@ -103,20 +126,22 @@ return {
           require("luasnip.loaders.from_vscode").lazy_load()
         end,
       },
-      
+
       -- Completion sources
       { "hrsh7th/cmp-nvim-lsp" },
       { "hrsh7th/cmp-buffer" },
       { "hrsh7th/cmp-path" },
       { "saadparwaiz1/cmp_luasnip" },
       { "hrsh7th/cmp-nvim-lua" },
-      
-      -- Icons in completion menu
+
+      -- Icons for completion menu
       { "onsails/lspkind.nvim" },
     },
   },
-  
-  -- Formatting
+
+  -- --------------------------------------------------
+  -- 🧹 Formatting (using Conform)
+  -- --------------------------------------------------
   {
     "stevearc/conform.nvim",
     event = { "BufWritePre" },
@@ -127,7 +152,7 @@ return {
         function()
           require("conform").format({ async = true, lsp_fallback = true })
         end,
-        desc = "Format buffer",
+        desc = "Format current buffer",
       },
     },
     opts = {
@@ -147,33 +172,36 @@ return {
       },
     },
   },
-  
-  -- Linting
+
+  -- --------------------------------------------------
+  -- 🧾 Linting (using nvim-lint)
+  -- --------------------------------------------------
   {
     "mfussenegger/nvim-lint",
     event = { "BufReadPre", "BufNewFile" },
     config = function()
       local lint = require("lint")
-      
+
       lint.linters_by_ft = {
         go = { "golangcilint" },
         python = { "flake8", "mypy" },
         lua = { "luacheck" },
       }
-      
-      -- Automatically lint on certain events
-      local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
+
+      -- Auto-lint when entering buffer or saving file
+      local lint_augroup = vim.api.nvim_create_augroup("LintAutoGroup", { clear = true })
       vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
         group = lint_augroup,
         callback = function()
           lint.try_lint()
         end,
+        desc = "Auto-lint buffer on save/leave",
       })
-      
-      -- Command to manually trigger linting
+
+      -- Manual command
       vim.api.nvim_create_user_command("Lint", function()
         lint.try_lint()
-      end, {})
+      end, { desc = "Manually trigger linting" })
     end,
   },
 }
