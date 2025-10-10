@@ -38,7 +38,6 @@ opt.shiftwidth = 4                     -- Indentation size
 opt.smartindent = true                 -- Auto-indent new lines
 
 -- UI & Appearance -------------------------------------------
-opt.termguicolors = true
 opt.laststatus = 3                     -- Global statusline
 opt.showmode = false                   -- Hide "-- INSERT --" message
 opt.cmdheight = 1

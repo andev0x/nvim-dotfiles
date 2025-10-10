@@ -53,15 +53,15 @@ return {
 				-- 🧩 Diagnostics
 				lsp_diag_hdlr = true,
 				-- lsp_diag_virtual_text = { space = 2, prefix = "●" },
-				lsp_diag_signs = {
+				lsp_diag_signs = false,
+                    -- {
 					-- text = {
 					--   [vim.diagnostic.severity.ERROR] = " ",
 					--   [vim.diagnostic.severity.WARN] = " ",
 					--   [vim.diagnostic.severity.HINT] = "󰌶 ",
 					--   [vim.diagnostic.severity.INFO] = " ",
 					-- },
-					false,
-				},
+				-- },
 				lsp_diag_update_in_insert = false,
 
 				-- 🧱 Formatter

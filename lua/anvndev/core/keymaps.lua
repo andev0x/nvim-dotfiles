@@ -69,19 +69,49 @@ keymap("n", "<leader>gs", ":Gitsigns stage_hunk<CR>", { desc = "Stage git hunk" 
 keymap("n", "<leader>gu", ":Gitsigns undo_stage_hunk<CR>", { desc = "Undo stage git hunk" })
 
 -- Debugging
-keymap("n", "<leader>db", ":lua require'dap'.toggle_breakpoint()<CR>", { desc = "Toggle breakpoint" })
-keymap("n", "<leader>dc", ":lua require'dap'.continue()<CR>", { desc = "Continue" })
-keymap("n", "<leader>di", ":lua require'dap'.step_into()<CR>", { desc = "Step into" })
-keymap("n", "<leader>do", ":lua require'dap'.step_over()<CR>", { desc = "Step over" })
-keymap("n", "<leader>dO", ":lua require'dap'.step_out()<CR>", { desc = "Step out" })
-keymap("n", "<leader>dr", ":lua require'dap'.repl.toggle()<CR>", { desc = "Toggle REPL" })
-keymap("n", "<leader>dl", ":lua require'dap'.run_last()<CR>", { desc = "Run last" })
-keymap("n", "<leader>du", ":lua require'dapui'.toggle()<CR>", { desc = "Toggle DAP UI" })
-keymap("n", "<leader>dt", ":lua require'dap'.terminate()<CR>", { desc = "Terminate" })
+keymap("n", "<leader>db", function()
+	local ok, dap = pcall(require, "dap")
+	if ok and dap then dap.toggle_breakpoint() end
+end, { desc = "Toggle breakpoint" })
+keymap("n", "<leader>dc", function()
+	local ok, dap = pcall(require, "dap")
+	if ok and dap then dap.continue() end
+end, { desc = "Continue" })
+keymap("n", "<leader>di", function()
+	local ok, dap = pcall(require, "dap")
+	if ok and dap then dap.step_into() end
+end, { desc = "Step into" })
+keymap("n", "<leader>do", function()
+	local ok, dap = pcall(require, "dap")
+	if ok and dap then dap.step_over() end
+end, { desc = "Step over" })
+keymap("n", "<leader>dO", function()
+	local ok, dap = pcall(require, "dap")
+	if ok and dap then dap.step_out() end
+end, { desc = "Step out" })
+keymap("n", "<leader>dr", function()
+	local ok, dap = pcall(require, "dap")
+	if ok and dap and dap.repl then pcall(dap.repl.toggle, dap.repl) end
+end, { desc = "Toggle REPL" })
+keymap("n", "<leader>dl", function()
+	local ok, dap = pcall(require, "dap")
+	if ok and dap then dap.run_last() end
+end, { desc = "Run last" })
+keymap("n", "<leader>du", function()
+	local ok, ui = pcall(require, "dapui")
+	if ok and ui then ui.toggle() end
+end, { desc = "Toggle DAP UI" })
+keymap("n", "<leader>dt", function()
+	local ok, dap = pcall(require, "dap")
+	if ok and dap then dap.terminate() end
+end, { desc = "Terminate" })
 
 -- Terminal
 keymap("n", "<leader>tt", ":ToggleTerm<CR>", { desc = "Toggle terminal" })
-keymap("t", "<Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
+keymap("t", "<Esc>", function()
+	local seq = [[<C-\><C-n>]]
+	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(seq, true, false, true), 'n', true)
+end, { desc = "Exit terminal mode" })
 
 -- Toggle features
 keymap("n", "<leader>ts", ":set spell!<CR>", { desc = "Toggle spell check" })
