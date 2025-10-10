@@ -32,6 +32,7 @@ require("anvndev.core.options")
 require("anvndev.core.keymaps")
 require("anvndev.core.autocmds")
 require("anvndev.core.which-key")
+require("anvndev.core.diagnostics")
 
 -- Initialize lazy.nvim with plugins
 require("lazy").setup("anvndev.plugins", {
