@@ -52,7 +52,7 @@ return {
 
 				-- 🧩 Diagnostics
 				lsp_diag_hdlr = true,
-				lsp_diag_virtual_text = { space = 2, prefix = "●" },
+				-- lsp_diag_virtual_text = { space = 2, prefix = "●" },
 				lsp_diag_signs = {
 					-- text = {
 					--   [vim.diagnostic.severity.ERROR] = " ",

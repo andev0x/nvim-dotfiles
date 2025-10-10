@@ -1,11 +1,11 @@
 -- ~/.config/nvim/lua/anvndev/plugins/lsp/init.lua
 -- ==================================================
--- ⚙️ LSP, Formatting, and Linting configuration
+-- ⚙️ LSP, Formatting, and Linting Configuration
 -- ==================================================
 
 return {
 	-- --------------------------------------------------
-	-- 🧠 LSP Core Configuration
+	-- 🧠 Core LSP Setup
 	-- --------------------------------------------------
 	{
 		"neovim/nvim-lspconfig",
@@ -53,7 +53,7 @@ return {
 			-- LSP progress/status UI
 			{ "j-hui/fidget.nvim", opts = {} },
 
-			-- Enhance Lua LSP for Neovim
+			-- Better Lua LSP integration for Neovim development
 			{ "folke/neodev.nvim", opts = {} },
 		},
 
@@ -64,41 +64,7 @@ return {
 			require("anvndev.plugins.lsp.completion")
 			require("anvndev.plugins.lsp.servers")
 
-			-- Diagnostic configuration for better readability
-			-- vim.diagnostic.config({
-			--   underline = true,
-			--   update_in_insert = false,
-			--   virtual_text = {
-			--     spacing = 4,
-			--     source = "if_many",
-			--     prefix = "●",
-			--   },
-			--   severity_sort = true,
-			--   float = {
-			--     border = "rounded",
-			--     source = "always",
-			--     header = "",
-			--     prefix = function(diagnostic)
-			--       local icons = {
-			--         [vim.diagnostic.severity.ERROR] = "",
-			--         [vim.diagnostic.severity.WARN] = "",
-			--         [vim.diagnostic.severity.INFO] = "",
-			--         [vim.diagnostic.severity.HINT] = "󰌵",
-			--       }
-			--       return icons[diagnostic.severity] .. ": "
-			--     end,
-			--   },
-			--   signs = {
-			--     text = {
-			--       [vim.diagnostic.severity.ERROR] = "",
-			--       [vim.diagnostic.severity.WARN] = "",
-			--       [vim.diagnostic.severity.INFO] = "",
-			--       [vim.diagnostic.severity.HINT] = "󰌵",
-			--     },
-			--   },
-			-- })
-
-			-- Load centralized diagnostic configuration
+			-- Centralized diagnostic configuration
 			require("anvndev.core.diagnostics")
 
 			-- Rounded borders for hover & signature popups
@@ -112,7 +78,7 @@ return {
 				max_width = 80,
 			})
 
-			-- ✅ Fix: Enable inlay hints correctly for Neovim 0.10+
+			-- ✅ Enable inlay hints automatically when supported (Neovim 0.10+)
 			vim.api.nvim_create_autocmd("LspAttach", {
 				callback = function(args)
 					local client = vim.lsp.get_client_by_id(args.data.client_id)

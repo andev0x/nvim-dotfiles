@@ -32,3 +32,7 @@ vim.api.nvim_create_autocmd("QuickFixCmdPost", {
 		vim.cmd("copen")
 	end,
 })
+
+vim.diagnostic.config({
+	virtual_text = false,
+}, vim.api.nvim_get_current_buf())
