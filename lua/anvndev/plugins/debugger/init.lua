@@ -1,28 +1,27 @@
 -- ~/.config/nvim/lua/anvndev/plugins/debugger/init.lua
--- Debugger configuration
+-- ==================================================
+-- 🐞 Debugger Configuration
+-- ==================================================
 
 return {
 	{
 		"mfussenegger/nvim-dap",
 		dependencies = {
-			-- UI for DAP
-			{ "rcarriga/nvim-dap-ui" },
-
-			-- Virtual text for DAP
-			{ "theHamsta/nvim-dap-virtual-text" },
-
-		-- Mason integration for DAP
+			{ "rcarriga/nvim-dap-ui" }, -- Debug UI
+			{ "theHamsta/nvim-dap-virtual-text" }, -- Inline variable preview
 			{ "jay-babu/mason-nvim-dap.nvim", dependencies = { "williamboman/mason.nvim" } },
 		},
+
 		config = function()
 			local dap = require("dap")
 			local dapui = require("dapui")
 
-			-- Setup DAP UI
+			-- ==========================
+			-- 🔹 DAP UI Setup
+			-- ==========================
 			dapui.setup({
 				icons = { expanded = "▾", collapsed = "▸", current_frame = "▸" },
 				mappings = {
-					-- Use a table to apply multiple mappings
 					expand = { "<CR>", "<2-LeftMouse>" },
 					open = "o",
 					remove = "d",
@@ -30,33 +29,26 @@ return {
 					repl = "r",
 					toggle = "t",
 				},
-				-- Expand lines larger than the window
 				expand_lines = vim.fn.has("nvim-0.7") == 1,
 				layouts = {
 					{
 						elements = {
-							-- Elements can be strings or table with id and size keys.
 							{ id = "scopes", size = 0.25 },
 							"breakpoints",
 							"stacks",
 							"watches",
 						},
-						size = 40, -- 40 columns
+						size = 40,
 						position = "left",
 					},
 					{
-						elements = {
-							"repl",
-							"console",
-						},
-						size = 0.25, -- 25% of total lines
+						elements = { "repl", "console" },
+						size = 0.25,
 						position = "bottom",
 					},
 				},
 				controls = {
-					-- Requires Neovim nightly (or 0.8 when released)
 					enabled = true,
-					-- Display controls in this element
 					element = "repl",
 					icons = {
 						pause = "",
@@ -70,41 +62,30 @@ return {
 					},
 				},
 				floating = {
-					max_height = nil, -- These can be integers or a float between 0 and 1.
-					max_width = nil, -- Floats will be treated as percentage of your screen.
-					border = "single", -- Border style. Can be "single", "double" or "rounded"
-					mappings = {
-						close = { "q", "<Esc>" },
-					},
+					border = "single",
+					mappings = { close = { "q", "<Esc>" } },
 				},
 				windows = { indent = 1 },
-				render = {
-					max_type_length = nil, -- Can be integer or nil.
-					max_value_lines = 100, -- Can be integer or nil.
-				},
+				render = { max_value_lines = 100 },
 			})
 
-			-- Setup DAP virtual text
+			-- ==========================
+			-- 🔹 Virtual Text Setup
+			-- ==========================
 			require("nvim-dap-virtual-text").setup({
 				enabled = true,
 				enabled_commands = true,
 				highlight_changed_variables = true,
-				highlight_new_as_changed = false,
 				show_stop_reason = true,
 				commented = false,
-				only_first_definition = true,
-				all_references = false,
-				filter_references_pattern = "<module",
 				virt_text_pos = "eol",
-				all_frames = false,
-				virt_lines = false,
-				virt_text_win_col = nil,
 			})
 
-			-- Setup Mason DAP
-			-- Ensure mason is available and configured before mason-nvim-dap uses mason-core
-			local mason_ok, mason = pcall(require, "mason")
-			if mason_ok then
+			-- ==========================
+			-- 🔹 Mason DAP Setup
+			-- ==========================
+			local ok, mason = pcall(require, "mason")
+			if ok then
 				mason.setup()
 			end
 
@@ -113,15 +94,15 @@ return {
 				automatic_installation = true,
 				handlers = {
 					function(config)
-						-- All sources with no handler get passed here
-						-- Keep original functionality
 						require("mason-nvim-dap").default_setup(config)
 					end,
 				},
 				automatic_setup = true,
 			})
 
-			-- Auto open/close DAP UI
+			-- ==========================
+			-- 🔹 Auto UI Handling
+			-- ==========================
 			dap.listeners.after.event_initialized["dapui_config"] = function()
 				dapui.open()
 			end
@@ -132,27 +113,34 @@ return {
 				dapui.close()
 			end
 
-			-- Load language-specific debug configurations
+			-- ==========================
+			-- 🔹 Load Language-Specific Debug Configurations
+			-- ==========================
 			require("anvndev.plugins.debugger.go")
 			require("anvndev.plugins.debugger.rust")
 			require("anvndev.plugins.debugger.python")
 			require("anvndev.plugins.debugger.cpp")
 
-			-- Set up signs
-			vim.fn.sign_define(
-				"DapBreakpoint",
-				{ text = "", texthl = "DiagnosticSignError", linehl = "", numhl = "" }
-			)
-			vim.fn.sign_define(
+			-- ==========================
+			-- 🔹 DAP Signs (Updated for Neovim 0.10+)
+			-- ==========================
+			local define_sign = function(name, opts)
+				if vim.fn.sign_define then
+					vim.fn.sign_define(name, opts)
+				end
+			end
+
+			define_sign("DapBreakpoint", { text = "", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
+			define_sign(
 				"DapBreakpointCondition",
 				{ text = "", texthl = "DiagnosticSignWarn", linehl = "", numhl = "" }
 			)
-			vim.fn.sign_define("DapLogPoint", { text = "", texthl = "DiagnosticSignInfo", linehl = "", numhl = "" })
-			vim.fn.sign_define(
+			define_sign("DapLogPoint", { text = "", texthl = "DiagnosticSignInfo", linehl = "", numhl = "" })
+			define_sign(
 				"DapStopped",
 				{ text = "", texthl = "DiagnosticSignHint", linehl = "DapStoppedLine", numhl = "" }
 			)
-			vim.fn.sign_define(
+			define_sign(
 				"DapBreakpointRejected",
 				{ text = "", texthl = "DiagnosticSignError", linehl = "", numhl = "" }
 			)
