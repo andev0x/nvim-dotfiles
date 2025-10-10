@@ -3,91 +3,81 @@
 
 local M = {}
 
--- Keymap helper function
+-- Keymap helper: small wrapper around vim.keymap.set with sane defaults
 function M.keymap(mode, lhs, rhs, opts)
-  local options = { noremap = true, silent = true }
-  if opts then
-    options = vim.tbl_extend("force", options, opts)
+  local defaults = { noremap = true, silent = true }
+  opts = opts and vim.tbl_extend("force", defaults, opts) or defaults
+  vim.keymap.set(mode, lhs, rhs, opts)
+end
+
+-- Safe plugin presence check (works even if lazy isn't loaded yet)
+function M.has_plugin(name)
+  local ok, lazy = pcall(require, "lazy.core.config")
+  if not ok or not lazy or not lazy.spec then
+    return false
   end
-  vim.keymap.set(mode, lhs, rhs, options)
+  return lazy.spec.plugins and lazy.spec.plugins[name] ~= nil
 end
 
--- Check if a plugin is available
-function M.has_plugin(plugin)
-  return require("lazy.core.config").spec.plugins[plugin] ~= nil
-end
-
--- Check if running on macOS
+-- OS helpers (cached)
+local _os
 function M.is_mac()
-  return vim.loop.os_uname().sysname == "Darwin"
+  _os = _os or vim.loop.os_uname().sysname
+  return _os == "Darwin"
 end
-
--- Check if running on Linux
 function M.is_linux()
-  return vim.loop.os_uname().sysname == "Linux"
+  _os = _os or vim.loop.os_uname().sysname
+  return _os == "Linux"
 end
-
--- Check if running on Windows
 function M.is_win()
-  return vim.loop.os_uname().sysname == "Windows_NT"
+  _os = _os or vim.loop.os_uname().sysname
+  return _os == "Windows_NT"
 end
 
--- Get the root directory of the project
+-- Project root discovery using vim.fs (clean and fast)
 function M.get_root()
-  local path = vim.loop.cwd()
+  local cwd = vim.loop.cwd()
   local root_patterns = { ".git", "Makefile", "go.mod", "Cargo.toml", "package.json", "mvnw", "gradlew", "pom.xml" }
-  
-  -- Check if any root pattern exists in the current directory
-  for _, pattern in ipairs(root_patterns) do
-    if vim.fn.filereadable(path .. "/" .. pattern) == 1 or vim.fn.isdirectory(path .. "/" .. pattern) == 1 then
-      return path
-    end
+  local match = vim.fs.find(root_patterns, { upward = true, path = cwd })
+  if match and #match > 0 then
+    return vim.fs.abspath(vim.fn.fnamemodify(match[1], ":p:h"))
   end
-  
-  -- If no root pattern found, try to find it in parent directories
-  local function find_root_in_parent(path)
-    for _, pattern in ipairs(root_patterns) do
-      local match = vim.fn.finddir(pattern, path .. ";")
-      if match ~= "" then
-        return vim.fn.fnamemodify(match, ":p:h:h")
-      end
-      
-      match = vim.fn.findfile(pattern, path .. ";")
-      if match ~= "" then
-        return vim.fn.fnamemodify(match, ":p:h")
-      end
-    end
-    return nil
-  end
-  
-  local root = find_root_in_parent(path)
-  return root or path
+  return cwd
 end
 
--- Merge tables
+-- Merge tables (shallow) using built-in helper
 function M.merge(...)
-  local result = {}
-  for i = 1, select("#", ...) do
-    local tbl = select(i, ...)
-    if tbl then
-      for k, v in pairs(tbl) do
-        result[k] = v
-      end
-    end
+  local args = { ... }
+  if #args == 0 then
+    return {}
   end
-  return result
+  return vim.tbl_extend("force", unpack(args))
 end
 
--- Toggle boolean option
+-- Toggle an option and notify user (safe getter/setter)
 function M.toggle_option(option)
-  local value = not vim.api.nvim_get_option_value(option, {})
-  vim.opt[option] = value
-  vim.notify(option .. " " .. tostring(value))
+  local ok, cur = pcall(vim.api.nvim_get_option_value, option, {})
+  if not ok then
+    vim.notify("Unknown option: " .. tostring(option), vim.log.levels.WARN)
+    return
+  end
+  pcall(vim.api.nvim_set_option_value, option, not cur, {})
+  vim.notify(option .. " " .. tostring(not cur))
 end
 
--- Toggle diagnostics
+-- Toggle diagnostics globally
 function M.toggle_diagnostics()
-  if vim.diagnostic.is_disabled() then
+  if not vim.diagnostic then
+    return vim.notify("vim.diagnostic not available", vim.log.levels.WARN)
+  end
+  -- Use buffer-level enable/disable to affect all buffers
+  local buf = 0
+  local disabled = false
+  -- we check first buffer to infer state
+  if pcall(vim.diagnostic.is_disabled, buf) then
+    disabled = vim.diagnostic.is_disabled(buf)
+  end
+  if disabled then
     vim.diagnostic.enable()
     vim.notify("Diagnostics enabled")
   else
