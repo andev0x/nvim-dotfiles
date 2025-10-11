@@ -1,8 +1,9 @@
 -- ~/.config/nvim/lua/anvndev/plugins/ui/lualine.lua
--- Statusline configuration
+-- Lualine and UI enhancements configuration
+-- Author: anvndev
 
 return {
-	-- Preview markdown
+	-- Markdown preview (via Node)
 	{
 		"andev0x/mdview.nvim",
 		build = "npm install",
@@ -10,73 +11,89 @@ return {
 			require("mdview").setup()
 		end,
 	},
-	-- Glow for markdown preview
+
+	-- Markdown preview (Glow)
 	{
 		"ellisonleao/glow.nvim",
 		config = true,
 		cmd = "Glow",
 		ft = "markdown",
 	},
-	-- Diffview for git diffs
+
+	-- Git diff viewer
 	{
 		"sindrets/diffview.nvim",
 		event = "VeryLazy",
 	},
+
+	-- Statusline setup
 	{
 		"nvim-lualine/lualine.nvim",
 		event = "VeryLazy",
-		dependencies = { "nvim-tree/nvim-web-devicons" },
+		dependencies = { "nvim-tree/nvim-web-devicons", "SmiteshP/nvim-navic" },
 		config = function()
 			local navic = require("nvim-navic")
 			local devicons = require("nvim-web-devicons")
-			-- Custom component: user name
+
+			-- Custom component: username
 			local function user_name()
-				return " anvndev"
+				return " anvndev"
 			end
+
 			-- Custom component: filetype with icon
 			local function filetype_with_icon()
-				local ft = vim.bo.filetype or ""
-				local fname = vim.api.nvim_buf_get_name(0)
-				local ext = vim.fn.fnamemodify(fname, ":e")
-				local icon, icon_hl = devicons.get_icon(fname, ext, { default = true })
-				if icon == nil or icon == "" then
-					icon = ""
-				end
-				return string.format("%s %s", icon, ft ~= "" and ft or "plain")
+				local fname = vim.fn.expand("%:t")
+				local ext = vim.fn.expand("%:e")
+				local icon, _ = devicons.get_icon(fname, ext, { default = true })
+				local ft = vim.bo.filetype ~= "" and vim.bo.filetype or "plain"
+				return string.format("%s %s", icon or "", ft)
 			end
-			-- Custom component: time-based icon
+
+			-- Custom component: dynamic time-based icon
 			local function time_icon()
 				local hour = tonumber(os.date("%H"))
-				if hour >= 5 and hour < 11 then
-					return "🌞"
-				elseif hour >= 11 and hour < 13 then
-					return "🥪"
-				elseif hour >= 13 and hour < 14 then
-					return "☕"
-				elseif hour >= 14 and hour < 17 then
-					return "⛅"
-				elseif hour >= 17 and hour < 19 then
-					return "🌵"
-				elseif hour >= 19 and hour < 22 then
-					return "🌙"
-				elseif hour >= 22 and hour < 23 then
-					return "🪐"
+				local icons = {
+					{ 5, 11, "🌞" },
+					{ 11, 13, "🥪" },
+					{ 13, 14, "☕" },
+					{ 14, 17, "⛅" },
+					{ 17, 19, "🌵" },
+					{ 19, 22, "🌙" },
+					{ 22, 23, "🪐" },
+					{ 0, 5, "🌚" },
+				}
+				for _, v in ipairs(icons) do
+					if hour >= v[1] and hour < v[2] then
+						return v[3]
+					end
+				end
+				return "🌚"
+			end
+
+			-- Optional: color changes based on time of day
+			local function day_color()
+				local h = tonumber(os.date("%H"))
+				if h >= 6 and h < 18 then
+					return { fg = "#EBCB8B" } -- day tone
 				else
-					return "🌚"
+					return { fg = "#81A1C1" } -- night tone
 				end
 			end
+
 			require("lualine").setup({
 				options = {
 					icons_enabled = true,
-					theme = "catppuccin-mocha", -- dark theme, change if you prefer
+					theme = "catppuccin-mocha",
 					section_separators = { left = "", right = "" },
 					component_separators = { left = "", right = "" },
 					globalstatus = true,
 					always_divide_middle = true,
+					refresh = { statusline = 1000 }, -- refresh every 1s for dynamic icon
 				},
+
 				sections = {
 					lualine_a = {
-						user_name,
+						{ user_name, color = day_color },
 						{ "mode", icon = "" },
 					},
 					lualine_b = {
@@ -91,7 +108,15 @@ return {
 						},
 						{
 							"diagnostics",
-							symbols = { error = " ", warn = " ", info = " ", hint = " " },
+							sources = { "nvim_diagnostic" },
+							symbols = {
+								error = " ",
+								warn = " ",
+								info = " ",
+								hint = " ",
+							},
+							colored = true,
+							update_in_insert = false,
 						},
 					},
 					lualine_c = {
@@ -125,6 +150,7 @@ return {
 					lualine_y = { "progress" },
 					lualine_z = { "location" },
 				},
+
 				inactive_sections = {
 					lualine_a = {},
 					lualine_b = {},
@@ -133,6 +159,7 @@ return {
 					lualine_y = {},
 					lualine_z = {},
 				},
+
 				extensions = {
 					"nvim-tree",
 					"toggleterm",
@@ -144,11 +171,10 @@ return {
 		end,
 	},
 
-	-- Breadcrumbs for code navigation
+	-- Breadcrumbs (code context)
 	{
 		"SmiteshP/nvim-navic",
 		lazy = true,
-		
 		config = function()
 			require("nvim-navic").setup({
 				highlight = true,

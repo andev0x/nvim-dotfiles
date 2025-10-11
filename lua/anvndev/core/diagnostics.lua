@@ -3,7 +3,7 @@
 -- 🎯 Centralized Diagnostic Configuration
 -- ==================================================
 
--- Define custom diagnostic icons
+-- Custom diagnostic icons for each severity level
 local signs = {
 	Error = " ",
 	Warn = " ",
@@ -11,18 +11,27 @@ local signs = {
 	Info = " ",
 }
 
--- Register the signs with Neovim
-for type, icon in pairs(signs) do
-	local hl = "DiagnosticSign" .. type
-	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+-- Safe helper to define diagnostic signs (compatible with Neovim 0.9 and 0.10+)
+local define_sign = function(name, opts)
+	if vim.diagnostic and vim.diagnostic.define_sign then
+		vim.diagnostic.define_sign(name, opts)
+	else
+		vim.fn.sign_define(name, opts)
+	end
 end
 
--- Global diagnostic configuration
+-- Register all diagnostic signs
+for type, icon in pairs(signs) do
+	local hl = "DiagnosticSign" .. type
+	define_sign(hl, { text = icon, texthl = hl, numhl = "" })
+end
+
+-- Global diagnostic behavior configuration
 vim.diagnostic.config({
-	-- Disable inline text diagnostics
+	-- Disable inline diagnostic virtual text (cleaner look)
 	virtual_text = false,
 
-	-- Keep underlines for errors/warnings
+	-- Keep underlines for errors and warnings
 	underline = true,
 
 	-- Do not update diagnostics while typing
@@ -31,7 +40,7 @@ vim.diagnostic.config({
 	-- Sort diagnostics by severity (Error > Warn > Info > Hint)
 	severity_sort = true,
 
-	-- Configure floating window (when hovering)
+	-- Floating diagnostic window configuration
 	float = {
 		border = "rounded",
 		focusable = true,
@@ -48,7 +57,7 @@ vim.diagnostic.config({
 		end,
 	},
 
-	-- Configure sign column (left symbols)
+	-- Sign column configuration (left gutter)
 	signs = {
 		text = {
 			[vim.diagnostic.severity.ERROR] = signs.Error,
@@ -58,3 +67,6 @@ vim.diagnostic.config({
 		},
 	},
 })
+
+-- Optional: Hide "~" filler lines at the end of the buffer
+vim.opt.fillchars:append({ eob = " " })

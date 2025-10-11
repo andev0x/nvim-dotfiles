@@ -1,21 +1,10 @@
 -- ~/.config/nvim/lua/anvndev/plugins/lsp/servers.lua
 -- LSP servers configuration
 
--- Mason setup
-local mason = require("mason")
-local mason_lspconfig = require("mason-lspconfig")
-local mason_tool_installer = require("mason-tool-installer")
 
-mason.setup({
-  ui = {
-    border = "rounded",
-    icons = {
-      package_installed = "✓",
-      package_pending = "➜",
-      package_uninstalled = "✗",
-    },
-  },
-})
+-- Note: mason and installer setup are handled in plugin setup (see anvndev.plugins.lsp.init).
+-- Here we keep configuration minimal and idempotent to avoid startup cycles.
+local ok_mason_lsp, mason_lspconfig = pcall(require, "mason-lspconfig")
 
 -- Define tools to install (LSP servers, formatters, linters, debuggers)
 local tools = {
@@ -55,12 +44,14 @@ local tools = {
   "debugpy",   -- Python
 }
 
--- Ensure tools are installed
-mason_tool_installer.setup({
-  ensure_installed = tools,
-  auto_update = true,
-  run_on_start = true,
-})
+mason_tool_installer = mason_tool_installer or {}
+if ok_mti and mason_tool_installer and mason_tool_installer.setup then
+  mason_tool_installer.setup({
+    ensure_installed = tools,
+    auto_update = true,
+    run_on_start = true,
+  })
+end
 
 -- LSP servers and custom settings
 local servers = {
@@ -86,7 +77,8 @@ local servers = {
 }
 
 -- LSP capabilities (for autocompletion)
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
+local ok_cmp_lsp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+local capabilities = ok_cmp_lsp and cmp_nvim_lsp.default_capabilities() or vim.empty_dict()
 
 -- Function called when an LSP connects to a buffer
 local on_attach = function(client, bufnr)
@@ -108,18 +100,17 @@ local on_attach = function(client, bufnr)
 end
 
 -- Setup all LSP servers using mason-lspconfig
-mason_lspconfig.setup({
-  ensure_installed = vim.tbl_keys(servers),
-})
-
-mason_lspconfig.setup_handlers({
-  function(server_name)
-    local server_opts = servers[server_name] or {}
-    require("lspconfig")[server_name].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-      settings = server_opts.settings or {},
-      filetypes = server_opts.filetypes,
-    })
-  end,
-})
+-- Configure servers directly with lspconfig (guarded). mason-lspconfig can be used separately by plugin manager.
+local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
+if lspconfig_ok and lspconfig then
+  for server_name, server_opts in pairs(servers) do
+    if lspconfig[server_name] and lspconfig[server_name].setup then
+      lspconfig[server_name].setup({
+        capabilities = capabilities,
+        on_attach = on_attach,
+        settings = server_opts.settings or {},
+        filetypes = server_opts.filetypes,
+      })
+    end
+  end
+end
