@@ -59,7 +59,7 @@ local servers = {
   rust_analyzer = {},
   clangd = {},
   pyright = {},
-  tsserver = {}, -- fixed from ts_ls
+  ts_ls = {}, -- renamed from tsserver
   html = {},
   cssls = {},
   jsonls = {},
@@ -101,16 +101,21 @@ end
 
 -- Setup all LSP servers using mason-lspconfig
 -- Configure servers directly with lspconfig (guarded). mason-lspconfig can be used separately by plugin manager.
-local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
-if lspconfig_ok and lspconfig then
-  for server_name, server_opts in pairs(servers) do
-    if lspconfig[server_name] and lspconfig[server_name].setup then
-      lspconfig[server_name].setup({
-        capabilities = capabilities,
-        on_attach = on_attach,
-        settings = server_opts.settings or {},
-        filetypes = server_opts.filetypes,
-      })
-    end
+local function setup_server(server_name, opts)
+  opts = opts or {}
+  -- Prefer new API: vim.lsp.config
+  if type(vim.lsp.config) == "table" and vim.lsp.config[server_name] then
+    pcall(vim.lsp.config[server_name].setup, { capabilities = capabilities, on_attach = on_attach, settings = opts.settings or {}, filetypes = opts.filetypes })
+    return
   end
+
+  -- Fallback to legacy lspconfig
+  local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
+  if lspconfig_ok and lspconfig[server_name] and lspconfig[server_name].setup then
+    pcall(lspconfig[server_name].setup, { capabilities = capabilities, on_attach = on_attach, settings = opts.settings or {}, filetypes = opts.filetypes })
+  end
+end
+
+for server_name, server_opts in pairs(servers) do
+  setup_server(server_name, server_opts)
 end
