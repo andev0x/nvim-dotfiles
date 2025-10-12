@@ -206,13 +206,12 @@ autocmd("BufWinEnter", {
 		if not ok then
 			return
 		end
-			local parser = parsers.get_parser(buf, ft)
-			-- If a parser exists for this filetype, ensure Treesitter highlighting is enabled for the buffer.
-			if parser then
-				vim.defer_fn(function()
-					pcall(vim.cmd, "TSBufEnable highlight")
-				end, 80)
-			end
+		local parser = parsers.get_parser(buf, ft)
+		if not parser then
+			vim.defer_fn(function()
+				pcall(vim.cmd, "TSBufEnable highlight")
+			end, 80)
+		end
 	end,
 	desc = "Force enable Treesitter highlight if missing",
 })
