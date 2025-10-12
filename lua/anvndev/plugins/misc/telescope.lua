@@ -126,6 +126,18 @@ return {
             find_command = { "fd", "--type", "f", "--strip-cwd-prefix" },
           },
           live_grep = {
+            vimgrep_arguments = {
+              "rg",
+              "--color=never",
+              "--no-heading",
+              "--with-filename",
+              "--line-number",
+              "--column",
+              "--smart-case",
+              "--hidden",
+              "-g",
+              "!.git/",
+            },
             additional_args = function(opts)
               return { "--hidden" }
             end,
