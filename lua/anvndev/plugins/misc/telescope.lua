@@ -19,7 +19,7 @@ return {
       "nvim-telescope/telescope-dap.nvim",
     },
     keys = {
-      { "<leader>fl", "<cmd>Telescope find_files<cr>", desc = "Find files" },
+      { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find files" },
       { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live grep" },
       { "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Find buffers" },
       { "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Help tags" },
@@ -39,6 +39,32 @@ return {
       local telescope = require("telescope")
       local actions = require("telescope.actions")
       local fb_actions = require("telescope").extensions.file_browser.actions
+
+      local previewers = require("telescope.previewers")
+      local custom_previewer = previewers.new_buffer_previewer {
+        define_preview = function(self, entry)
+          local filepath = entry.value
+          if not filepath or vim.fn.isdirectory(filepath) == 1 then
+            return
+          end
+
+          if vim.fn.executable("bat") == 1 then
+            local cmd = { "bat", "--style=numbers,changes", "--color=always", filepath }
+            vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, {})
+            vim.fn.jobstart(cmd, {
+              stdout_buffered = true,
+              on_stdout = function(_, data)
+                if data then
+                  vim.api.nvim_buf_set_lines(self.state.bufnr, -1, -1, false, data)
+                end
+              end,
+            })
+          else
+            -- Fallback to simple file read
+            vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, vim.fn.readfile(filepath))
+          end
+        end,
+      }
       
       telescope.setup({
         defaults = {
@@ -124,8 +150,21 @@ return {
           find_files = {
             hidden = true,
             find_command = { "fd", "--type", "f", "--strip-cwd-prefix" },
+            previewer = custom_previewer,
           },
           live_grep = {
+            vimgrep_arguments = {
+              "rg",
+              "--color=never",
+              "--no-heading",
+              "--with-filename",
+              "--line-number",
+              "--column",
+              "--smart-case",
+              "--hidden",
+              "-g",
+              "!.git/",
+            },
             additional_args = function(opts)
               return { "--hidden" }
             end,
