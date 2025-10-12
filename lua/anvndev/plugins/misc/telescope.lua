@@ -39,6 +39,18 @@ return {
       local telescope = require("telescope")
       local actions = require("telescope.actions")
       local fb_actions = require("telescope").extensions.file_browser.actions
+
+      local function custom_previewer(filepath, bufnr, opts)
+        if vim.fn.executable("bat") == 1 then
+          local cmd = { "bat", "--style=numbers,changes", "--color=always", filepath }
+          vim.fn.jobstart(cmd, {
+            stdout = vim.api.nvim_buf_get_name(bufnr),
+            stderr = vim.api.nvim_buf_get_name(bufnr),
+          })
+        else
+          require("telescope.previewers.cat").new(opts)(filepath, bufnr)
+        end
+      end
       
       telescope.setup({
         defaults = {
@@ -124,6 +136,7 @@ return {
           find_files = {
             hidden = true,
             find_command = { "fd", "--type", "f", "--strip-cwd-prefix" },
+            previewer = custom_previewer,
           },
           live_grep = {
             vimgrep_arguments = {
