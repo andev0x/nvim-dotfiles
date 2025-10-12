@@ -44,7 +44,9 @@ return {
           row = 0,
           col = 1,
         },
-        -- 'yadm' option removed (not supported in current gitsigns versions)
+        yadm = {
+          enable = false,
+        },
         on_attach = function(bufnr)
           local gs = package.loaded.gitsigns
           
