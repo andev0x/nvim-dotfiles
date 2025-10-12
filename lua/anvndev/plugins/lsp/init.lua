@@ -36,13 +36,40 @@ return {
 
 					require("mason-tool-installer").setup({
 						ensure_installed = {
+							-- LSP servers
 							"gopls",
-							"lua-language-server",
 							"rust-analyzer",
-							"golangci-lint",
-							"stylua",
+							"clangd",
+							"pyright",
+							"lua-language-server",
+							"typescript-language-server",
+							"html-lsp",
+							"css-lsp",
+							"json-lsp",
+							"yaml-language-server",
+							"dockerfile-language-server",
+
+							-- Formatters
 							"gofumpt",
 							"goimports",
+							"rustfmt",
+							"clang-format",
+							"black",
+							"isort",
+							"stylua",
+							"prettier",
+
+							-- Linters
+							"golangci-lint",
+							"flake8",
+							"mypy",
+							"luacheck",
+							"eslint_d",
+
+							-- Debuggers
+							"delve",     -- Go
+							"codelldb",  -- Rust, C/C++
+							"debugpy",   -- Python
 						},
 						auto_update = true,
 						run_on_start = true,
