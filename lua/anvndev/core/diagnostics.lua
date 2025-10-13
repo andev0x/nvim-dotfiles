@@ -5,7 +5,7 @@
 
 -- Custom diagnostic icons for each severity level
 local signs = {
-	Error = " ",
+	Error = " ",
 	Warn = " ",
 	Hint = "󰌵 ",
 	Info = " ",
@@ -48,7 +48,7 @@ vim.diagnostic.config({
 		source = "if_many",
 		prefix = function(diagnostic)
 			local icons = {
-				[vim.diagnostic.severity.ERROR] = " ",
+				[vim.diagnostic.severity.ERROR] = " ",
 				[vim.diagnostic.severity.WARN] = " ",
 				[vim.diagnostic.severity.INFO] = " ",
 				[vim.diagnostic.severity.HINT] = "󰌵 ",
