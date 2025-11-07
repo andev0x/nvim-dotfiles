@@ -5,8 +5,8 @@ This is my personal Neovim configuration, built with a focus on modern developme
 ----
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/andev0x/description-image-archive/refs/heads/main/nvim-dotfies/p3.png" width="350" />
-  <img src="https://raw.githubusercontent.com/andev0x/description-image-archive/refs/heads/main/nvim-dotfies/p4.png" width="350" />
+  <img src="https://raw.githubusercontent.com/andev0x/description-image-archive/refs/heads/main/nvim-dotfies/p5.png" width="350" />
+  <img src="https://raw.githubusercontent.com/andev0x/description-image-archive/refs/heads/main/nvim-dotfies/p6.png" width="350" />
 </p>
 
 <div align="center">
