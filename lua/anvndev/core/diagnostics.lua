@@ -11,20 +11,7 @@ local signs = {
 	Info = " ",
 }
 
--- Safe helper to define diagnostic signs (compatible with Neovim 0.9 and 0.10+)
-local define_sign = function(name, opts)
-	if vim.diagnostic and vim.diagnostic.define_sign then
-		vim.diagnostic.define_sign(name, opts)
-	else
-		vim.fn.sign_define(name, opts)
-	end
-end
 
--- Register all diagnostic signs
-for type, icon in pairs(signs) do
-	local hl = "DiagnosticSign" .. type
-	define_sign(hl, { text = icon, texthl = hl, numhl = "" })
-end
 
 -- Global diagnostic behavior configuration
 vim.diagnostic.config({
