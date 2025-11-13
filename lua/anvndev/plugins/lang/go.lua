@@ -1,5 +1,6 @@
 -- ~/.config/nvim/lua/anvndev/plugins/lang/go.lua
--- Go language configuration for Neovim
+-- Professional Go language configuration for Neovim
+-- Compatible with Lazy.nvim and modern Neovim setups
 
 return {
 	{
@@ -9,9 +10,12 @@ return {
 			"nvim-treesitter/nvim-treesitter",
 		},
 		ft = { "go", "gomod", "gosum", "gowork" },
+
 		config = function()
 			require("go").setup({
-				-- 🔧 LSP configuration
+				-----------------------------------------------------------------------
+				-- ⚙️ LSP configuration
+				-----------------------------------------------------------------------
 				lsp_cfg = {
 					settings = {
 						gopls = {
@@ -38,48 +42,51 @@ return {
 					},
 				},
 
+				-----------------------------------------------------------------------
 				-- 💡 Inlay hints
+				-----------------------------------------------------------------------
 				lsp_inlay_hints = {
 					enable = true,
 					only_current_line = false,
-					only_current_line_autocmd = "CursorHold",
 					show_parameter_hints = true,
-					show_variable_name = true,
 					parameter_hints_prefix = "󰊕 ",
 					other_hints_prefix = "=> ",
 					highlight = "Comment",
 				},
 
+				-----------------------------------------------------------------------
 				-- 🧩 Diagnostics
-				lsp_diag_hdlr = true,
-				-- lsp_diag_virtual_text = { space = 2, prefix = "●" },
-				lsp_diag_signs = false,
-                    -- {
-					-- text = {
-					--   [vim.diagnostic.severity.ERROR] = " ",
-					--   [vim.diagnostic.severity.WARN] = " ",
-					--   [vim.diagnostic.severity.HINT] = "󰌶 ",
-					--   [vim.diagnostic.severity.INFO] = " ",
-					-- },
-				-- },
+				-- Disable inline diagnostic virtual text for cleaner view
+				-----------------------------------------------------------------------
+				lsp_diag_hdlr = false, -- disable Go.nvim's internal diagnostic handler
+				lsp_diag_virtual_text = false, -- disable inline diagnostics
+				lsp_diag_signs = true, -- keep signs (gutter icons)
 				lsp_diag_update_in_insert = false,
 
-				-- 🧱 Formatter
+				-----------------------------------------------------------------------
+				-- 🧱 Formatting
+				-----------------------------------------------------------------------
 				formatter = "gofumpt",
 				formatter_extra_args = { "-s" },
 
+				-----------------------------------------------------------------------
 				-- 🧪 Testing
+				-----------------------------------------------------------------------
 				test_runner = "go",
 				run_in_floaterm = true,
 
-				-- 🧰 Misc features
+				-----------------------------------------------------------------------
+				-- 🧰 Miscellaneous features
+				-----------------------------------------------------------------------
 				lsp_codelens = true,
 				trouble = true,
 				text_obj = true,
 				tag_transform = "camelcase",
 				lsp_format_on_save = true,
 
-				-- ⚡ on_attach: keymaps & more
+				-----------------------------------------------------------------------
+				-- ⚡ On attach: keymaps and hooks
+				-----------------------------------------------------------------------
 				lsp_on_attach = function(client, bufnr)
 					local map = vim.keymap.set
 					local opts = { noremap = true, silent = true, buffer = bufnr }
@@ -94,14 +101,44 @@ return {
 					map("n", "<leader>gii", "<cmd>GoIfErr<CR>", opts)
 				end,
 
-				-- 🐞 DAP integration
+				-----------------------------------------------------------------------
+				-- 🐞 DAP (Debug Adapter Protocol)
+				-----------------------------------------------------------------------
 				dap_debug = true,
 				dap_debug_gui = true,
 			})
+
+			-------------------------------------------------------------------------
+			-- 🚫 Override any fallback diagnostic handler (for extra safety)
+			-------------------------------------------------------------------------
+			vim.diagnostic.config({
+				virtual_text = false, -- no inline diagnostic messages
+				signs = true, -- keep signs in gutter
+				underline = true,
+				update_in_insert = false,
+				severity_sort = true,
+			})
+
+			-------------------------------------------------------------------------
+			-- 🎨 Replace default diagnostic signs with icons
+			-------------------------------------------------------------------------
+			local signs = {
+				Error = " ", -- nf-fa-times_circle
+				Warn = " ", -- nf-fa-warning
+				Hint = " ", -- nf-oct-light_bulb
+				Info = "󰙎 ", -- nf-fa-info_circle
+			}
+
+			for type, icon in pairs(signs) do
+				local hl = "DiagnosticSign" .. type
+				vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+			end
 		end,
 	},
 
+	---------------------------------------------------------------------------
 	-- 🧠 Neotest integration for Go
+	---------------------------------------------------------------------------
 	{
 		"nvim-neotest/neotest",
 		dependencies = {
