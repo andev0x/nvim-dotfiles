@@ -11,8 +11,6 @@ local signs = {
 	Info = " ",
 }
 
-
-
 -- Global diagnostic behavior configuration
 vim.diagnostic.config({
 	-- Disable inline diagnostic virtual text (cleaner look)
@@ -36,8 +34,8 @@ vim.diagnostic.config({
 		prefix = function(diagnostic)
 			local icons = {
 				[vim.diagnostic.severity.ERROR] = " ",
-				[vim.diagnostic.severity.WARN] = " ",
-				[vim.diagnostic.severity.INFO] = " ",
+				[vim.diagnostic.severity.WARN] = " ",
+				[vim.diagnostic.severity.INFO] = "󰙎 ",
 				[vim.diagnostic.severity.HINT] = "󰌵 ",
 			}
 			return icons[diagnostic.severity] or ""
