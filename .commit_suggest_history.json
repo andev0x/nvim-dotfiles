@@ -1,6 +1,10 @@
 {
   "entries": [
     {
+      "message": "Feat(core, lua): introduce .commit_suggest_history for bug fix",
+      "timestamp": "2025-11-14T00:47:42.373633+07:00"
+    },
+    {
       "message": "Fix(after, lua): correct issue related to go (massive refactor)",
       "timestamp": "2025-11-14T00:16:32.726055+07:00"
     }
