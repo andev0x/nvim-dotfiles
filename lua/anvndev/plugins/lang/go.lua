@@ -109,30 +109,22 @@ return {
 			})
 
 			-------------------------------------------------------------------------
-			-- 🚫 Override any fallback diagnostic handler (for extra safety)
+			-- 🎨 Configure diagnostic signs with icons
 			-------------------------------------------------------------------------
 			vim.diagnostic.config({
 				virtual_text = false, -- no inline diagnostic messages
-				signs = true, -- keep signs in gutter
+				signs = {
+					text = {
+						[vim.diagnostic.severity.ERROR] = " ", -- nf-fa-times_circle
+						[vim.diagnostic.severity.WARN] = " ", -- nf-fa-warning
+						[vim.diagnostic.severity.INFO] = "󰙎 ", -- nf-fa-info_circle
+						[vim.diagnostic.severity.HINT] = " ", -- nf-oct-light_bulb
+					},
+				},
 				underline = true,
 				update_in_insert = false,
 				severity_sort = true,
 			})
-
-			-------------------------------------------------------------------------
-			-- 🎨 Replace default diagnostic signs with icons
-			-------------------------------------------------------------------------
-			local signs = {
-				Error = " ", -- nf-fa-times_circle
-				Warn = " ", -- nf-fa-warning
-				Hint = " ", -- nf-oct-light_bulb
-				Info = "󰙎 ", -- nf-fa-info_circle
-			}
-
-			for type, icon in pairs(signs) do
-				local hl = "DiagnosticSign" .. type
-				vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-			end
 		end,
 	},
 

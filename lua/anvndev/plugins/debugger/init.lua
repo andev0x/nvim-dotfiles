@@ -122,28 +122,29 @@ return {
 			require("anvndev.plugins.debugger.cpp")
 
 			-- ==========================
-			-- 🔹 DAP Signs (Updated for Neovim 0.10+)
+			-- 🔹 DAP Signs Configuration (Neovim 0.10+)
 			-- ==========================
-			local define_sign = function(name, opts)
-				if vim.fn.sign_define then
-					vim.fn.sign_define(name, opts)
-				end
-			end
-
-			define_sign("DapBreakpoint", { text = "", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
-			define_sign(
-				"DapBreakpointCondition",
-				{ text = "", texthl = "DiagnosticSignWarn", linehl = "", numhl = "" }
-			)
-			define_sign("DapLogPoint", { text = "", texthl = "DiagnosticSignInfo", linehl = "", numhl = "" })
-			define_sign(
-				"DapStopped",
-				{ text = "", texthl = "DiagnosticSignHint", linehl = "DapStoppedLine", numhl = "" }
-			)
-			define_sign(
-				"DapBreakpointRejected",
-				{ text = "", texthl = "DiagnosticSignError", linehl = "", numhl = "" }
-			)
-		end,
+			vim.diagnostic.config({
+				signs = {
+					text = {
+						["DapBreakpoint"] = "",
+						["DapBreakpointCondition"] = "",
+						["DapLogPoint"] = "",
+						["DapStopped"] = "",
+						["DapBreakpointRejected"] = "",
+					},
+					texthl = {
+						["DapBreakpoint"] = "DiagnosticSignError",
+						["DapBreakpointCondition"] = "DiagnosticSignWarn",
+						["DapLogPoint"] = "DiagnosticSignInfo",
+						["DapStopped"] = "DiagnosticSignHint",
+						["DapBreakpointRejected"] = "DiagnosticSignError",
+					},
+					linehl = {
+						["DapStopped"] = "DapStoppedLine",
+					},
+					numhl = {},
+				},
+			})
 	},
 }
