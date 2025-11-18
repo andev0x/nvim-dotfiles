@@ -11,30 +11,22 @@ return {
 
 		config = function()
 			----------------------------------------------------------------------------
-			-- Diagnostics configuration (global)
+			-- 🎨 Configure diagnostic signs with icons
 			----------------------------------------------------------------------------
 			vim.diagnostic.config({
 				virtual_text = false, -- disable inline diagnostics
-				signs = true, -- show only signs in gutter
+				signs = {
+					text = {
+						[vim.diagnostic.severity.ERROR] = " ", -- nf-fa-times_circle
+						[vim.diagnostic.severity.WARN] = " ", -- nf-fa-warning
+						[vim.diagnostic.severity.INFO] = "󰙎 ", -- nf-fa-info_circle
+						[vim.diagnostic.severity.HINT] = " ", -- nf-oct-light_bulb
+					},
+				},
 				underline = true,
 				update_in_insert = false,
 				severity_sort = true,
 			})
-
-			----------------------------------------------------------------------------
-			-- Beautiful diagnostic icons (replace E/W/H)
-			----------------------------------------------------------------------------
-			local signs = {
-				Error = " ", -- nf-fa-times_circle
-				Warn = " ", -- nf-fa-warning
-				Hint = " ", -- nf-oct-light_bulb
-				Info = "󰙎 ", -- nf-fa-info_circle
-			}
-
-			for type, icon in pairs(signs) do
-				local hl = "DiagnosticSign" .. type
-				vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-			end
 
 			----------------------------------------------------------------------------
 			-- Clangd Extensions setup
