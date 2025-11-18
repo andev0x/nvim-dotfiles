@@ -146,5 +146,6 @@ return {
 					numhl = {},
 				},
 			})
+		end,
 	},
 }
