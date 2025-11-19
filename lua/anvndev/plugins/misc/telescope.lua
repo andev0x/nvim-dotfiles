@@ -232,6 +232,35 @@ return {
         },
       })
       
+      -- Ensure common Telescope highlight groups exist to avoid runtime errors
+      -- (some themes or load-order issues may not define them). Link missing
+      -- groups to sensible defaults.
+      do
+        local safe_links = {
+          TelescopeBorder = "Normal",
+          TelescopeNormal = "Normal",
+          TelescopePromptNormal = "Normal",
+          TelescopePromptBorder = "Normal",
+          TelescopePreviewBorder = "Normal",
+          TelescopeResultsBorder = "Normal",
+          TelescopePromptPrefix = "Question",
+          TelescopeSelection = "PmenuSel",
+          TelescopeSelectionCaret = "PmenuSel",
+          TelescopeMatching = "Search",
+          TelescopeMultiSelection = "PmenuSel",
+        }
+
+        for group, link in pairs(safe_links) do
+          -- Use hlexists() which is robust across Neovim versions to check for
+          -- highlight group existence. If missing, create a link to a sensible
+          -- default group.
+          local exists = vim.fn.hlexists(group)
+          if exists == 0 then
+            pcall(vim.cmd, string.format("highlight link %s %s", group, link))
+          end
+        end
+      end
+
       -- Load extensions
       telescope.load_extension("fzf")
       telescope.load_extension("file_browser")
