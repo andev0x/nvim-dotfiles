@@ -76,6 +76,30 @@ return {
           end
         end
       end
+      -- Reapply links whenever the colorscheme is changed to handle runtime
+      -- theme switches or reloads.
+      vim.api.nvim_create_autocmd("ColorScheme", {
+        callback = function()
+          local safe_links = {
+            TelescopeBorder = "Normal",
+            TelescopeNormal = "Normal",
+            TelescopePromptNormal = "Normal",
+            TelescopePromptBorder = "Normal",
+            TelescopePreviewBorder = "Normal",
+            TelescopeResultsBorder = "Normal",
+            TelescopePromptPrefix = "Question",
+            TelescopeSelection = "PmenuSel",
+            TelescopeSelectionCaret = "PmenuSel",
+            TelescopeMatching = "Search",
+            TelescopeMultiSelection = "PmenuSel",
+          }
+          for group, link in pairs(safe_links) do
+            if vim.fn.hlexists(group) == 0 then
+              pcall(vim.cmd, string.format("highlight link %s %s", group, link))
+            end
+          end
+        end,
+      })
     end,
   },
   
