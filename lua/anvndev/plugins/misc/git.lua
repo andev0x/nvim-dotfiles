@@ -1,5 +1,6 @@
 -- ~/.config/nvim/lua/anvndev/plugins/misc/git.lua
 -- Git integration
+-- Author: anvndev
 
 return {
 	-- Git signs in the gutter
@@ -278,4 +279,3 @@ return {
 		end,
 	},
 }
-

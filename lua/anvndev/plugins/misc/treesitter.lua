@@ -1,5 +1,6 @@
 -- ~/.config/nvim/lua/anvndev/plugins/misc/treesitter.lua
 -- Treesitter configuration
+-- Author: anvndev
 
 return {
 	{
@@ -166,4 +167,3 @@ return {
 		end,
 	},
 }
-

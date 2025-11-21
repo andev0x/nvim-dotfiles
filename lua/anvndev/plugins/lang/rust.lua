@@ -8,7 +8,7 @@ return {
 		ft = { "rust" },
 		config = function()
 			-------------------------------------------------------------------------
-			-- 🦀 Setup rustaceanvim (Rust LSP + Tools)
+			-- Setup rustaceanvim (Rust LSP + Tools)
 			-------------------------------------------------------------------------
 			vim.g.rustaceanvim = {
 				server = {
@@ -26,7 +26,7 @@ return {
 							vim.lsp.buf.format({ async = true })
 						end, opts)
 
-						-- 🧩 Rust-specific actions
+						-- Rust-specific actions
 						map("n", "<leader>rr", "<cmd>RustLsp runnables<CR>", opts)
 						map("n", "<leader>rt", "<cmd>RustLsp testables<CR>", opts)
 						map("n", "<leader>re", "<cmd>RustLsp expandMacro<CR>", opts)
@@ -60,7 +60,7 @@ return {
 			}
 
 			-------------------------------------------------------------------------
-			-- 🎨 Configure diagnostic signs with icons
+			-- Configure diagnostic signs with icons
 			-------------------------------------------------------------------------
 			vim.diagnostic.config({
 				virtual_text = false, -- no inline diagnostic messages
@@ -78,7 +78,7 @@ return {
 			})
 
 			-------------------------------------------------------------------------
-			-- 🧰 Auto format on save for Rust files
+			-- Auto format on save for Rust files
 			-------------------------------------------------------------------------
 			vim.api.nvim_create_autocmd("BufWritePre", {
 				pattern = "*.rs",

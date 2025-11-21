@@ -56,7 +56,7 @@ wk.setup({
 	},
 })
 
--- 🔹 Modern which-key v3 spec (flat list)
+-- Modern which-key v3 spec (flat list)
 wk.add({
 	{ "<leader>l", group = "LSP" },
 	{ "<leader>g", group = "Git" },
@@ -69,7 +69,7 @@ wk.add({
 	{ "<leader>f", group = "Find/Files" },
 	{ "<leader>x", group = "Text" },
 
-	-- 🔹 Optional: group toggle
+	-- Optional: group toggle
 	{ "<leader>to", group = "Toggle" },
 	{ "<leader>tl", desc = "Toggle invisible characters" },
 	{ "<leader>th", desc = "Horizontal terminal" },

@@ -1,6 +1,7 @@
 -- ~/.config/nvim/lua/anvndev/plugins/debugger/init.lua
 -- ==================================================
--- 🐞 Debugger Configuration
+-- Debugger Configuration
+-- Author: anvndev
 -- ==================================================
 
 return {
@@ -17,7 +18,7 @@ return {
 			local dapui = require("dapui")
 
 			-- ==========================
-			-- 🔹 DAP UI Setup
+			-- DAP UI Setup
 			-- ==========================
 			dapui.setup({
 				icons = { expanded = "▾", collapsed = "▸", current_frame = "▸" },
@@ -70,7 +71,7 @@ return {
 			})
 
 			-- ==========================
-			-- 🔹 Virtual Text Setup
+			-- Virtual Text Setup
 			-- ==========================
 			require("nvim-dap-virtual-text").setup({
 				enabled = true,
@@ -82,7 +83,7 @@ return {
 			})
 
 			-- ==========================
-			-- 🔹 Mason DAP Setup
+			-- Mason DAP Setup
 			-- ==========================
 			local ok, mason = pcall(require, "mason")
 			if ok then
@@ -101,7 +102,7 @@ return {
 			})
 
 			-- ==========================
-			-- 🔹 Auto UI Handling
+			-- Auto UI Handling
 			-- ==========================
 			dap.listeners.after.event_initialized["dapui_config"] = function()
 				dapui.open()
@@ -114,7 +115,7 @@ return {
 			end
 
 			-- ==========================
-			-- 🔹 Load Language-Specific Debug Configurations
+			-- Load Language-Specific Debug Configurations
 			-- ==========================
 			require("anvndev.plugins.debugger.go")
 			require("anvndev.plugins.debugger.rust")
@@ -122,7 +123,7 @@ return {
 			require("anvndev.plugins.debugger.cpp")
 
 			-- ==========================
-			-- 🔹 DAP Signs Configuration (Neovim 0.10+)
+			-- DAP Signs Configuration (Neovim 0.10+)
 			-- ==========================
 			vim.diagnostic.config({
 				signs = {

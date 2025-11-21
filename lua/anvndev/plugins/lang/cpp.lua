@@ -3,7 +3,7 @@
 
 return {
 	---------------------------------------------------------------------------
-	-- 🛠️ Clangd (LSP) Extensions
+	-- Clangd (LSP) Extensions
 	---------------------------------------------------------------------------
 	{
 		"p00f/clangd_extensions.nvim",
@@ -11,7 +11,7 @@ return {
 
 		config = function()
 			----------------------------------------------------------------------------
-			-- 🎨 Configure diagnostic signs with icons
+			-- Configure diagnostic signs with icons
 			----------------------------------------------------------------------------
 			vim.diagnostic.config({
 				virtual_text = false, -- disable inline diagnostics
@@ -126,7 +126,7 @@ return {
 	},
 
 	---------------------------------------------------------------------------
-	-- 🧪 C/C++ Unit Testing (GoogleTest)
+	-- C/C++ Unit Testing (GoogleTest)
 	---------------------------------------------------------------------------
 	{
 		"nvim-neotest/neotest",
@@ -148,4 +148,3 @@ return {
 		end,
 	},
 }
-
