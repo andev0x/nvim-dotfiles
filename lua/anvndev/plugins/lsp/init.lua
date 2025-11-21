@@ -180,6 +180,14 @@ return {
 					opts.desc = "Restart LSP"
 					vim.keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts)
 
+					-- navic
+					if client.server_capabilities.documentSymbolProvider then
+						local navic_ok, navic = pcall(require, "nvim-navic")
+						if navic_ok then
+							navic.attach(client, bufnr)
+						end
+					end
+
 					-- Enable inlay hints (Neovim 0.10+)
 					if client and client:supports_method("textDocument/inlayHint") then
 						vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
@@ -210,13 +218,13 @@ return {
 			"hrsh7th/cmp-nvim-lua",
 			"onsails/lspkind.nvim",
 		},
-		-- NOTE: Ensure you have a config function for cmp here, 
-        -- usually calling require("anvndev.plugins.lsp.completion") 
-        -- or defining setup({ ... }) directly.
-        -- If it's in an external file, keep the 'config' key pointing to it.
-        config = function()
-             require("anvndev.plugins.lsp.completion") 
-        end,
+		-- NOTE: Ensure you have a config function for cmp here,
+		-- usually calling require("anvndev.plugins.lsp.completion")
+		-- or defining setup({ ... }) directly.
+		-- If it's in an external file, keep the 'config' key pointing to it.
+		config = function()
+			require("anvndev.plugins.lsp.completion")
+		end,
 	},
 
 	-- --------------------------------------------------
