@@ -82,10 +82,10 @@ return {
 
 			-- Icons for the Sign Column (Gutter - Left side)
 			local gutter_signs = {
-				Error = " ",
-				Warn = " ",
-				Hint = "󰌵 ",
-				Info = " ",
+				Error = "",
+				Warn = "",
+				Hint = "󰌵",
+				Info = "",
 			}
 
 			-- Define signs for legacy support

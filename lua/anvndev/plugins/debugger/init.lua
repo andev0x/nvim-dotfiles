@@ -11,6 +11,7 @@ return {
 			{ "rcarriga/nvim-dap-ui" }, -- Debug UI
 			{ "theHamsta/nvim-dap-virtual-text" }, -- Inline variable preview
 			{ "jay-babu/mason-nvim-dap.nvim", dependencies = { "williamboman/mason.nvim" } },
+			"nvim-neotest/nvim-nio", -- Added explicit dependency for new dap-ui versions
 		},
 
 		config = function()
@@ -117,36 +118,32 @@ return {
 			-- ==========================
 			-- Load Language-Specific Debug Configurations
 			-- ==========================
-			require("anvndev.plugins.debugger.go")
-			require("anvndev.plugins.debugger.rust")
-			require("anvndev.plugins.debugger.python")
-			require("anvndev.plugins.debugger.cpp")
+			-- Ensure these modules exist, otherwise comment them out
+			pcall(require, "anvndev.plugins.debugger.go")
+			pcall(require, "anvndev.plugins.debugger.rust")
+			pcall(require, "anvndev.plugins.debugger.python")
+			pcall(require, "anvndev.plugins.debugger.cpp")
 
 			-- ==========================
-			-- DAP Signs Configuration (Neovim 0.10+)
+			-- DAP Signs Configuration (FIXED)
 			-- ==========================
-			vim.diagnostic.config({
-				signs = {
-					text = {
-						["DapBreakpoint"] = "",
-						["DapBreakpointCondition"] = "",
-						["DapLogPoint"] = "",
-						["DapStopped"] = "",
-						["DapBreakpointRejected"] = "",
-					},
-					texthl = {
-						["DapBreakpoint"] = "DiagnosticSignError",
-						["DapBreakpointCondition"] = "DiagnosticSignWarn",
-						["DapLogPoint"] = "DiagnosticSignInfo",
-						["DapStopped"] = "DiagnosticSignHint",
-						["DapBreakpointRejected"] = "DiagnosticSignError",
-					},
-					linehl = {
-						["DapStopped"] = "DapStoppedLine",
-					},
-					numhl = {},
-				},
-			})
+			-- We must use vim.fn.sign_define, NOT vim.diagnostic.config
+			local dap_signs = {
+				{ name = "DapBreakpoint", text = "", texthl = "DiagnosticSignError" },
+				{ name = "DapBreakpointCondition", text = "", texthl = "DiagnosticSignWarn" },
+				{ name = "DapLogPoint", text = "", texthl = "DiagnosticSignInfo" },
+				{ name = "DapStopped", text = "", texthl = "DiagnosticSignHint", linehl = "Visual" },
+				{ name = "DapBreakpointRejected", text = "", texthl = "DiagnosticSignError" },
+			}
+
+			for _, sign in ipairs(dap_signs) do
+				vim.fn.sign_define(sign.name, {
+					text = sign.text,
+					texthl = sign.texthl,
+					linehl = sign.linehl or "",
+					numhl = "",
+				})
+			end
 		end,
 	},
 }
