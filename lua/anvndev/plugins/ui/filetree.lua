@@ -1,5 +1,6 @@
 -- ~/.config/nvim/lua/anvndev/plugins/ui/filetree.lua
 -- File explorer configuration
+-- Author: anvndev
 
 return {
 	{

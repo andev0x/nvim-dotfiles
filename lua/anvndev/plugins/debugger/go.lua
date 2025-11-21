@@ -1,5 +1,6 @@
 -- ~/.config/nvim/lua/anvndev/plugins/debugger/go.lua
 -- Go debugger configuration
+-- Author: anvndev
 
 local ok, dap = pcall(require, "dap")
 if not ok then
@@ -59,4 +60,3 @@ dap.configurations.go = {
 		host = "127.0.0.1",
 	},
 }
-

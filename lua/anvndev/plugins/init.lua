@@ -1,5 +1,6 @@
 -- ~/.config/nvim/lua/anvndev/plugins/init.lua
 -- Main plugin loader for lazy.nvim
+-- Author: anvndev
 
 return {
 	-- Core plugins

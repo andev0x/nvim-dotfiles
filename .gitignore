@@ -60,3 +60,6 @@ credentials.lua
 *.old
 *.orig
 *.rej
+
+# Different
+.commit_suggest_history.json

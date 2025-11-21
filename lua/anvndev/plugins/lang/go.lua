@@ -14,7 +14,7 @@ return {
 		config = function()
 			require("go").setup({
 				-----------------------------------------------------------------------
-				-- ⚙️ LSP configuration
+				-- LSP configuration
 				-----------------------------------------------------------------------
 				lsp_cfg = {
 					settings = {
@@ -43,7 +43,7 @@ return {
 				},
 
 				-----------------------------------------------------------------------
-				-- 💡 Inlay hints
+				-- Inlay hints
 				-----------------------------------------------------------------------
 				lsp_inlay_hints = {
 					enable = true,
@@ -55,7 +55,7 @@ return {
 				},
 
 				-----------------------------------------------------------------------
-				-- 🧩 Diagnostics
+				-- Diagnostics
 				-- Disable inline diagnostic virtual text for cleaner view
 				-----------------------------------------------------------------------
 				lsp_diag_hdlr = false, -- disable Go.nvim's internal diagnostic handler
@@ -64,19 +64,19 @@ return {
 				lsp_diag_update_in_insert = false,
 
 				-----------------------------------------------------------------------
-				-- 🧱 Formatting
+				-- Formatting
 				-----------------------------------------------------------------------
 				formatter = "gofumpt",
 				formatter_extra_args = { "-s" },
 
 				-----------------------------------------------------------------------
-				-- 🧪 Testing
+				-- Testing
 				-----------------------------------------------------------------------
 				test_runner = "go",
 				run_in_floaterm = true,
 
 				-----------------------------------------------------------------------
-				-- 🧰 Miscellaneous features
+				-- Miscellaneous features
 				-----------------------------------------------------------------------
 				lsp_codelens = true,
 				trouble = true,
@@ -85,7 +85,7 @@ return {
 				lsp_format_on_save = true,
 
 				-----------------------------------------------------------------------
-				-- ⚡ On attach: keymaps and hooks
+				-- On attach: keymaps and hooks
 				-----------------------------------------------------------------------
 				lsp_on_attach = function(client, bufnr)
 					local map = vim.keymap.set
@@ -102,14 +102,14 @@ return {
 				end,
 
 				-----------------------------------------------------------------------
-				-- 🐞 DAP (Debug Adapter Protocol)
+				-- DAP (Debug Adapter Protocol)
 				-----------------------------------------------------------------------
 				dap_debug = true,
 				dap_debug_gui = true,
 			})
 
 			-------------------------------------------------------------------------
-			-- 🎨 Configure diagnostic signs with icons
+			-- Configure diagnostic signs with icons
 			-------------------------------------------------------------------------
 			vim.diagnostic.config({
 				virtual_text = false, -- no inline diagnostic messages
@@ -129,7 +129,7 @@ return {
 	},
 
 	---------------------------------------------------------------------------
-	-- 🧠 Neotest integration for Go
+	-- Neotest integration for Go
 	---------------------------------------------------------------------------
 	{
 		"nvim-neotest/neotest",

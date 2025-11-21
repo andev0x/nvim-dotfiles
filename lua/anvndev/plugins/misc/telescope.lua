@@ -1,5 +1,6 @@
 -- ~/.config/nvim/lua/anvndev/plugins/misc/telescope.lua
 -- Telescope configuration
+-- Author: anvndev
 
 return {
 	{

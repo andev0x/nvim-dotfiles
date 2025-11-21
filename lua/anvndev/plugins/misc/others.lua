@@ -1,5 +1,6 @@
 -- ~/.config/nvim/lua/anvndev/plugins/misc/others.lua
 -- Miscellaneous utility plugins
+-- Author: anvndev
 
 return {
 	-- Auto pairs
