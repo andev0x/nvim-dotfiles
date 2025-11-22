@@ -102,9 +102,9 @@ return {
 							bookmark = "",
 							modified = "✦",
 							folder = {
-								arrow_closed = "",
+								arrow_closed = "",
 								arrow_open = "󱞢",
-								default = "",
+								default = "",
 								open = "",
 								empty = "",
 								empty_open = "",

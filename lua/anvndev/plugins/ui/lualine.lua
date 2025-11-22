@@ -13,12 +13,12 @@ return {
 	},
 
 	-- Markdown preview (Glow)
-	{
+	--[[ 	{
 		"ellisonleao/glow.nvim",
 		config = true,
 		cmd = "Glow",
 		ft = "markdown",
-	},
+	}, ]]
 
 	-- Git diff viewer
 	{

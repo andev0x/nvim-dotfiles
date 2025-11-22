@@ -34,7 +34,7 @@ wk.setup({
 	},
 	win = {
 		border = "rounded",
-		row = math.huge,
+		-- row = math.huge,
 		margin = { 1, 0, 1, 0 },
 		padding = { 2, 2, 2, 2 },
 		winblend = 0,
