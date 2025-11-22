@@ -139,3 +139,6 @@ keymap("n", "<leader>tw", ":set wrap!<CR>", { desc = "Toggle word wrap" })
 keymap("n", "<leader>tl", ":set list!<CR>", { desc = "Toggle invisible characters" })
 keymap("n", "<leader>th", ":set hlsearch!<CR>", { desc = "Toggle search highlight" })
 
+-- Tab
+vim.keymap.set("v", "<Tab>", ">gv", { noremap = true, silent = true })
+vim.keymap.set("v", "<S-Tab>", "<gv", { noremap = true, silent = true })

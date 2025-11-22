@@ -3,24 +3,24 @@
 -- Optimized for stability and clean diagnostics (no inline messages)
 
 -- ===============================
--- 🧱 Indentation & syntax setup
+-- Indentation & syntax setup
 -- ===============================
 vim.opt_local.expandtab = false
 vim.opt_local.tabstop = 4
 vim.opt_local.shiftwidth = 4
 
 -- ===============================
--- ⚙️ Build and error format
+-- Build and error format
 -- ===============================
 vim.opt_local.makeprg = "go build"
 vim.opt_local.errorformat = "%f:%l:%c: %m"
 
 -- ===============================
--- 🪄 Autocommands group
+-- Autocommands group
 -- ===============================
 local group = vim.api.nvim_create_augroup("GoFileSettings", { clear = true })
 
--- 🧽 Auto-format and organize imports before saving
+-- Auto-format and organize imports before saving
 vim.api.nvim_create_autocmd("BufWritePre", {
 	group = group,
 	buffer = 0,
@@ -32,7 +32,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 	end,
 })
 
--- 🧾 Automatically open quickfix window after build/test errors
+-- Automatically open quickfix window after build/test errors
 vim.api.nvim_create_autocmd("QuickFixCmdPost", {
 	group = group,
 	pattern = { "make", "GoTest" },
@@ -44,7 +44,7 @@ vim.api.nvim_create_autocmd("QuickFixCmdPost", {
 })
 
 -- ===============================
--- ✅ Diagnostics
+-- NOTE: Diagnostics
 -- ===============================
 -- DO NOT override global diagnostic settings here
 -- (Handled centrally in plugins/lang/go.lua)
