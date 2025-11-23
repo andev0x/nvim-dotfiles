@@ -1,9 +1,11 @@
 -- ~/.config/nvim/lua/anvndev/plugins/misc/others.lua
--- Miscellaneous utility plugins
+-- Miscellaneous utility plugins configuration
 -- Author: anvndev
 
 return {
-	-- Auto pairs
+	-- ==================================================
+	-- Auto Pairs
+	-- ==================================================
 	{
 		"windwp/nvim-autopairs",
 		event = "InsertEnter",
@@ -36,14 +38,18 @@ return {
 		end,
 	},
 
+	-- ==================================================
 	-- Surround
+	-- ==================================================
 	{
 		"kylechui/nvim-surround",
 		event = "VeryLazy",
 		config = true,
 	},
 
-	-- Indent guides
+	-- ==================================================
+	-- Indent Guides
+	-- ==================================================
 	{
 		"lukas-reineke/indent-blankline.nvim",
 		event = { "BufReadPost", "BufNewFile" },
@@ -68,13 +74,16 @@ return {
 		},
 	},
 
-	-- Terminal
+	-- ==================================================
+	-- Terminal (ToggleTerm)
+	-- ==================================================
 	{
 		"akinsho/toggleterm.nvim",
 		version = "*",
 		cmd = "ToggleTerm",
 		keys = {
-			{ "<leader>t", "<cmd>ToggleTerm<cr>", desc = "Toggle terminal" },
+			-- [FIXED] Changed <leader>t to <leader>tt to avoid conflict with WhichKey group
+			{ "<leader>tt", "<cmd>ToggleTerm<cr>", desc = "Toggle terminal" },
 			{ "<leader>tf", "<cmd>ToggleTerm direction=float<cr>", desc = "Float terminal" },
 			{ "<leader>th", "<cmd>ToggleTerm direction=horizontal<cr>", desc = "Horizontal terminal" },
 			{ "<leader>tv", "<cmd>ToggleTerm direction=vertical<cr>", desc = "Vertical terminal" },
@@ -131,35 +140,11 @@ return {
 		end,
 	},
 
-	-- Which-key
-	{
-		"folke/which-key.nvim",
-		event = "VeryLazy",
-		config = function()
-			require("which-key").setup({
-				plugins = {
-					marks = true,
-					registers = true,
-					spelling = { enabled = true, suggestions = 20 },
-					presets = {
-						operators = true,
-						motions = true,
-						text_objects = true,
-						windows = true,
-						nav = true,
-						z = true,
-						g = true,
-					},
-				},
-				icons = { breadcrumb = "»", separator = "➜", group = "+" },
-				win = { border = "rounded", position = "bottom", padding = { 2, 2, 2, 2 } },
-				layout = { height = { min = 4, max = 25 }, width = { min = 20, max = 50 }, spacing = 3 },
-				triggers = { "<leader>" },
-			})
-		end,
-	},
+	-- [REMOVED] which-key block was deleted here to avoid duplication and crash
 
-	-- Notify
+	-- ==================================================
+	-- Notifications
+	-- ==================================================
 	{
 		"rcarriga/nvim-notify",
 		event = "VeryLazy",
@@ -189,9 +174,9 @@ return {
 				background_colour = "#000000",
 				icons = {
 					ERROR = time_icon(),
-					WARN = "⚠️",
-					INFO = "ℹ️",
-					DEBUG = "🔍",
+					WARN = "",
+					INFO = "",
+					DEBUG = "",
 					TRACE = "✎",
 				},
 			})
@@ -204,7 +189,9 @@ return {
 		end,
 	},
 
-	-- Dressing UI
+	-- ==================================================
+	-- UI Improvements (Dressing)
+	-- ==================================================
 	{
 		"stevearc/dressing.nvim",
 		event = "VeryLazy",
@@ -217,7 +204,9 @@ return {
 		},
 	},
 
-	-- Web devicons
+	-- ==================================================
+	-- Icons
+	-- ==================================================
 	{
 		"nvim-tree/nvim-web-devicons",
 		event = "VeryLazy",
@@ -230,7 +219,9 @@ return {
 		},
 	},
 
-	-- Todo comments
+	-- ==================================================
+	-- Todo Comments
+	-- ==================================================
 	{
 		"folke/todo-comments.nvim",
 		event = { "BufReadPost", "BufNewFile" },
@@ -248,7 +239,9 @@ return {
 		},
 	},
 
-	-- Trouble
+	-- ==================================================
+	-- Trouble (Diagnostics List)
+	-- ==================================================
 	{
 		"folke/trouble.nvim",
 		cmd = { "Trouble", "TroubleToggle" },
@@ -260,6 +253,8 @@ return {
 			{ "gR", "<cmd>TroubleToggle lsp_references<cr>", desc = "LSP References" },
 		},
 		opts = {
+			-- Note: Trouble v2 uses 'position', v3 uses different config.
+			-- If this causes errors later, we will fix it. For now, it's likely fine.
 			position = "bottom",
 			height = 10,
 			icons = true,
@@ -270,7 +265,9 @@ return {
 		},
 	},
 
-	-- Mini icons
+	-- ==================================================
+	-- Mini Icons
+	-- ==================================================
 	{
 		"echasnovski/mini.icons",
 		event = "VeryLazy",

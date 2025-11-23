@@ -17,7 +17,8 @@ local general = augroup("General", { clear = true })
 autocmd("TextYankPost", {
 	group = general,
 	callback = function()
-		vim.highlight.on_yank({ higroup = "IncSearch", timeout = 200 })
+		-- [FIXED] Updated from vim.highlight.on_yank to vim.hl.on_yank
+		vim.hl.on_yank({ higroup = "IncSearch", timeout = 200 })
 	end,
 	desc = "Highlight selected text on yank",
 })
@@ -39,6 +40,7 @@ autocmd("BufWritePre", {
 		if event.match:match("^%w%w+://") then
 			return
 		end
+		-- Note: vim.loop is typically vim.uv in newer versions, but vim.loop still works for compatibility
 		local file = vim.loop.fs_realpath(event.match) or event.match
 		vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
 	end,
@@ -146,7 +148,3 @@ autocmd("BufWinEnter", {
 	end,
 	desc = "Force enable Treesitter highlight if missing",
 })
-
--- ==================================================
--- End of autocmds.lua
--- ==================================================

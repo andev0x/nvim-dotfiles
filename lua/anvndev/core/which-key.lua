@@ -1,82 +1,102 @@
-local status_ok, wk = pcall(require, "which-key")
-if not status_ok then
-	return
-end
+-- ~/.config/nvim/lua/anvndev/plugins/misc/which-key.lua
+-- ==================================================
+-- Keybinding Helper Configuration (Which-Key v3)
+-- ==================================================
 
-wk.setup({
-	plugins = {
-		marks = true,
-		registers = true,
-		spelling = {
-			enabled = true,
-			suggestions = 20,
+return {
+	"folke/which-key.nvim",
+	event = "VeryLazy",
+	init = function()
+		-- Timeout settings are required for which-key to open automatically
+		vim.o.timeout = true
+		vim.o.timeoutlen = 300 -- Time in ms to wait before opening the popup
+	end,
+	opts = {
+		-- ----------------------------------------------------------------
+		-- UI & Layout Configuration
+		-- ----------------------------------------------------------------
+		-- "modern" is the default v3 style. Options: "classic", "modern", "helix"
+		preset = "modern",
+
+		-- Delay before showing the popup (in ms)
+		delay = function(ctx)
+			return ctx.plugin and 0 or 200
+		end,
+
+		-- Window configuration (Replaces the old 'window' and 'position' options)
+		win = {
+			border = "rounded",
+			padding = { 2, 2 }, -- [top/bottom, right/left]
+			-- 'margin' and 'position' are deprecated in v3, handled by 'wo' or layout presets
 		},
-		presets = {
-			operators = true,
-			motions = true,
-			text_objects = true,
-			windows = true,
-			nav = true,
-			z = true,
-			g = true,
+
+		-- Icon settings
+		icons = {
+			breadcrumb = "»",
+			separator = "➜",
+			group = "+",
+			-- v3 uses 'rules' to assign icons, but defaults are usually fine
+		},
+
+		-- Key label replacements (Replaces the old 'key_labels')
+		replace = {
+			["<space>"] = "SPC",
+			["<cr>"] = "RET",
+			["<tab>"] = "TAB",
+		},
+
+		-- ----------------------------------------------------------------
+		-- Plugin Integrations
+		-- ----------------------------------------------------------------
+		plugins = {
+			marks = true, -- shows a list of your marks on ' and `
+			registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
+			spelling = {
+				enabled = true, -- enabling this will show WhichKey when pressing z= to select suggestions
+				suggestions = 20, -- how many suggestions should be shown in the list?
+			},
+			presets = {
+				operators = true, -- adds help for operators like d, y, ...
+				motions = true, -- adds help for motions
+				text_objects = true, -- help for text objects triggered after entering an operator
+				windows = true, -- default bindings on <c-w>
+				nav = true, -- misc bindings to work with windows
+				z = true, -- bindings for folds, spelling and others prefixed with z
+				g = true, -- bindings for prefixed with g
+			},
+		},
+
+		-- ----------------------------------------------------------------
+		-- Mappings Registration (The 'Spec')
+		-- ----------------------------------------------------------------
+		-- In v3, mappings are defined in the 'spec' table.
+		-- This fixes the overlap warnings by clearly defining Groups vs Commands.
+		spec = {
+			{
+				mode = { "n", "v" }, -- Normal and Visual mode
+				{ "<leader>b", group = "Buffers" },
+				{ "<leader>c", group = "Code" },
+				{ "<leader>d", group = "Debug" },
+				{ "<leader>f", group = "Find/Files" },
+				{ "<leader>g", group = "Git" },
+				{ "<leader>l", group = "LSP" },
+				{ "<leader>r", group = "Refactor" },
+				{ "<leader>w", group = "Workspace" },
+				{ "<leader>x", group = "Text" },
+
+				-- Terminal & Toggles Group
+				-- Note: Since 't' is the group, the toggle command must be 'tt'
+				{ "<leader>t", group = "Terminal / Toggles" },
+				{ "<leader>tf", desc = "Float terminal" },
+				{ "<leader>th", desc = "Horizontal terminal" },
+				{ "<leader>tl", desc = "Toggle invisible characters" },
+				{ "<leader>to", group = "Toggle Options" }, -- Sub-group for specific toggles if needed
+				{ "<leader>tr", desc = "Toggle relative line numbers" },
+				{ "<leader>ts", desc = "Toggle spell check" },
+				{ "<leader>tt", desc = "Toggle terminal" }, -- The main toggle command
+				{ "<leader>tv", desc = "Vertical terminal" },
+				{ "<leader>tw", desc = "Toggle word wrap" },
+			},
 		},
 	},
-	operators = { gc = "Comments" },
-	key_labels = {
-		["<space>"] = "SPC",
-		["<cr>"] = "RET",
-		["<tab>"] = "TAB",
-	},
-	icons = {
-		breadcrumb = "»",
-		separator = "➜",
-		group = "+",
-	},
-	win = {
-		border = "rounded",
-		row = math.huge,
-		margin = { 1, 0, 1, 0 },
-		padding = { 2, 2, 2, 2 },
-		winblend = 0,
-	},
-	layout = {
-		height = { min = 4, max = 25 },
-		width = { min = 20, max = 50 },
-		spacing = 3,
-		align = "center",
-	},
-	ignore_missing = true,
-	hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ " },
-	show_help = true,
-	show_keys = true,
-	triggers = "auto",
-	triggers_blacklist = {
-		i = { "j", "k" },
-		v = { "j", "k" },
-	},
-})
-
--- Modern which-key v3 spec (flat list)
-wk.add({
-	{ "<leader>l", group = "LSP" },
-	{ "<leader>g", group = "Git" },
-	{ "<leader>c", group = "Code" },
-	{ "<leader>t", group = "Terminal" },
-	{ "<leader>b", group = "Buffers" },
-	{ "<leader>d", group = "Debug" },
-	{ "<leader>r", group = "Refactor" },
-	{ "<leader>w", group = "Workspace" },
-	{ "<leader>f", group = "Find/Files" },
-	{ "<leader>x", group = "Text" },
-
-	-- Optional: group toggle
-	{ "<leader>to", group = "Toggle" },
-	{ "<leader>tl", desc = "Toggle invisible characters" },
-	{ "<leader>th", desc = "Horizontal terminal" },
-	{ "<leader>ts", desc = "Toggle spell check" },
-	{ "<leader>tt", desc = "Toggle terminal" },
-	{ "<leader>tr", desc = "Toggle relative line numbers" },
-	{ "<leader>tw", desc = "Toggle word wrap" },
-	{ "<leader>tv", desc = "Vertical terminal" },
-	{ "<leader>tf", desc = "Float terminal" },
-})
+}
