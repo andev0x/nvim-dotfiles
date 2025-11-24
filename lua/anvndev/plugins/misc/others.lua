@@ -229,10 +229,10 @@ return {
 		opts = {
 			signs = true,
 			keywords = {
-				FIX = { icon = "", color = "error", alt = { "FIXME", "BUG" } },
+				FIX = { icon = "󰁨", color = "error", alt = { "FIXME", "BUG" } },
 				TODO = { icon = "", color = "info" },
 				HACK = { icon = "", color = "warning" },
-				WARN = { icon = "", color = "warning" },
+				WARN = { icon = "", color = "warning" },
 				PERF = { icon = "" },
 				NOTE = { icon = "󰍨", color = "hint" },
 			},
