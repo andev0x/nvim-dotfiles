@@ -17,7 +17,7 @@ local general = augroup("General", { clear = true })
 autocmd("TextYankPost", {
 	group = general,
 	callback = function()
-		-- [FIXED] Updated from vim.highlight.on_yank to vim.hl.on_yank
+		-- FIX: Updated from vim.highlight.on_yank to vim.hl.on_yank
 		vim.hl.on_yank({ higroup = "IncSearch", timeout = 200 })
 	end,
 	desc = "Highlight selected text on yank",
