@@ -50,6 +50,12 @@ git clone https://github.com/andev0x/nvim-dotfiles.git ~/.config/nvim
 nvim
 ```
 
+> On Arch Linux install both:
+```bash
+sudo pacman -S fd ripgrep
+```
+
+
 ## Structure
 
 ```
@@ -75,4 +81,3 @@ nvim
 ## License
 
 MIT [License](LICENSE)
-

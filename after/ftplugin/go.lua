@@ -1,6 +1,7 @@
 -- ~/.config/nvim/after/ftplugin/go.lua
 -- Filetype-specific settings for Go
 -- Optimized for stability and clean diagnostics (no inline messages)
+-- Author: anvndev
 
 -- ===============================
 -- Indentation & syntax setup
