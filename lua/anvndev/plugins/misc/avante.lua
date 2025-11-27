@@ -1,21 +1,38 @@
+-- File: lua/anvndev/plugins/misc/avante.lua
 return {
 	"yetone/avante.nvim",
-	event = "VeryLazy",
-	lazy = false, -- Recommended: Disable lazy loading to ensure proper initialization
-	version = false, -- set this if you want to always pull the latest change
+	-- Avante needs to load early/eagerly for stability
+	lazy = false,
+	version = false,
 
-	-- IMPORTANT: This is the fix for the "missing avante_templates" error.
-	-- It compiles the necessary Rust core components.
-	build = "make",
+	-- FIX: Use the stable build command (avoiding BUILD_FROM_SOURCE=true)
+	build = vim.fn.has("win32") ~= 0 and "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false"
+		or "make",
 
 	dependencies = {
-		"nvim-treesitter/nvim-treesitter", -- Required for syntax highlighting
-		"stevearc/dressing.nvim", -- Recommended: Improves the UI for inputs
+		"nvim-treesitter/nvim-treesitter",
 		"nvim-lua/plenary.nvim",
 		"MunifTanjim/nui.nvim",
-		"zbirenbaum/copilot.lua", -- Your AI provider
 
-		-- Optional: Support for image pasting
+		-- Input UI: Fixes transparent prompt issues
+		{
+			"stevearc/dressing.nvim",
+			opts = {
+				input = {
+					win_options = { winblend = 0 },
+					border = "rounded",
+				},
+			},
+		},
+
+		-- Markdown Rendering for interactive buttons
+		{
+			"MeanderingProgrammer/render-markdown.nvim",
+			opts = { file_types = { "markdown", "Avante" } },
+			ft = { "markdown", "Avante" },
+		},
+
+		-- Optional image support
 		{
 			"HakonHarnes/img-clip.nvim",
 			event = "VeryLazy",
@@ -23,79 +40,59 @@ return {
 				default = {
 					embed_image_as_base64 = false,
 					prompt_for_file_name = false,
-					drag_and_drop = {
-						insert_mode = true,
-					},
+					drag_and_drop = { insert_mode = true },
+					use_absolute_path = true,
 				},
 			},
 		},
 	},
 
-	config = function()
-		--  Setup Copilot BEFORE Avante
-		-- We disable Copilot's native suggestions to avoid UI clutter with Avante
+	opts = {
+		-- Core provider
+		provider = "copilot",
+		auto_suggestions_provider = "copilot",
+		instructions_file = "avante.md",
+
+		-- Behaviour settings
+		behaviour = {
+			-- IMPORTANT: Use default keymaps (keep Avante's defaults)
+			auto_set_keymaps = true,
+			-- Prevent Avante from auto-applying suggestions into buffers.
+			-- Some providers (or upstream changes) can insert code without
+			-- explicit accept. Disabling auto_suggestions ensures diffs
+			-- are shown and changes are only applied when you accept them.
+			auto_suggestions = false,
+			debounce_time = 150,
+		},
+
+		-- UI settings
+		ui = {
+			position = "right",
+			width = 40,
+		},
+
+		-- Enable interactive diff panel
+		diff_view = {
+			enabled = true,
+		},
+	},
+
+	config = function(_, opts)
+		-- 1. Setup Copilot (Disable native UI)
 		require("copilot").setup({
 			suggestion = { enabled = false },
 			panel = { enabled = false },
 		})
 
-		-- 2️⃣ Setup Avante with Copilot provider
-		require("avante").setup({
-			provider = "copilot",
+		-- 2. Setup Avante plugin
+		require("avante").setup(opts)
 
-			behaviour = {
-				auto_suggestions = false, -- Recommended: Disable auto-suggestions if using Copilot provider to prevent conflicts
-				auto_set_keymaps = false, -- We will define custom keymaps below
-			},
+		-- 3. Visual fixes
+		vim.api.nvim_set_hl(0, "AvanteLineAdded", { bg = "#1f3b25" })
+		vim.api.nvim_set_hl(0, "AvanteLineRemoved", { bg = "#4a2121" })
+		vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#1e1e2e" })
+		vim.api.nvim_set_hl(0, "FloatBorder", { bg = "#1e1e2e", fg = "#89b4fa" })
 
-			ui = {
-				position = "right", -- Options: "right" | "left" | "bottom"
-				width = 40, -- Width of the AI sidebar
-			},
-		})
-
-		-- 3️⃣ Custom keymaps for Avante
-		local map = vim.keymap.set
-		local opts = { noremap = true, silent = true }
-
-		-- Ask AI a question
-		map(
-			{ "n", "v" },
-			"<leader>va",
-			"<cmd>AvanteAsk<CR>",
-			vim.tbl_extend("force", opts, { desc = "Avante: Ask AI" })
-		)
-
-		-- Edit selected code using AI
-		map(
-			{ "n", "v" },
-			"<leader>ve",
-			"<cmd>AvanteEdit<CR>",
-			vim.tbl_extend("force", opts, { desc = "Avante: Edit code with AI" })
-		)
-
-		-- Toggle Avante chat window
-		map(
-			"n",
-			"<leader>vc",
-			"<cmd>AvanteToggle<CR>",
-			vim.tbl_extend("force", opts, { desc = "Avante: Toggle AI Chat" })
-		)
-
-		-- Refresh AI response
-		map(
-			"n",
-			"<leader>vr",
-			"<cmd>AvanteRefresh<CR>",
-			vim.tbl_extend("force", opts, { desc = "Avante: Refresh AI response" })
-		)
-
-		-- Stop ongoing AI generation
-		map(
-			"n",
-			"<leader>vs",
-			"<cmd>AvanteStop<CR>",
-			vim.tbl_extend("force", opts, { desc = "Avante: Stop AI action" })
-		)
+		-- The default Avante keymaps are now fully active.
 	end,
 }

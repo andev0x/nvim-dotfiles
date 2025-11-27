@@ -1,6 +1,12 @@
 -- ~/.config/nvim/lua/anvndev/plugins/misc/git.lua
 -- Git integration
 -- Author: anvndev
+-- NOTE: This file contains gitsigns configuration only. If you're seeing code
+-- changes being applied automatically on save (formatters/format-on-save), that
+-- behavior is controlled by your formatters/format-on-save settings (for example,
+-- in your LSP/formatting plugins such as conform.nvim or language-specific ftplugin
+-- autocmds). To avoid unexpected edits to your code, disable format-on-save in
+-- those places (e.g. set `format_on_save = false` in your formatter config).
 
 return {
 	-- Git signs in the gutter
@@ -20,11 +26,15 @@ return {
 				signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
 				numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
 				linehl = false, -- Toggle with `:Gitsigns toggle_linehl`
-				word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
+				-- Enable word diff so you can see character/word level changes inside lines.
+				-- This often makes diffs much clearer when using the preview or hunk commands.
+				word_diff = true, -- Toggle with `:Gitsigns toggle_word_diff`
 				watch_gitdir = {
 					follow_files = true,
 				},
-				attach_to_untracked = true,
+				-- Avoid attaching to untracked files by default to reduce noise and
+				-- prevent accidental operations on files that are not yet tracked.
+				attach_to_untracked = false,
 				current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
 				current_line_blame_opts = {
 					virt_text = true,
@@ -34,9 +44,10 @@ return {
 				},
 				current_line_blame_formatter = " <author>, <author_time:%Y-%m-%d> - <summary>",
 				sign_priority = 6,
-				update_debounce = 100,
+				update_debounce = 150, -- slightly increase debounce to avoid rapid auto updates
 				status_formatter = nil, -- Use default
 				max_file_length = 40000, -- Disable if file is longer than this (in lines)
+				-- Improve preview window options so diffs are clearer and less intrusive
 				preview_config = {
 					-- Options passed to nvim_open_win
 					border = "rounded",
@@ -44,6 +55,10 @@ return {
 					relative = "cursor",
 					row = 0,
 					col = 1,
+					winblend = 0,
+					max_width = 120,
+					max_height = 30,
+					wrap = false,
 				},
 				--[[ 				yadm = {
 					enable = false,
