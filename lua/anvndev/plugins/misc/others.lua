@@ -232,6 +232,7 @@ return {
 				FIX = { icon = "󰁨", color = "error", alt = { "FIXME", "BUG" } },
 				TODO = { icon = "", color = "info" },
 				HACK = { icon = "", color = "warning" },
+				IMPORTANT = { icon = "", color = "info" },
 				WARN = { icon = "", color = "warning" },
 				PERF = { icon = "" },
 				NOTE = { icon = "󰍨", color = "hint" },
