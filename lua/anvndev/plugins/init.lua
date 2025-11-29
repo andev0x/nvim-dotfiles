@@ -30,14 +30,15 @@ return {
 	{ import = "anvndev.plugins.lang.sql", ft = "sql" },
 
 	-- Miscellaneous plugins (load on demand)
-	{ "zbirenbaum/copilot.lua", event = "VimEnter" },
+	{ import = "anvndev.plugins.misc.copilot" },
+	{ import = "anvndev.plugins.misc.copilot_chat" },
 	{ import = "anvndev.plugins.misc.git" },
+	{ import = "anvndev.plugins.misc.lazygit" },
 	{ import = "anvndev.plugins.misc.comment" },
 	{ import = "anvndev.plugins.misc.telescope" },
 	{ import = "anvndev.plugins.misc.treesitter" },
 	{ import = "anvndev.plugins.misc.codeium" },
 	{ import = "anvndev.plugins.misc.neorg" },
-	{ import = "anvndev.plugins.misc.avante" },
 	{ import = "anvndev.plugins.misc.others" },
 	{
 		"tpope/vim-eunuch",

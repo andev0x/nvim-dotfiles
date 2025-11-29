@@ -96,6 +96,28 @@ return {
 				{ "<leader>tt", desc = "Toggle terminal" }, -- The main toggle command
 				{ "<leader>tv", desc = "Vertical terminal" },
 				{ "<leader>tw", desc = "Toggle word wrap" },
+
+				-- Comment Group (non-overlapping keys)
+				{ "<leader>c", group = "Comment" },
+				{ "<leader>cc", desc = "Toggle comment line" },
+				{ "<leader>cm", desc = "Toggle comment motion" },
+				{ "<leader>cv", desc = "Toggle comment selection" },
+				{ "<leader>cb", desc = "Toggle block comment line" },
+				{ "<leader>cB", desc = "Toggle block comment motion" },
+				{ "<leader>cV", desc = "Toggle block comment selection" },
+				{ "<leader>cO", desc = "Add comment above" },
+				{ "<leader>co", desc = "Add comment below" },
+				{ "<leader>cA", desc = "Add comment at end of line" },
+
+				-- Surround Group (nvim-surround with gz prefix)
+				{ "gz", group = "Surround" },
+				{ "gza", desc = "Add surrounding" },
+				{ "gzl", desc = "Add surrounding (current line)" },
+				{ "gzA", desc = "Add surrounding (new lines)" },
+				{ "gzL", desc = "Add surrounding (current line, new lines)" },
+				{ "gzd", desc = "Delete surrounding" },
+				{ "gzr", desc = "Replace surrounding" },
+				{ "gzR", desc = "Replace surrounding (new lines)" },
 			},
 		},
 	},

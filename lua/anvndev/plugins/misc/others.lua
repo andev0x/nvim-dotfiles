@@ -44,7 +44,23 @@ return {
 	{
 		"kylechui/nvim-surround",
 		event = "VeryLazy",
-		config = true,
+		config = function()
+			require("nvim-surround").setup({
+				keymaps = {
+					insert = "<M-s>s",
+					insert_line = "<M-s>S",
+					normal = "gza", -- gz + add
+					normal_cur = "gzl", -- gz + line
+					normal_line = "gzA",
+					normal_cur_line = "gzL",
+					visual = "gza",
+					visual_line = "gzA",
+					delete = "gzd", -- gz + delete
+					change = "gzr", -- gz + replace
+					change_line = "gzR",
+				},
+			})
+		end,
 	},
 
 	-- ==================================================

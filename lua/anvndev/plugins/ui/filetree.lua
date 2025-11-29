@@ -52,6 +52,11 @@ return {
 					vim.keymap.set("n", "l", api.node.open.edit, opts("Open"))
 					vim.keymap.set("n", "h", api.node.navigate.parent_close, opts("Close Directory"))
 					vim.keymap.set("n", "v", api.node.open.vertical, opts("Open: Vertical Split"))
+
+					-- Unmap conflicting keys
+					vim.keymap.del("n", "c", { buffer = bufnr })
+					vim.keymap.del("n", "y", { buffer = bufnr })
+					vim.keymap.del("n", "d", { buffer = bufnr })
 				end,
 				view = {
 					adaptive_size = false,

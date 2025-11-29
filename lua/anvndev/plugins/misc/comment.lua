@@ -14,22 +14,11 @@ return {
 				padding = true,
 				sticky = true,
 				ignore = nil,
-				toggler = {
-					line = "gcc",
-					block = "gbc",
-				},
-				opleader = {
-					line = "gc",
-					block = "gb",
-				},
-				extra = {
-					above = "gcO",
-					below = "gco",
-					eol = "gcA",
-				},
+				-- Disable ALL default mappings to prevent gc/gcc creation
 				mappings = {
-					basic = true,
-					extra = true,
+					basic = false,
+					extra = false,
+					extended = false,
 				},
 				pre_hook = function(ctx)
 					-- Only calculate commentstring for tsx/jsx files
@@ -59,6 +48,55 @@ return {
 				end,
 				post_hook = nil,
 			})
+
+			-- Set up custom keymaps using Comment API with distinct keys (no overlaps)
+			local api = require("Comment.api")
+			local esc = vim.api.nvim_replace_termcodes("<ESC>", true, false, true)
+
+			-- Line comment
+			vim.keymap.set("n", "<leader>//", api.toggle.linewise.current, { desc = "Toggle comment line" })
+
+			-- Comment with motion - <leader>cm (c = comment, m = motion)
+			vim.keymap.set("n", "<leader>/m", function()
+				return require("Comment.api").toggle.linewise.opfunc
+			end, { expr = true, desc = "Toggle comment motion" })
+
+			-- Comment in visual mode - <leader>cv (c = comment, v = visual)
+			vim.keymap.set("v", "<leader>/v", function()
+				vim.api.nvim_feedkeys(esc, "nx", false)
+				api.toggle.linewise(vim.fn.visualmode())
+			end, { desc = "Toggle comment selection" })
+
+			-- Block comment line - <leader>cb (c = comment, b = block)
+			vim.keymap.set("n", "<leader>cb", api.toggle.blockwise.current, { desc = "Toggle block comment line" })
+
+			-- Block comment with motion - <leader>cB (c = comment, B = block motion)
+			vim.keymap.set("n", "<leader>cB", function()
+				return require("Comment.api").toggle.blockwise.opfunc
+			end, { expr = true, desc = "Toggle block comment motion" })
+
+			-- Block comment in visual mode - <leader>cV (c = comment, V = visual block)
+			vim.keymap.set("v", "<leader>cV", function()
+				vim.api.nvim_feedkeys(esc, "nx", false)
+				api.toggle.blockwise(vim.fn.visualmode())
+			end, { desc = "Toggle block comment selection" })
+
+			-- Extra mappings with distinct keys
+			vim.keymap.set("n", "<leader>cO", api.insert.linewise.above, { desc = "Add comment above" })
+			vim.keymap.set("n", "<leader>co", api.insert.linewise.below, { desc = "Add comment below" })
+			vim.keymap.set("n", "<leader>cA", api.insert.linewise.eol, { desc = "Add comment at end of line" })
+
+			-- Unmap any gc/gcc mappings that might have been created
+			vim.schedule(function()
+				pcall(vim.keymap.del, "n", "gc")
+				pcall(vim.keymap.del, "n", "gcc")
+				pcall(vim.keymap.del, "n", "gbc")
+				pcall(vim.keymap.del, "n", "gcO")
+				pcall(vim.keymap.del, "n", "gco")
+				pcall(vim.keymap.del, "n", "gcA")
+				pcall(vim.keymap.del, "v", "gc")
+				pcall(vim.keymap.del, "v", "gb")
+			end)
 		end,
 	},
 
@@ -83,4 +121,3 @@ return {
 		end,
 	},
 }
-
