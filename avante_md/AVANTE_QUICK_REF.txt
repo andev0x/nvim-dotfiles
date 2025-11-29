@@ -1,0 +1,134 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                    AVANTE NEOVIM - QUICK REFERENCE                         ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+┌─ ESSENTIAL KEYMAPS ──────────────────────────────────────────────────────┐
+│                                                                           │
+│  <leader>aa  ─────  ACCEPT     ✅ Approve & apply suggestion             │
+│  <leader>ar  ─────  REJECT     ❌ Discard the suggestion                 │
+│  <leader>av  ─────  ASK        💬 Ask a question or open chat            │
+│  <leader>af  ─────  REFRESH    🔄 Try again / regenerate                 │
+│  <leader>ad  ─────  DIFF       👀 Show/hide code comparison              │
+│  <leader>ae  ─────  EDIT       ✏️  Modify your question                  │
+│                                                                           │
+│  Ctrl-Z      ─────  UNDO       ↩️  Undo any changes                      │
+│  :AvanteStatus ────  HELP       📖 Show this guide                       │
+│                                                                           │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─ SAFETY FEATURES ───────────────────────────────────────────────────────┐
+│                                                                           │
+│  ✓ No Auto-Apply        → Changes require explicit approval              │
+│  ✓ Diff View Always On  → See before/after comparison                   │
+│  ✓ Manual Approval      → Press <leader>aa to apply                     │
+│  ✓ Easy Reject          → Press <leader>ar to discard                   │
+│  ✓ Undo Support         → Ctrl-Z reverses any change                    │
+│  ✓ Backup Command       → :AvanteCreateBackup for safety                │
+│                                                                           │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─ TYPICAL WORKFLOW ──────────────────────────────────────────────────────┐
+│                                                                           │
+│  1. Open your code file                                                  │
+│  2. Position cursor on code or select in visual mode                     │
+│  3. Press <leader>av to ask Avante                                       │
+│  4. Describe what you want to do                                         │
+│  5. Wait for suggestion (3-5 seconds)                                    │
+│  6. Look at the DIFF on the right side                                   │
+│  7. Review carefully for mistakes:                                       │
+│     - Does the logic look correct?                                       │
+│     - Is indentation consistent?                                         │
+│     - Are there unintended changes?                                      │
+│  8. Decide:                                                              │
+│     - <leader>aa  to ACCEPT (apply changes)                              │
+│     - <leader>ar  to REJECT (discard)                                    │
+│  9. Test your code                                                       │
+│  10. Commit to git                                                       │
+│                                                                           │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─ DIFF VIEW LEGEND ──────────────────────────────────────────────────────┐
+│                                                                           │
+│  🟢 GREEN LINES    = Code being ADDED (new)                              │
+│  🔴 RED LINES      = Code being REMOVED (deleted)                        │
+│  ⚪ GRAY LINES     = Original code (unchanged)                           │
+│                                                                           │
+│  Always review both sides carefully before accepting!                    │
+│                                                                           │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─ BEST PRACTICES ────────────────────────────────────────────────────────┐
+│                                                                           │
+│  ✅ DO:                                                                  │
+│     • Be specific: "Add TypeScript types and error handling"             │
+│     • Review diffs carefully before accepting                            │
+│     • Test after applying changes                                        │
+│     • Use git to track modifications                                     │
+│     • Create backups: :AvanteCreateBackup                                │
+│                                                                           │
+│  ❌ DON'T:                                                               │
+│     • Accept without reviewing                                           │
+│     • Trust Avante 100% (always verify)                                  │
+│     • Use vague requests ("fix it")                                      │
+│     • Ignore error messages                                              │
+│     • Apply to production without testing                                │
+│     • Use for sensitive/confidential code                                │
+│                                                                           │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─ EMERGENCY COMMANDS ────────────────────────────────────────────────────┐
+│                                                                           │
+│  :AvanteStatus         Show this guide with keymaps                      │
+│  :AvanteCreateBackup   Create timestamped backup of file                 │
+│  :Copilot auth         Re-authenticate with GitHub                       │
+│  :Copilot status       Check Copilot status                              │
+│  :Lazy sync            Update all plugins                                │
+│  :messages             View error messages                               │
+│  :checkhealth copilot  Check Copilot health                              │
+│                                                                           │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─ EXAMPLES ──────────────────────────────────────────────────────────────┐
+│                                                                           │
+│  REFACTOR:                                                               │
+│    <leader>av  →  "Refactor this function to use async/await"           │
+│                                                                           │
+│  ADD TESTS:                                                              │
+│    <leader>av  →  "Write unit tests for this function"                  │
+│                                                                           │
+│  DEBUG:                                                                  │
+│    <leader>av  →  "Why does this code crash? How do I fix it?"           │
+│                                                                           │
+│  IMPROVE:                                                               │
+│    <leader>av  →  "Add TypeScript types and error handling"             │
+│                                                                           │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─ TROUBLESHOOTING ───────────────────────────────────────────────────────┐
+│                                                                           │
+│  Avante won't open?                                                      │
+│    → :Lazy sync  (update plugins)                                        │
+│    → Restart Neovim                                                      │
+│                                                                           │
+│  No diff view?                                                           │
+│    → <leader>ad  (toggle diff)                                           │
+│    → :AvanteShowDiff                                                     │
+│                                                                           │
+│  Copilot auth failed?                                                    │
+│    → :Copilot auth  (re-authenticate)                                    │
+│                                                                           │
+│  Code was auto-applied?                                                  │
+│    → Ctrl-Z  (undo immediately)                                          │
+│    → Check config has auto_suggestions = false                           │
+│                                                                           │
+│  For more help:                                                          │
+│    → :AvanteStatus  (show detailed guide)                                │
+│    → Read AVANTE_SETUP.md                                                │
+│    → Read AVANTE_DEBUG.md                                                │
+│                                                                           │
+└─────────────────────────────────────────────────────────────────────────┘
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║  Remember: SAFETY FIRST! Always review before accepting.                   ║
+║  Your code changes require EXPLICIT APPROVAL. You have full control! ✓      ║
+╚════════════════════════════════════════════════════════════════════════════╝

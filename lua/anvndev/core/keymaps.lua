@@ -155,3 +155,28 @@ keymap("n", "<leader>tH", ":set hlsearch!<CR>", { desc = "Toggle search highligh
 -- Tab
 keymap("v", "<Tab>", ">gv")
 keymap("v", "<S-Tab>", "<gv")
+
+-- Avante AI Assistant
+keymap("n", "<leader>aa", function()
+	require("avante.api").accept()
+end, { desc = "Avante: Accept suggestion" })
+
+keymap("n", "<leader>ar", function()
+	require("avante.api").reject()
+end, { desc = "Avante: Reject suggestion" })
+
+keymap("n", "<leader>av", function()
+	require("avante.api").ask()
+end, { desc = "Avante: Ask question" })
+
+keymap("n", "<leader>af", function()
+	require("avante.api").refresh()
+end, { desc = "Avante: Refresh suggestion" })
+
+keymap("n", "<leader>ad", function()
+	require("avante.diff").toggle()
+end, { desc = "Avante: Toggle diff view" })
+
+keymap("n", "<leader>ae", function()
+	require("avante.api").edit()
+end, { desc = "Avante: Edit prompt" })
