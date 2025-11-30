@@ -75,7 +75,7 @@ return {
 			{
 				mode = { "n", "v" }, -- Normal and Visual mode
 				{ "<leader>b", group = "Buffers" },
-				{ "<leader>c", group = "Code" },
+				{ "<leader>C", group = "Code" },
 				{ "<leader>d", group = "Debug" },
 				{ "<leader>f", group = "Find/Files" },
 				{ "<leader>g", group = "Git" },

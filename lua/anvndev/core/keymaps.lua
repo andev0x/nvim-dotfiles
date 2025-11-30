@@ -53,23 +53,15 @@ keymap("n", "<leader>fc", ":Telescope commands<CR>", { desc = "Commands" })
 keymap("n", "<leader>fr", ":Telescope oldfiles<CR>", { desc = "Recent files" })
 keymap("n", "<leader>fk", ":Telescope keymaps<CR>", { desc = "Keymaps" })
 
--- LSP (Updated to avoid conflict with Debugger <leader>d)
+-- LSP (Diagnostics)
+-- Ensure this does not conflict with Debug mappings (<leader>d...)
 keymap("n", "<leader>ld", vim.diagnostic.open_float, { desc = "Line diagnostics" })
 keymap("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
 keymap("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
 keymap("n", "<leader>lq", vim.diagnostic.setloclist, { desc = "Diagnostics list" })
 
--- Git
-keymap("n", "<leader>gg", ":LazyGit<CR>", { desc = "LazyGit" })
-keymap("n", "<leader>gj", ":Gitsigns next_hunk<CR>", { desc = "Next git hunk" })
-keymap("n", "<leader>gk", ":Gitsigns prev_hunk<CR>", { desc = "Previous git hunk" })
-keymap("n", "<leader>gl", ":Gitsigns blame_line<CR>", { desc = "Git blame line" })
-keymap("n", "<leader>gp", ":Gitsigns preview_hunk<CR>", { desc = "Preview git hunk" })
-keymap("n", "<leader>gr", ":Gitsigns reset_hunk<CR>", { desc = "Reset git hunk" })
-keymap("n", "<leader>gs", ":Gitsigns stage_hunk<CR>", { desc = "Stage git hunk" })
-keymap("n", "<leader>gu", ":Gitsigns undo_stage_hunk<CR>", { desc = "Undo stage git hunk" })
-
--- Debugging
+-- Debugging (DAP)
+-- Using safer pcall to avoid errors if DAP is not loaded
 keymap("n", "<leader>db", function()
 	local ok, dap = pcall(require, "dap")
 	if ok and dap then
@@ -155,28 +147,3 @@ keymap("n", "<leader>tH", ":set hlsearch!<CR>", { desc = "Toggle search highligh
 -- Tab
 keymap("v", "<Tab>", ">gv")
 keymap("v", "<S-Tab>", "<gv")
-
--- Avante AI Assistant
-keymap("n", "<leader>aa", function()
-	require("avante.api").accept()
-end, { desc = "Avante: Accept suggestion" })
-
-keymap("n", "<leader>ar", function()
-	require("avante.api").reject()
-end, { desc = "Avante: Reject suggestion" })
-
-keymap("n", "<leader>av", function()
-	require("avante.api").ask()
-end, { desc = "Avante: Ask question" })
-
-keymap("n", "<leader>af", function()
-	require("avante.api").refresh()
-end, { desc = "Avante: Refresh suggestion" })
-
-keymap("n", "<leader>ad", function()
-	require("avante.diff").toggle()
-end, { desc = "Avante: Toggle diff view" })
-
-keymap("n", "<leader>ae", function()
-	require("avante.api").edit()
-end, { desc = "Avante: Edit prompt" })
