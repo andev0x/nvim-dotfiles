@@ -15,6 +15,7 @@ return {
 	{ import = "anvndev.plugins.ui.filetree" },
 	{ import = "anvndev.plugins.ui.icons" },
 	{ import = "anvndev.plugins.ui.colorizer" },
+	{ import = "anvndev.plugins.ui.render_markdown" },
 
 	-- LSP, completion, and formatting (load on demand)
 	{ import = "anvndev.plugins.lsp.init" },
