@@ -8,6 +8,9 @@ local keymap = utils.keymap
 -- Clear search highlights
 keymap("n", "<Esc>", ":nohl<CR>", { desc = "Clear search highlights" })
 
+-- Remove extra comment characters in the first line
+keymap("n", "<leader>//", ":'<,'>s#^s*//s*##g<CR>", { desc = "Remove extra comment characters in the first line" })
+
 -- Window navigation
 keymap("n", "<C-h>", "<C-w>h", { desc = "Navigate to left window" })
 keymap("n", "<C-j>", "<C-w>j", { desc = "Navigate to bottom window" })

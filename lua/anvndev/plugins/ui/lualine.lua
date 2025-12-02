@@ -36,7 +36,10 @@ return {
 
 				-- Custom component: username
 				local function user_name()
-					return " anvndev"
+					local hour = tonumber(os.date("%H"))
+					local is_day = hour >= 6 and hour < 18
+					local icon = is_day and "󰈸" or "󰏒"
+					return string.format("%s anvndev", icon)
 				end
 
 				-- Custom component: filetype with icon
