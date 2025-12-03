@@ -78,7 +78,7 @@ return {
 					if h >= 6 and h < 18 then
 						return { fg = "#EBCB8B" } -- day tone
 					else
-						return { fg = "#81A1C1" } -- night tone
+						return { fg = "#02210C" } -- night tone
 					end
 				end
 
