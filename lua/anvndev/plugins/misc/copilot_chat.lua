@@ -1,60 +1,82 @@
 return {
 	"CopilotC-Nvim/CopilotChat.nvim",
+	lazy = true,
+
+	-- Load plugin when these commands are called
+	cmd = {
+		"CopilotChatToggle",
+		"CopilotChatExplain",
+		"CopilotChatReview",
+		"CopilotChat",
+	},
+
+	-- Basic lazy-load keymaps (safe, no 'q')
+	keys = {
+		{ "<leader>zct", "<cmd>CopilotChatToggle<CR>", desc = "Toggle CopilotChat" },
+		{ "<leader>zce", "<cmd>CopilotChatExplain<CR>", desc = "Explain code" },
+	},
+
 	dependencies = {
 		"nvim-lua/plenary.nvim",
-		"zbirenbaum/copilot.lua", -- or zbirenbaum/copilot.lua
-		"nvim-telescope/telescope.nvim", -- Recommended by CopilotChat.nvim
-		"folke/which-key.nvim", -- For keymaps (assuming it's already installed)
+		"zbirenbaum/copilot.lua",
+		"nvim-telescope/telescope.nvim",
+		"folke/which-key.nvim",
 	},
+
 	opts = {
-		-- You can add any specific configuration here.
-		-- For a Cursor-like experience, we mostly rely on the default commands
-		-- like :CopilotChat and :CopilotChatDiff.
-		-- Ensure your 'which-key' setup registers these commands for easy access.
-		question_popup_border = {
-			{ "╭", "CopilotChatBorder" },
-			{ "─", "CopilotChatBorder" },
-			{ "╮", "CopilotChatBorder" },
-			{ "│", "CopilotChatBorder" },
-			{ "╯", "CopilotChatBorder" },
-			{ "─", "CopilotChatBorder" },
-			{ "╰", "CopilotChatBorder" },
-			{ "│", "CopilotChatBorder" },
-		},
-		response_popup_border = {
-			{ "╭", "CopilotChatBorder" },
-			{ "─", "CopilotChatBorder" },
-			{ "╮", "CopilotChatBorder" },
-			{ "│", "CopilotChatBorder" },
-			{ "╯", "CopilotChatBorder" },
-			{ "─", "CopilotChatBorder" },
-			{ "╰", "CopilotChatBorder" },			{ "│", "CopilotChatBorder" },
-		},
+		window = { border = "rounded" },
 	},
+
 	config = function(_, opts)
-		require("CopilotChat").setup(opts)
+		local chat = require("CopilotChat")
+		local select = require("CopilotChat.select")
+		chat.setup(opts)
 
-		-- Set up keymaps for CopilotChat
 		local wk = require("which-key")
-		wk.add({
-			mode = "n", -- Normal mode
-			{ "<leader>cc", group = "CopilotChat" },
-			{ "<leader>ccq", ":CopilotChatToggle<CR>", desc = "Toggle CopilotChat" },
-			{ "<leader>cce", ":CopilotChatExplain<CR>", desc = "Explain code" },
-			{ "<leader>ccd", ":CopilotChatFixDiagnostic<CR>", desc = "Fix diagnostic" },
-			{ "<leader>cct", ":CopilotChatTests<CR>", desc = "Generate tests" },
-			{ "<leader>ccn", ":CopilotChatNewSheet<CR>", desc = "New Chat Sheet" },
-			{ "<leader>ccr", ":CopilotChatReset<CR>", desc = "Reset Chat" },
-		})
-		wk.add({
-			mode = "v", -- Visual mode
-			{ "<leader>cc", group = "CopilotChat" },
-			{ "<leader>cce", ":CopilotChatExplain<CR>", desc = "Explain selection" },
-			{ "<leader>ccr", ":CopilotChatRefactor<CR>", desc = "Refactor selection" },
-			{ "<leader>ccd", ":CopilotChatDiff<CR>", desc = "Diff selection" },
-			{ "<leader>ccf", ":CopilotChatFix<CR>", desc = "Fix selection" },
-			{ "<leader>cct", ":CopilotChatTests<CR>", desc = "Generate tests for selection" },
-		})
 
+		-- NORMAL MODE mappings
+		wk.add({
+			{ "<leader>zc", group = "CopilotChat" },
+
+			{ "<leader>zct", "<cmd>CopilotChatToggle<CR>", desc = "Toggle chat" },
+			{ "<leader>zce", "<cmd>CopilotChatExplain<CR>", desc = "Explain code" },
+
+			{
+				"<leader>zca",
+				function()
+					chat.ask()
+				end,
+				desc = "Ask Copilot",
+			},
+			{
+				"<leader>zcr",
+				function()
+					chat.review()
+				end,
+				desc = "Review code",
+			},
+		}, { mode = "n" })
+
+		-- VISUAL MODE mappings
+		wk.add({
+			{ "<leader>zc", group = "CopilotChat" },
+
+			{ "<leader>zce", "<cmd>CopilotChatExplain<CR>", desc = "Explain selection" },
+
+			{
+				"<leader>zca",
+				function()
+					chat.ask({ selection = select.visual })
+				end,
+				desc = "Ask on selection",
+			},
+			{
+				"<leader>zcr",
+				function()
+					chat.review({ selection = select.visual })
+				end,
+				desc = "Review selection",
+			},
+		}, { mode = "v" })
 	end,
 }

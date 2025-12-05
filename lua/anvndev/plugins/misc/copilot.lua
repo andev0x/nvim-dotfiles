@@ -1,6 +1,6 @@
 return {
 	"zbirenbaum/copilot.lua",
-	event = "VimEnter",
+	event = "InsertEnter",
 	config = function()
 		require("copilot").setup({
 			enable = true,
