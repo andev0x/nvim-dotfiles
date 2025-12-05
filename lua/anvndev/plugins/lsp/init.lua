@@ -8,6 +8,7 @@ return {
 	-- --------------------------------------------------
 	-- Core LSP Setup
 	-- --------------------------------------------------
+	require("anvndev.plugins.misc.fidget"),
 	{
 		"neovim/nvim-lspconfig",
 		event = { "BufReadPre", "BufNewFile" },
@@ -16,7 +17,6 @@ return {
 			{ "williamboman/mason.nvim", config = true },
 			"williamboman/mason-lspconfig.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
-			{ "j-hui/fidget.nvim", opts = {} },
 			{ "folke/neodev.nvim", opts = {} },
 			"hrsh7th/cmp-nvim-lsp",
 		},
