@@ -8,6 +8,9 @@ local keymap = utils.keymap
 -- Clear search highlights
 keymap("n", "<Esc>", ":nohl<CR>", { desc = "Clear search highlights" })
 
+-- Copy path of current file to clipboard
+keymap("n", "<leader>yp", ':let @+ = expand("%:p")<CR>', { desc = "Copy File Name of Current File" })
+
 -- Remove extra comment characters in the first line
 keymap("n", "<leader>//", ":'<,'>s#^s*//s*##g<CR>", { desc = "Remove extra comment characters in the first line" })
 

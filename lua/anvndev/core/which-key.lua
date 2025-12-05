@@ -5,7 +5,7 @@
 
 return {
 	"folke/which-key.nvim",
-	event = "VeryLazy",
+	event = "VimEnter",
 	init = function()
 		-- Timeout settings are required for which-key to open automatically
 		vim.o.timeout = true
