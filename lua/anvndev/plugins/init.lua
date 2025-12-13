@@ -41,6 +41,8 @@ return {
 	-- { import = "anvndev.plugins.misc.codeium" },
 	{ import = "anvndev.plugins.misc.neorg" },
 	{ import = "anvndev.plugins.misc.others" },
+	{ import = "anvndev.plugins.misc.img_clip" },
+
 	{
 		"tpope/vim-eunuch",
 		event = "VeryLazy",
