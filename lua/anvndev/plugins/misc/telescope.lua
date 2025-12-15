@@ -20,7 +20,6 @@ return {
 			"nvim-telescope/telescope-dap.nvim",
 		},
 		keys = {
-			{ "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find files" },
 			{ "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live grep" },
 			{ "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Find buffers" },
 			{ "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Help tags" },
@@ -40,9 +39,102 @@ return {
 			local telescope = require("telescope")
 			local actions = require("telescope.actions")
 			local fb_actions = require("telescope").extensions.file_browser.actions
+			local builtin = require("telescope.builtin")
 
-			-- Helper function: Ensure Telescope highlight groups exist.
-			-- This prevents issues where highlights are missing or cleared by theme changes.
+			---------------------------------------------------------------------
+			-- Source finders
+			---------------------------------------------------------------------
+
+			-- Daily source finder: Go + Rust + Lua + configs
+			vim.keymap.set("n", "<leader>ff", function()
+				builtin.find_files({
+					find_command = {
+						"rg",
+						"--files",
+						"--hidden",
+
+						-- Language sources (file-based, not folder-based)
+						"--glob",
+						"*.go",
+						"--glob",
+						"*.rs",
+						"--glob",
+						"*.lua",
+
+						-- Project configs / docs
+						"--glob",
+						"*.yml",
+						"--glob",
+						"*.yaml",
+						"--glob",
+						"*.toml",
+						"--glob",
+						"*.json",
+						"--glob",
+						"*.md",
+
+						-- Entry files
+						"--glob",
+						"go.mod",
+						"--glob",
+						"go.sum",
+						"--glob",
+						"Cargo.toml",
+						"--glob",
+						"build.rs",
+						"--glob",
+						"Dockerfile*",
+					},
+				})
+			end, { desc = "Find source (Go + Rust + Lua)" })
+
+			-- Go-only source finder (focused scope)
+			vim.keymap.set("n", "<leader>fG", function()
+				builtin.find_files({
+					find_command = {
+						"rg",
+						"--files",
+						"--hidden",
+						"--glob",
+						"cmd/**",
+						"--glob",
+						"internal/**",
+						"--glob",
+						"configs/**",
+						"--glob",
+						"deployments/**",
+						"--glob",
+						"*.go",
+						"--glob",
+						"go.mod",
+						"--glob",
+						"go.sum",
+						"--glob",
+						"Dockerfile*",
+					},
+				})
+			end, { desc = "Find Go source (focused)" })
+
+			-- Panic mode: absolute everything, bypass all ignores
+			vim.keymap.set("n", "<leader>fl", function()
+				builtin.find_files({
+					find_command = {
+						"fd",
+						"--type",
+						"f",
+						"--hidden",
+						"--no-ignore",
+						"--follow",
+						"--strip-cwd-prefix",
+					},
+				})
+			end, { desc = "Find ALL files (panic mode)" })
+
+			---------------------------------------------------------------------
+			-- Highlight safety helper
+			---------------------------------------------------------------------
+
+			-- Ensure Telescope highlight groups exist
 			local function ensure_telescope_highlights()
 				local safe_links = {
 					TelescopeBorder = "Normal",
@@ -65,13 +157,16 @@ return {
 				end
 			end
 
-			-- Reapply highlights at startup
+			-- Apply highlights on startup
 			ensure_telescope_highlights()
+
+			---------------------------------------------------------------------
+			-- Telescope setup
+			---------------------------------------------------------------------
 
 			telescope.setup({
 				defaults = {
-					-- Reapply highlights whenever a picker is opened to ensure consistency
-					attach_mappings = function(prompt_bufnr, map)
+					attach_mappings = function()
 						ensure_telescope_highlights()
 						return true
 					end,
@@ -87,15 +182,18 @@ return {
 							preview_width = 0.55,
 							results_width = 0.8,
 						},
-						vertical = {
-							mirror = false,
-						},
+						vertical = { mirror = false },
 						width = 0.87,
 						height = 0.80,
 						preview_cutoff = 120,
 					},
-					-- Using native fzf sorter, no need to specify file_sorter here explicitly
-					file_ignore_patterns = { "node_modules", ".git/", "dist/", "build/", "target/" },
+					file_ignore_patterns = {
+						"^.git/",
+						"^node_modules/",
+						"^dist/",
+						"^bin/",
+						"%.exe$",
+					},
 					winblend = 0,
 					border = {},
 					borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
@@ -108,46 +206,19 @@ return {
 							["<C-j>"] = actions.move_selection_next,
 							["<C-k>"] = actions.move_selection_previous,
 							["<C-c>"] = actions.close,
-							["<Down>"] = actions.move_selection_next,
-							["<Up>"] = actions.move_selection_previous,
 							["<CR>"] = actions.select_default,
 							["<C-x>"] = actions.select_horizontal,
 							["<C-v>"] = actions.select_vertical,
 							["<C-t>"] = actions.select_tab,
-							["<C-u>"] = actions.preview_scrolling_up,
-							["<C-d>"] = actions.preview_scrolling_down,
-							["<PageUp>"] = actions.results_scrolling_up,
-							["<PageDown>"] = actions.results_scrolling_down,
-							["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
-							["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
 							["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
-							["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
-							["<C-l>"] = actions.complete_tag,
-							["<C-_>"] = actions.which_key, -- keys from pressing <C-/>
+							["<C-_>"] = actions.which_key,
 						},
 						n = {
 							["<esc>"] = actions.close,
 							["<CR>"] = actions.select_default,
-							["<C-x>"] = actions.select_horizontal,
-							["<C-v>"] = actions.select_vertical,
-							["<C-t>"] = actions.select_tab,
-							["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
-							["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
 							["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
-							["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
 							["j"] = actions.move_selection_next,
 							["k"] = actions.move_selection_previous,
-							["H"] = actions.move_to_top,
-							["M"] = actions.move_to_middle,
-							["L"] = actions.move_to_bottom,
-							["<Down>"] = actions.move_selection_next,
-							["<Up>"] = actions.move_selection_previous,
-							["gg"] = actions.move_to_top,
-							["G"] = actions.move_to_bottom,
-							["<C-u>"] = actions.preview_scrolling_up,
-							["<C-d>"] = actions.preview_scrolling_down,
-							["<PageUp>"] = actions.results_scrolling_up,
-							["<PageDown>"] = actions.results_scrolling_down,
 							["?"] = actions.which_key,
 						},
 					},
@@ -156,7 +227,6 @@ return {
 					find_files = {
 						hidden = true,
 						find_command = { "fd", "--type", "f", "--strip-cwd-prefix" },
-						-- Removed custom previewer to allow default Telescope/Treesitter highlighting
 					},
 					live_grep = {
 						vimgrep_arguments = {
@@ -171,21 +241,10 @@ return {
 							"-g",
 							"!.git/",
 						},
-						additional_args = function(opts)
-							return { "--hidden" }
-						end,
 					},
 					buffers = {
 						show_all_buffers = true,
 						sort_lastused = true,
-						mappings = {
-							i = {
-								["<c-d>"] = actions.delete_buffer,
-							},
-							n = {
-								["dd"] = actions.delete_buffer,
-							},
-						},
 					},
 				},
 				extensions = {
@@ -199,46 +258,32 @@ return {
 						theme = "dropdown",
 						hijack_netrw = true,
 						mappings = {
-							["i"] = {
-								["<C-w>"] = function()
-									vim.cmd("normal vbd")
-								end,
+							i = {
 								["<C-h>"] = fb_actions.goto_parent_dir,
 								["<C-e>"] = fb_actions.create,
-								["<C-y>"] = fb_actions.copy,
-								["<C-m>"] = fb_actions.move,
 								["<C-d>"] = fb_actions.remove,
 								["<C-r>"] = fb_actions.rename,
-								["<C-o>"] = fb_actions.open,
-								["<C-g>"] = fb_actions.goto_cwd,
-								["<C-f>"] = fb_actions.toggle_browser,
 								["<C-s>"] = fb_actions.toggle_hidden,
 								["<C-a>"] = fb_actions.toggle_all,
 							},
-							["n"] = {
+							n = {
 								["h"] = fb_actions.goto_parent_dir,
 								["e"] = fb_actions.create,
-								["y"] = fb_actions.copy,
-								["m"] = fb_actions.move,
 								["d"] = fb_actions.remove,
 								["r"] = fb_actions.rename,
-								["o"] = fb_actions.open,
-								["g"] = fb_actions.goto_cwd,
-								["f"] = fb_actions.toggle_browser,
 								["s"] = fb_actions.toggle_hidden,
 								["a"] = fb_actions.toggle_all,
 							},
 						},
 					},
-					["ui-select"] = {
-						require("telescope.themes").get_dropdown({
-							-- additional options if needed
-						}),
-					},
+					["ui-select"] = require("telescope.themes").get_dropdown(),
 				},
 			})
 
+			---------------------------------------------------------------------
 			-- Load extensions
+			---------------------------------------------------------------------
+
 			telescope.load_extension("fzf")
 			telescope.load_extension("file_browser")
 			telescope.load_extension("ui-select")
