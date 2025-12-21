@@ -51,13 +51,23 @@ keymap("v", "p", '"_dP', { desc = "Paste without yanking" })
 keymap("n", "<leader>e", ":NvimTreeToggle<CR>", { desc = "Toggle file explorer" })
 
 -- Telescope
-keymap("n", "<leader>ff", ":Telescope find_files<CR>", { desc = "Find files" })
+-- Note: <leader>ff has custom logic in telescope.lua config for advanced filtering
 keymap("n", "<leader>fg", ":Telescope live_grep<CR>", { desc = "Live grep" })
 keymap("n", "<leader>fb", ":Telescope buffers<CR>", { desc = "Find buffers" })
 keymap("n", "<leader>fh", ":Telescope help_tags<CR>", { desc = "Help tags" })
 keymap("n", "<leader>fc", ":Telescope commands<CR>", { desc = "Commands" })
 keymap("n", "<leader>fr", ":Telescope oldfiles<CR>", { desc = "Recent files" })
 keymap("n", "<leader>fk", ":Telescope keymaps<CR>", { desc = "Keymaps" })
+keymap("n", "<leader>fs", ":Telescope lsp_document_symbols<CR>", { desc = "Document symbols" })
+keymap("n", "<leader>fS", ":Telescope lsp_workspace_symbols<CR>", { desc = "Workspace symbols" })
+keymap("n", "<leader>fd", ":Telescope diagnostics<CR>", { desc = "Diagnostics" })
+keymap("n", "<leader>fp", ":Telescope projects<CR>", { desc = "Projects" })
+keymap("n", "<leader>fe", ":Telescope file_browser<CR>", { desc = "File browser" })
+
+-- Git (Telescope)
+keymap("n", "<leader>gc", ":Telescope git_commits<CR>", { desc = "Git commits" })
+keymap("n", "<leader>gs", ":Telescope git_status<CR>", { desc = "Git status" })
+keymap("n", "<leader>gb", ":Telescope git_branches<CR>", { desc = "Git branches" })
 
 -- LSP (Diagnostics)
 -- Ensure this does not conflict with Debug mappings (<leader>d...)

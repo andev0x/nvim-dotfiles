@@ -19,22 +19,8 @@ return {
 			"nvim-telescope/telescope-project.nvim",
 			"nvim-telescope/telescope-dap.nvim",
 		},
-		keys = {
-			{ "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live grep" },
-			{ "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Find buffers" },
-			{ "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Help tags" },
-			{ "<leader>fc", "<cmd>Telescope commands<cr>", desc = "Commands" },
-			{ "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent files" },
-			{ "<leader>fk", "<cmd>Telescope keymaps<cr>", desc = "Keymaps" },
-			{ "<leader>fs", "<cmd>Telescope lsp_document_symbols<cr>", desc = "Document symbols" },
-			{ "<leader>fS", "<cmd>Telescope lsp_workspace_symbols<cr>", desc = "Workspace symbols" },
-			{ "<leader>fd", "<cmd>Telescope diagnostics<cr>", desc = "Diagnostics" },
-			{ "<leader>fp", "<cmd>Telescope projects<cr>", desc = "Projects" },
-			{ "<leader>fe", "<cmd>Telescope file_browser<cr>", desc = "File browser" },
-			{ "<leader>gc", "<cmd>Telescope git_commits<cr>", desc = "Git commits" },
-			{ "<leader>gs", "<cmd>Telescope git_status<cr>", desc = "Git status" },
-			{ "<leader>gb", "<cmd>Telescope git_branches<cr>", desc = "Git branches" },
-		},
+		-- Note: Keybindings are defined in lua/anvndev/core/keymaps.lua
+		-- Custom keybindings with advanced logic are set in config() below
 		config = function()
 			local telescope = require("telescope")
 			local actions = require("telescope.actions")
@@ -42,8 +28,10 @@ return {
 			local builtin = require("telescope.builtin")
 
 			---------------------------------------------------------------------
-			-- Source finders
+			-- Custom source finders (advanced file filtering)
 			---------------------------------------------------------------------
+			-- Note: These keybindings use vim.keymap.set for custom function logic.
+			-- Basic Telescope keybindings are defined in lua/anvndev/core/keymaps.lua
 
 			-- Daily source finder: Go + Rust + Lua + configs
 			vim.keymap.set("n", "<leader>ff", function()
