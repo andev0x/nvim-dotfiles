@@ -135,12 +135,9 @@ autocmd("BufWinEnter", {
 	callback = function(args)
 		local buf = args.buf
 		local ft = vim.bo[buf].filetype
-		local ok, parsers = pcall(require, "nvim-treesitter.parsers")
-		if not ok then
-			return
-		end
-		local parser = parsers.get_parser(buf, ft)
-		if not parser then
+		-- Use the correct Neovim API for getting treesitter parser
+		local ok, parser = pcall(vim.treesitter.get_parser, buf, ft)
+		if not ok or not parser then
 			vim.defer_fn(function()
 				pcall(vim.cmd, "TSBufEnable highlight")
 			end, 80)
