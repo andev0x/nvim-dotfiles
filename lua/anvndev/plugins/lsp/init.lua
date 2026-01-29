@@ -137,6 +137,19 @@ return {
 					function(server_name)
 						lspconfig[server_name].setup({ capabilities = capabilities })
 					end,
+					["yamlls"] = function()
+						lspconfig.yamlls.setup({
+							capabilities = capabilities,
+							settings = {
+								yaml = {
+									schemas = {
+										["https://golangci-lint.run/jsonschema/golangci.jsonschema.json"] = ".golangci.yml",
+									},
+									validate = true,
+								},
+							},
+						})
+					end,
 					["lua_ls"] = function()
 						lspconfig.lua_ls.setup({
 							capabilities = capabilities,
