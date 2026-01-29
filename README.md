@@ -1,6 +1,8 @@
-# Neovim Configuration
 
 <div align="center">
+
+<h1>Neovim Configuration</h1>
+
 
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 ![Neovim](https://img.shields.io/badge/Neovim-%3E=0.9.0-blueviolet?logo=neovim)
@@ -156,3 +158,6 @@ This is a personal configuration. For questions or suggestions, see the main rep
 ## License
 
 [MIT License](LICENSE)
+
+## Author
+[andev0x](github.com/andev0x)
