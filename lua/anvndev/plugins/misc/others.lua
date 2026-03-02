@@ -44,22 +44,30 @@ return {
 	{
 		"kylechui/nvim-surround",
 		event = "VeryLazy",
+		init = function()
+			vim.g.nvim_surround_no_mappings = true
+		end,
 		config = function()
-			require("nvim-surround").setup({
-				keymaps = {
-					insert = "<M-s>s",
-					insert_line = "<M-s>S",
-					normal = "gza", -- gz + add
-					normal_cur = "gzl", -- gz + line
-					normal_line = "gzA",
-					normal_cur_line = "gzL",
-					visual = "gza",
-					visual_line = "gzA",
-					delete = "gzd", -- gz + delete
-					change = "gzr", -- gz + replace
-					change_line = "gzR",
-				},
-			})
+			require("nvim-surround").setup({})
+
+			local map = vim.keymap.set
+
+			-- Add
+			map("n", "gza", "<Plug>(nvim-surround-normal)")
+			map("n", "gzl", "<Plug>(nvim-surround-normal-cur)")
+			map("n", "gzA", "<Plug>(nvim-surround-normal-line)")
+			map("n", "gzL", "<Plug>(nvim-surround-normal-cur-line)")
+			map("x", "gza", "<Plug>(nvim-surround-visual)")
+			map("x", "gzA", "<Plug>(nvim-surround-visual-line)")
+
+			-- Delete / Change
+			map("n", "gzd", "<Plug>(nvim-surround-delete)")
+			map("n", "gzr", "<Plug>(nvim-surround-change)")
+			map("n", "gzR", "<Plug>(nvim-surround-change-line)")
+
+			-- Insert mode (Alt+s)
+			map("i", "<M-s>s", "<Plug>(nvim-surround-insert)")
+			map("i", "<M-s>S", "<Plug>(nvim-surround-insert-line)")
 		end,
 	},
 
