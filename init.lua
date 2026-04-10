@@ -25,13 +25,24 @@ vim.g.maplocalleader = ","
 -- vim.cmd([[command! SQLFormat call sqlformat#Format(1, line('$'))]])
 --
 -- Python Provider
-vim.g.python3_host_prog = "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3"
+do
+	local python_candidates = {
+		vim.fn.exepath("python3"),
+		"/opt/homebrew/bin/python3",
+		"/usr/local/bin/python3",
+	}
+	for _, python in ipairs(python_candidates) do
+		if python ~= nil and python ~= "" and vim.fn.executable(python) == 1 then
+			vim.g.python3_host_prog = python
+			break
+		end
+	end
+end
 
 -- Load core settings
 require("anvndev.core.options")
 require("anvndev.core.keymaps")
 require("anvndev.core.autocmds")
-require("anvndev.core.which-key")
 
 -- Initialize lazy.nvim with plugins
 require("lazy").setup("anvndev.plugins", {
@@ -39,7 +50,7 @@ require("lazy").setup("anvndev.plugins", {
 		colorscheme = { "catppuccin" },
 	},
 	checker = {
-		enabled = true,
+		enabled = false,
 		notify = false,
 	},
 	change_detection = {
@@ -62,14 +73,4 @@ require("lazy").setup("anvndev.plugins", {
 	ui = {
 		border = "rounded",
 	},
-})
-
--- Print startup time
-vim.api.nvim_create_autocmd("User", {
-	pattern = "LazyVimStarted",
-	callback = function()
-		local stats = require("lazy").stats()
-		local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
-		print("⚡ Neovim loaded " .. stats.count .. " plugins in " .. ms .. "ms")
-	end,
 })

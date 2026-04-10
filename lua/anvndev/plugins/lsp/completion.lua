@@ -79,6 +79,12 @@ cmp.setup({
 		completion = cmp.config.window.bordered(),
 		documentation = cmp.config.window.bordered(),
 	},
+	performance = {
+		debounce = 60,
+		throttle = 30,
+		fetching_timeout = 200,
+		max_view_entries = 40,
+	},
 	experimental = {
 		ghost_text = true,
 	},

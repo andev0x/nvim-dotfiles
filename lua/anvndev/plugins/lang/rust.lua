@@ -6,7 +6,7 @@ return {
 		"mrcjkb/rustaceanvim",
 		version = "^5", -- ensure stable release
 		ft = { "rust" },
-		config = function()
+		init = function()
 			-------------------------------------------------------------------------
 			-- Setup rustaceanvim (Rust LSP + Tools)
 			-------------------------------------------------------------------------
@@ -58,24 +58,6 @@ return {
 					},
 				},
 			}
-
-			-------------------------------------------------------------------------
-			-- Configure diagnostic signs with icons
-			-------------------------------------------------------------------------
-			vim.diagnostic.config({
-				virtual_text = false, -- no inline diagnostic messages
-				signs = {
-					text = {
-						[vim.diagnostic.severity.ERROR] = " ", -- nf-fa-times_circle
-						[vim.diagnostic.severity.WARN] = " ", -- nf-fa-warning
-						[vim.diagnostic.severity.INFO] = "󰙎 ", -- nf-fa-info_circle
-						[vim.diagnostic.severity.HINT] = " ", -- nf-oct-light_bulb
-					},
-				},
-				underline = true,
-				update_in_insert = false,
-				severity_sort = true,
-			})
 
 			-------------------------------------------------------------------------
 			-- Auto format on save for Rust files

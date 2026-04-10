@@ -51,8 +51,7 @@ return {
 					return string.format("%s %s", icon or "", ft)
 				end
 
-				-- Custom component: dynamic time-based icon
-				local function time_icon()
+				local function clock_icon()
 					local hour = tonumber(os.date("%H"))
 					local icons = {
 						{ 5, 11, "🌞" },
@@ -90,7 +89,7 @@ return {
 						component_separators = { left = "", right = "" },
 						globalstatus = true,
 						always_divide_middle = true,
-						refresh = { statusline = 1000 }, -- refresh every 1s for dynamic icon
+						refresh = { statusline = 1000 },
 					},
 
 					sections = {
@@ -145,9 +144,10 @@ return {
 							},
 						},
 						lualine_x = {
-							time_icon,
+							clock_icon,
 							"encoding",
 							"fileformat",
+							"filetype",
 						},
 						lualine_y = { "progress" },
 						lualine_z = { "location" },

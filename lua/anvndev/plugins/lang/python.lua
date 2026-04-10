@@ -2,16 +2,16 @@
 -- Python language configuration
 
 return {
-  {
-    "mfussenegger/nvim-dap-python",
-    ft = "python",
+	{
+		"mfussenegger/nvim-dap-python",
+		ft = "python",
     dependencies = {
       "mfussenegger/nvim-dap",
       "rcarriga/nvim-dap-ui",
     },
-    config = function()
-      local path = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python"
-      require("dap-python").setup(path)
+		config = function()
+			local path = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python"
+			require("dap-python").setup(path)
       
       -- Add configurations
       local dap = require("dap")
@@ -40,35 +40,13 @@ return {
       })
       
       -- Key mappings
-      vim.keymap.set("n", "<leader>dpm", require("dap-python").test_method, { desc = "Debug Python Method" })
-      vim.keymap.set("n", "<leader>dpc", require("dap-python").test_class, { desc = "Debug Python Class" })
-      vim.keymap.set("n", "<leader>dps", require("dap-python").debug_selection, { desc = "Debug Python Selection" })
-    end,
-  },
-  
-  -- Python test integration
-  {
-    "nvim-neotest/neotest",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-treesitter/nvim-treesitter",
-      "antoinemadec/FixCursorHold.nvim",
-      "nvim-neotest/neotest-python",
-    },
-    config = function()
-      require("neotest").setup({
-        adapters = {
-        require("neotest-python")({
-          dap = { justMyCode = false },
-          runner = "pytest",
-          python = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python",
-        }),
-        },
-      })
-    end,
-  },
-  
-  -- Python REPL
+			vim.keymap.set("n", "<leader>dpm", require("dap-python").test_method, { desc = "Debug Python Method" })
+			vim.keymap.set("n", "<leader>dpc", require("dap-python").test_class, { desc = "Debug Python Class" })
+			vim.keymap.set("n", "<leader>dps", require("dap-python").debug_selection, { desc = "Debug Python Selection" })
+		end,
+	},
+
+	-- Python REPL
   {
     "michaelb/sniprun",
     build = "bash ./install.sh",

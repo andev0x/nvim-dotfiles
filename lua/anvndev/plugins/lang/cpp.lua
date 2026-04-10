@@ -11,24 +11,6 @@ return {
 
 		config = function()
 			----------------------------------------------------------------------------
-			-- Configure diagnostic signs with icons
-			----------------------------------------------------------------------------
-			vim.diagnostic.config({
-				virtual_text = false, -- disable inline diagnostics
-				signs = {
-					text = {
-						[vim.diagnostic.severity.ERROR] = " ", -- nf-fa-times_circle
-						[vim.diagnostic.severity.WARN] = " ", -- nf-fa-warning
-						[vim.diagnostic.severity.INFO] = "󰙎 ", -- nf-fa-info_circle
-						[vim.diagnostic.severity.HINT] = " ", -- nf-oct-light_bulb
-					},
-				},
-				underline = true,
-				update_in_insert = false,
-				severity_sort = true,
-			})
-
-			----------------------------------------------------------------------------
 			-- Clangd Extensions setup
 			----------------------------------------------------------------------------
 			require("clangd_extensions").setup({
@@ -120,29 +102,6 @@ return {
 
 					memory_usage = { border = "none" },
 					symbol_info = { border = "none" },
-				},
-			})
-		end,
-	},
-
-	---------------------------------------------------------------------------
-	-- C/C++ Unit Testing (GoogleTest)
-	---------------------------------------------------------------------------
-	{
-		"nvim-neotest/neotest",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"nvim-treesitter/nvim-treesitter",
-			"antoinemadec/FixCursorHold.nvim",
-			"alfaix/neotest-gtest",
-		},
-		config = function()
-			require("neotest").setup({
-				adapters = {
-					require("neotest-gtest")({
-						gtest_command = "gtest",
-						gtest_args = { "--gtest_color=yes" },
-					}),
 				},
 			})
 		end,
