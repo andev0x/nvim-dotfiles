@@ -23,6 +23,8 @@ return {
 	{ import = "anvndev.plugins.debugger.init" },
 	{ import = "anvndev.plugins.debugger.capytrace" },
 
+	{ import = "anvndev.plugins.debugger.codeguide" },
+
 	-- Language specific plugins (load on file type)
 	{ import = "anvndev.plugins.lang.go", ft = "go" },
 	{ import = "anvndev.plugins.lang.rust", ft = "rust" },
