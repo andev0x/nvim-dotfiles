@@ -2,15 +2,18 @@ return {
 	{
 		"nanotee/sqls.nvim",
 		ft = "sql",
-		dependencies = {
-			
-		},
+		dependencies = {},
 		config = function()
+			local ok, lspconfig = pcall(require, "lspconfig")
+			if not ok then
+				return
+			end
+
 			-- SQL language server configuration
-			vim.lsp.config.sqls.setup({
+			lspconfig.sqls.setup({
 				on_attach = function(client, bufnr)
 					-- Enable completion triggered by <c-x><c-o>
-					vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+					vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
 
 					-- Mappings
 					local opts = { noremap = true, silent = true, buffer = bufnr }
@@ -18,16 +21,13 @@ return {
 					vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
 					vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
 					vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
-					vim.keymap.set("n", "<leader>f", vim.lsp.buf.formatting, opts)
+					vim.keymap.set("n", "<leader>lf", function()
+						vim.lsp.buf.format({ async = true })
+					end, opts)
 				end,
 				settings = {
 					sqls = {
-						connections = {
-							{
-								driver = "postgres", -- or "mysql", "sqlite3", etc.
-								dataSourceName = "host=127.0.0.1 port=5432 user=postgres password=postgres dbname=postgres sslmode=disable",
-							},
-						},
+						connections = {},
 					},
 				},
 			})

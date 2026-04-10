@@ -8,6 +8,17 @@ return {
 	{
 		"lewis6991/gitsigns.nvim",
 		event = { "BufReadPre", "BufNewFile" },
+		keys = {
+			{ "<leader>gs", desc = "Stage hunk" },
+			{ "<leader>gr", desc = "Reset hunk" },
+			{ "<leader>gS", desc = "Stage buffer" },
+			{ "<leader>gu", desc = "Undo stage hunk" },
+			{ "<leader>gR", desc = "Reset buffer" },
+			{ "<leader>gp", desc = "Preview hunk" },
+			{ "<leader>gb", desc = "Blame line" },
+			{ "<leader>gd", desc = "Diff against index" },
+			{ "<leader>gD", desc = "Diff against last commit" },
+		},
 		config = function()
 			require("gitsigns").setup({
 				signs = {
@@ -132,7 +143,7 @@ return {
 		"tpope/vim-fugitive",
 		cmd = { "Git", "Gstatus", "Gblame", "Gpush", "Gpull" },
 		keys = {
-			{ "<leader>gg", "<cmd>Git<cr>", desc = "Git status (Fugitive)" },
+			{ "<leader>gg", "<cmd>Git<cr>", desc = "Git status" },
 			{ "<leader>gB", "<cmd>Git blame<cr>", desc = "Git blame (Fugitive)" },
 			{ "<leader>gc", "<cmd>Git commit<cr>", desc = "Git commit" },
 			{ "<leader>gL", "<cmd>Git log<cr>", desc = "Git log" },
@@ -149,6 +160,7 @@ return {
 		keys = {
 			-- CHANGED: Use lg to avoid conflict with fugitive's gg (status)
 			{ "<leader>lg", "<cmd>LazyGit<cr>", desc = "Open LazyGit" },
+			{ "<leader>gk", "<cmd>LazyGit<cr>", desc = "Open LazyGit" },
 		},
 		config = function()
 			-- Visual adjustments for the floating window

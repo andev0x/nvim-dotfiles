@@ -15,6 +15,7 @@ return {
 	{ import = "anvndev.plugins.ui.filetree" },
 	{ import = "anvndev.plugins.ui.icons" },
 	{ import = "anvndev.plugins.ui.colorizer" },
+	{ import = "anvndev.plugins.misc.which_key" },
 
 	-- LSP, completion, and formatting (load on demand)
 	{ import = "anvndev.plugins.lsp.init" },
@@ -36,11 +37,11 @@ return {
 	{ import = "anvndev.plugins.misc.copilot" },
 	{ import = "anvndev.plugins.misc.copilot_chat" },
 	{ import = "anvndev.plugins.misc.git" },
-	{ import = "anvndev.plugins.misc.lazygit" },
 	{ import = "anvndev.plugins.misc.comment" },
 	{ import = "anvndev.plugins.misc.telescope" },
 	{ import = "anvndev.plugins.misc.treesitter" },
 	{ import = "anvndev.plugins.misc.neorg" },
+	{ import = "anvndev.plugins.misc.testing" },
 	{ import = "anvndev.plugins.misc.others" },
 	{ import = "anvndev.plugins.misc.img_clip" },
 
@@ -60,11 +61,5 @@ return {
 			"SudoWrite",
 			"SudoEdit",
 		},
-	},
-	{
-		"folke/trouble.nvim",
-		cmd = "TroubleToggle",
-		dependencies = { "nvim-tree/nvim-web-devicons" },
-		opts = {},
 	},
 }

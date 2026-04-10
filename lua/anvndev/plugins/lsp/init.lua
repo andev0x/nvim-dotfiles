@@ -49,6 +49,7 @@ return {
 					"rust-analyzer",
 					"clangd",
 					"pyright",
+					"sqls",
 					"lua-language-server",
 					"typescript-language-server",
 					"html-lsp",
@@ -74,8 +75,9 @@ return {
 					"codelldb",
 					"debugpy",
 				},
-				auto_update = true,
+				auto_update = false,
 				run_on_start = true,
+				start_delay = 3000,
 			})
 
 			-- 3. UI & Diagnostics Configuration (MERGED FROM YOUR DIAGNOSTICS.LUA)
@@ -137,6 +139,10 @@ return {
 					function(server_name)
 						lspconfig[server_name].setup({ capabilities = capabilities })
 					end,
+					["gopls"] = function() end,
+					["rust_analyzer"] = function() end,
+					["clangd"] = function() end,
+					["sqls"] = function() end,
 					["yamlls"] = function()
 						lspconfig.yamlls.setup({
 							capabilities = capabilities,
@@ -161,18 +167,12 @@ return {
 							},
 						})
 					end,
-					["clangd"] = function()
-						lspconfig.clangd.setup({
-							capabilities = capabilities,
-							cmd = { "clangd", "--offset-encoding=utf-16" },
-						})
-					end,
 				},
 			})
 
 			-- 5. LspAttach Configuration
 			vim.api.nvim_create_autocmd("LspAttach", {
-				group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+				group = vim.api.nvim_create_augroup("UserLspConfig", { clear = true }),
 				callback = function(args)
 					local client = vim.lsp.get_client_by_id(args.data.client_id)
 					local bufnr = args.buf
@@ -191,8 +191,6 @@ return {
 					vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
 					opts.desc = "Diagnostics (Buffer)"
 					vim.keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", opts)
-					opts.desc = "Line Diagnostics"
-					vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts)
 					opts.desc = "Documentation"
 					vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
 					opts.desc = "Restart LSP"
@@ -203,22 +201,27 @@ return {
 						vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
 					end
 
-					-- 6. Auto-show Diagnostics Popup on Cursor Hold
-					vim.api.nvim_create_autocmd("CursorHold", {
-						buffer = bufnr,
-						callback = function()
-							-- We DO NOT define 'prefix' here, so it inherits the function
-							-- from vim.diagnostic.config above!
-							local float_opts = {
-								focusable = false,
-								close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
-								border = "rounded",
-								source = "if_many",
-								scope = "cursor",
-							}
-							vim.diagnostic.open_float(nil, float_opts)
-						end,
-					})
+					if not vim.b[bufnr].diagnostic_float_autocmd_set then
+						vim.b[bufnr].diagnostic_float_autocmd_set = true
+						vim.api.nvim_create_autocmd("CursorHold", {
+							buffer = bufnr,
+							callback = function()
+								if vim.api.nvim_get_mode().mode ~= "n" then
+									return
+								end
+								if vim.fn.pumvisible() == 1 then
+									return
+								end
+								vim.diagnostic.open_float(nil, {
+									focusable = false,
+									close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+									border = "rounded",
+									source = "if_many",
+									scope = "cursor",
+								})
+							end,
+						})
+					end
 
 					-- Navic
 					if client.server_capabilities.documentSymbolProvider then
@@ -239,8 +242,10 @@ return {
 			"L3MON4D3/LuaSnip",
 			"saadparwaiz1/cmp_luasnip",
 			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-nvim-lua",
 			"hrsh7th/cmp-path",
 			"hrsh7th/cmp-buffer",
+			"hrsh7th/cmp-cmdline",
 			"onsails/lspkind.nvim",
 		},
 		config = function()
@@ -279,7 +284,7 @@ return {
 	-- Linting
 	{
 		"mfussenegger/nvim-lint",
-		event = { "BufReadPre", "BufNewFile" },
+		event = { "BufReadPost", "BufNewFile" },
 		config = function()
 			local lint = require("lint")
 			lint.linters_by_ft = {
@@ -291,7 +296,7 @@ return {
 			vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
 				group = lint_augroup,
 				callback = function()
-					lint.try_lint()
+					lint.try_lint(nil, { ignore_errors = true })
 				end,
 			})
 		end,

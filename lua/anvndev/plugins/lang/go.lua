@@ -79,7 +79,7 @@ return {
 				-- Miscellaneous features
 				-----------------------------------------------------------------------
 				lsp_codelens = true,
-				trouble = true,
+				trouble = false,
 				text_obj = true,
 				tag_transform = "camelcase",
 				lsp_format_on_save = true,
@@ -108,46 +108,6 @@ return {
 				dap_debug_gui = true,
 			})
 
-			-------------------------------------------------------------------------
-			-- Configure diagnostic signs with icons
-			-------------------------------------------------------------------------
-			vim.diagnostic.config({
-				virtual_text = false, -- no inline diagnostic messages
-				signs = {
-					text = {
-						[vim.diagnostic.severity.ERROR] = " ", -- nf-fa-times_circle
-						[vim.diagnostic.severity.WARN] = " ", -- nf-fa-warning
-						[vim.diagnostic.severity.INFO] = "󰙎 ", -- nf-fa-info_circle
-						[vim.diagnostic.severity.HINT] = " ", -- nf-oct-light_bulb
-					},
-				},
-				underline = true,
-				update_in_insert = false,
-				severity_sort = true,
-			})
-		end,
-	},
-
-	---------------------------------------------------------------------------
-	-- Neotest integration for Go
-	---------------------------------------------------------------------------
-	{
-		"nvim-neotest/neotest",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"nvim-treesitter/nvim-treesitter",
-			"antoinemadec/FixCursorHold.nvim",
-			"nvim-neotest/neotest-go",
-		},
-		config = function()
-			require("neotest").setup({
-				adapters = {
-					require("neotest-go")({
-						experimental = { test_table = true },
-						args = { "-count=1", "-timeout=60s" },
-					}),
-				},
-			})
 		end,
 	},
 }

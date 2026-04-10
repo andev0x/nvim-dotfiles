@@ -138,15 +138,11 @@ return {
 
 			local Terminal = require("toggleterm.terminal").Terminal
 			local terms = {
-				lazygit = Terminal:new({ cmd = "lazygit", hidden = true, direction = "float" }),
 				node = Terminal:new({ cmd = "node", hidden = true, direction = "float" }),
 				python = Terminal:new({ cmd = "python3", hidden = true, direction = "float" }),
 				go = Terminal:new({ cmd = "gore", hidden = true, direction = "float" }),
 			}
 
-			_G._LAZYGIT_TOGGLE = function()
-				terms.lazygit:toggle()
-			end
 			_G._NODE_TOGGLE = function()
 				terms.node:toggle()
 			end
@@ -157,7 +153,6 @@ return {
 				terms.go:toggle()
 			end
 
-			vim.keymap.set("n", "<leader>gg", _LAZYGIT_TOGGLE, { desc = "LazyGit" })
 			vim.keymap.set("n", "<leader>tn", _NODE_TOGGLE, { desc = "Node REPL" })
 			vim.keymap.set("n", "<leader>tp", _PYTHON_TOGGLE, { desc = "Python REPL" })
 			vim.keymap.set("n", "<leader>tg", _GO_TOGGLE, { desc = "Go REPL" })
@@ -225,21 +220,6 @@ return {
 				backend = { "telescope", "fzf_lua", "fzf", "builtin", "nui" },
 				builtin = { border = "rounded" },
 			},
-		},
-	},
-
-	-- ==================================================
-	-- Icons
-	-- ==================================================
-	{
-		"nvim-tree/nvim-web-devicons",
-		event = "VeryLazy",
-		opts = {
-			override = {
-				go = { icon = "", color = "#519aba", name = "Go" },
-				py = { icon = "󰌠", color = "#ffd43b", name = "Python" },
-			},
-			default = true,
 		},
 	},
 

@@ -14,9 +14,7 @@ opt.clipboard = "unnamedplus" -- Sync with system clipboard
 opt.swapfile = false -- Disable swap files
 opt.backup = false -- Disable backups
 opt.undofile = true -- Persistent undo history
-opt.encoding = "utf-8" -- Set UTF-8 encoding
 opt.termguicolors = true -- Enable 24-bit color
-opt.hidden = true -- Allow hidden unsaved buffers
 opt.signcolumn = "yes" -- Always show sign column
 opt.cursorline = true -- Highlight current line
 opt.scrolloff = 8 -- Keep cursor centered
@@ -30,6 +28,8 @@ opt.ignorecase = true -- Ignore case in searches
 opt.smartcase = true -- But respect case if typed
 opt.incsearch = true -- Show matches while typing
 opt.hlsearch = true -- Highlight search matches
+opt.completeopt = { "menu", "menuone", "noselect" }
+opt.pumheight = 12
 
 -- Tabs & Indentation ----------------------------------------
 opt.expandtab = true -- Use spaces instead of tabs
