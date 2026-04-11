@@ -7,10 +7,32 @@
 return {
 	{
 		"mfussenegger/nvim-dap",
+		cmd = {
+			"DapContinue",
+			"DapToggleBreakpoint",
+			"DapStepInto",
+			"DapStepOver",
+			"DapStepOut",
+			"DapTerminate",
+			"DapRunLast",
+			"DapToggleRepl",
+		},
+		keys = {
+			{ "<leader>db", "<cmd>DapToggleBreakpoint<CR>", desc = "Toggle breakpoint" },
+			{ "<leader>dc", "<cmd>DapContinue<CR>", desc = "Continue" },
+			{ "<leader>di", "<cmd>DapStepInto<CR>", desc = "Step into" },
+			{ "<leader>do", "<cmd>DapStepOver<CR>", desc = "Step over" },
+			{ "<leader>dO", "<cmd>DapStepOut<CR>", desc = "Step out" },
+			{ "<leader>dr", "<cmd>DapToggleRepl<CR>", desc = "Toggle REPL" },
+			{ "<leader>dl", "<cmd>DapRunLast<CR>", desc = "Run last" },
+			{ "<leader>du", function()
+				require("dapui").toggle()
+			end, desc = "Toggle DAP UI" },
+			{ "<leader>dt", "<cmd>DapTerminate<CR>", desc = "Terminate" },
+		},
 		dependencies = {
 			{ "rcarriga/nvim-dap-ui" }, -- Debug UI
 			{ "theHamsta/nvim-dap-virtual-text" }, -- Inline variable preview
-			{ "jay-babu/mason-nvim-dap.nvim", dependencies = { "williamboman/mason.nvim" } },
 			"nvim-neotest/nvim-nio", -- Added explicit dependency for new dap-ui versions
 		},
 
@@ -81,25 +103,6 @@ return {
 				show_stop_reason = true,
 				commented = false,
 				virt_text_pos = "eol",
-			})
-
-			-- ==========================
-			-- Mason DAP Setup
-			-- ==========================
-			local ok, mason = pcall(require, "mason")
-			if ok then
-				mason.setup()
-			end
-
-			require("mason-nvim-dap").setup({
-				ensure_installed = { "delve", "codelldb", "debugpy" },
-				automatic_installation = true,
-				handlers = {
-					function(config)
-						require("mason-nvim-dap").default_setup(config)
-					end,
-				},
-				automatic_setup = true,
 			})
 
 			-- ==========================
