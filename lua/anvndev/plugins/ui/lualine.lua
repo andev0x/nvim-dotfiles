@@ -75,7 +75,7 @@ return {
 				local function day_color()
 					local h = tonumber(os.date("%H"))
 					if h >= 6 and h < 18 then
-						return { fg = "#EBCB8B" } -- day tone
+						return { fg = "#FFFFFF" } -- day tone
 					else
 						return { fg = "#02210C" } -- night tone
 					end
