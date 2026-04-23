@@ -40,7 +40,7 @@ return {
 	{ import = "anvndev.plugins.misc.comment" },
 	{ import = "anvndev.plugins.misc.telescope" },
 	{ import = "anvndev.plugins.misc.treesitter" },
-	{ import = "anvndev.plugins.misc.neorg" },
+	-- { import = "anvndev.plugins.misc.neorg" },
 	{ import = "anvndev.plugins.misc.testing" },
 	{ import = "anvndev.plugins.misc.others" },
 	{ import = "anvndev.plugins.misc.img_clip" },
