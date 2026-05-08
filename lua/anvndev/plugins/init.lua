@@ -44,6 +44,7 @@ return {
 	{ import = "anvndev.plugins.misc.testing" },
 	{ import = "anvndev.plugins.misc.others" },
 	{ import = "anvndev.plugins.misc.img_clip" },
+	{ import = "anvndev.plugins.misc.render-markdown" },
 
 	{
 		"tpope/vim-eunuch",

@@ -111,6 +111,16 @@ autocmd("FileType", {
 	desc = "Set Rust indentation to tabs (4 spaces width)",
 })
 
+-- Markdown and MDX rendering support
+autocmd("FileType", {
+	group = language,
+	pattern = { "markdown", "mdx" },
+	callback = function()
+		vim.opt_local.conceallevel = 2
+	end,
+	desc = "Enable conceallevel for markdown/mdx rendering",
+})
+
 -- --------------------------------------------------
 -- Terminal Settings
 -- --------------------------------------------------
