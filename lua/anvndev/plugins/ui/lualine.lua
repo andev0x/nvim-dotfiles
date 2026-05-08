@@ -15,8 +15,8 @@ return {
 		-- Markdown Rendering for interactive buttons
 		{
 			"MeanderingProgrammer/render-markdown.nvim",
-			opts = { file_types = { "markdown" } },
-			ft = { "markdown" },
+			opts = { file_types = { "markdown", "mdx" } },
+			ft = { "markdown", "mdx" },
 		},
 
 		-- Git diff viewer

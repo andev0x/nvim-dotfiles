@@ -20,6 +20,13 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
+-- mdx
+vim.filetype.add({
+	extension = {
+		mdx = "mdx",
+	},
+})
+
 -- SQLFormat
 -- vim.api.nvim_set_keymap("v", "<Leader>f", "<Plug>SQLFormat", { noremap = true, silent = true })
 -- vim.cmd([[command! SQLFormat call sqlformat#Format(1, line('$'))]])

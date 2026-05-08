@@ -55,6 +55,7 @@ return {
 					"bash",
 					"markdown",
 					"markdown_inline",
+					"mdx",
 				},
 
 				auto_install = true,
